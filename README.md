@@ -1,2 +1,2 @@
-# experience-spring-boot
+# spring-boot-experience
 Experience accumulation for Spring Boot
