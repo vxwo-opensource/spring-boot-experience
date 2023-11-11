@@ -1,0 +1,121 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <packaging>pom</packaging>
+  <groupId>org.vxwo.springboot.experience</groupId>
+  <artifactId>spring-boot-experience</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+
+  <name>${project.artifactId}</name>
+  <description>Experience accumulation for Spring Boot</description>
+
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+    </license>
+  </licenses>
+
+  <properties>
+    <java.version>1.8</java.version>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <lombok.version>1.18.30</lombok.version>
+    <spring-boot.version>2.7.15</spring-boot.version>
+
+    <maven-pmd-plugin.version>3.11.0</maven-pmd-plugin.version>
+    <p3c-pmd.version>2.1.1</p3c-pmd.version>
+  </properties>
+
+  <modules>
+    <module>spring-boot-experience-web</module>
+  </modules>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${lombok.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+  </dependencies>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${spring-boot.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <version>${maven-pmd-plugin.version}</version>
+        <configuration>
+          <rulesets>
+            <ruleset>rulesets/java/ali-comment.xml</ruleset>
+            <ruleset>rulesets/java/ali-concurrent.xml</ruleset>
+            <ruleset>rulesets/java/ali-constant.xml</ruleset>
+            <ruleset>rulesets/java/ali-exception.xml</ruleset>
+            <ruleset>rulesets/java/ali-flowcontrol.xml</ruleset>
+            <ruleset>rulesets/java/ali-naming.xml</ruleset>
+            <ruleset>rulesets/java/ali-oop.xml</ruleset>
+            <ruleset>rulesets/java/ali-orm.xml</ruleset>
+            <ruleset>rulesets/java/ali-other.xml</ruleset>
+            <ruleset>rulesets/java/ali-set.xml</ruleset>
+          </rulesets>
+          <printFailingErrors>true</printFailingErrors>
+          <excludes>
+            <exclude>**/test/**</exclude>
+            <exclude>**/example/**</exclude>
+          </excludes>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>com.alibaba.p3c</groupId>
+            <artifactId>p3c-pmd</artifactId>
+            <version>${p3c-pmd.version}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+    </plugins>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-maven-plugin</artifactId>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-deploy-plugin</artifactId>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+</project>

@@ -1,3 +1,16 @@
+# Project Files
+.aproject/
+GPATH
+GTAGS
+GRTAGS
+
+.project
+.classpath
+.factorypath
+.settings/
+
+target/
+
 # Compiled class file
 *.class
 
