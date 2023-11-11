@@ -32,7 +32,7 @@ public class CorsFilter extends OncePerRequestFilter {
 
     @Autowired
     public CorsFilter(CorsConfig value) {
-        parseReferer = value.isParseBearer();
+        parseReferer = value.isParseReferer();
 
         acceptAllowOrigins = Arrays.asList(value.getAllowOrigin().split(",|;")).stream()
                 .map(o -> o.trim()).filter(o -> !o.isEmpty()).collect(Collectors.toList());
