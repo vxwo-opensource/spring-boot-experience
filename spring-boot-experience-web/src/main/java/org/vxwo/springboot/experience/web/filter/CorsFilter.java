@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.vxwo.springboot.experience.web.CoreOrdered;
+import org.vxwo.springboot.experience.web.config.CorsConfig;
 import lombok.extern.slf4j.Slf4j;
 
 /**

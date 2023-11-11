@@ -1,4 +1,4 @@
-package org.vxwo.springboot.experience.web.filter;
+package org.vxwo.springboot.experience.web.config;
 
 import lombok.Data;
 
