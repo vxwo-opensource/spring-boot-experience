@@ -15,6 +15,6 @@ import org.springframework.context.annotation.PropertySource;
 @ConfigurationProperties(prefix = "experience.web.cors")
 @PropertySource("classpath:experience/experience-web.properties")
 public class CorsConfig {
-    private String allowOrigin;
+    private String allowOrigins;
     private boolean parseReferer;
 }

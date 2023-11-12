@@ -34,14 +34,14 @@ public class PathProcessor {
     }
 
     /**
-     * Create absolute URL
+     * Create absolute URI
      *
      * @param Relative Path
      * @return Absolute URL
      */
 
     @SuppressWarnings("PMD")
-    public String createAbsoluteURL(String relativeURI) {
+    public String createAbsoluteURI(String relativeURI) {
         return servletContextPath + relativeURI;
     }
 
