@@ -29,7 +29,7 @@ public class PathProcessor {
         servletContextPathLength = servletContextPath.length();
 
         if (log.isInfoEnabled()) {
-            log.info("PathProcessor actived on: " + servletContextPath + "/");
+            log.info(getClass().getSimpleName() + " actived on: " + servletContextPath + "/");
         }
     }
 

@@ -10,6 +10,12 @@
   <name>${project.artifactId}</name>
   <description>Experience accumulation for Spring Boot</description>
 
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.5.5</version>
+  </parent>
+
   <licenses>
     <license>
       <name>Apache License, Version 2.0</name>
@@ -19,12 +25,12 @@
 
   <properties>
     <java.version>1.8</java.version>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
     <lombok.version>1.18.30</lombok.version>
-    <spring-boot.version>2.7.15</spring-boot.version>
 
     <maven-pmd-plugin.version>3.11.0</maven-pmd-plugin.version>
     <p3c-pmd.version>2.1.1</p3c-pmd.version>
@@ -46,18 +52,6 @@
       <artifactId>slf4j-api</artifactId>
     </dependency>
   </dependencies>
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-dependencies</artifactId>
-        <version>${spring-boot.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
 
   <build>
     <plugins>
@@ -105,10 +99,6 @@
         <plugin>
           <groupId>org.springframework.boot</groupId>
           <artifactId>spring-boot-maven-plugin</artifactId>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>

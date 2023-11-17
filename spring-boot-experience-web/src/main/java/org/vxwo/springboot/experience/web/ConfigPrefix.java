@@ -5,7 +5,9 @@ package org.vxwo.springboot.experience.web;
  */
 
 public final class ConfigPrefix {
-    public final static String CORS = "experience.web.cors";
+    private final static String ATTRIBUTE_PREFIX = "experience.web";
 
-    public final static String AUTHORIZATION_API_KEY = "experience.web.authorization.api-key";
+    public final static String CORS = ATTRIBUTE_PREFIX + ".cors";
+
+    public final static String AUTHORIZATION_API_KEY = ATTRIBUTE_PREFIX + ".authorization.api-key";
 }

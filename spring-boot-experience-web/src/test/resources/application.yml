@@ -1,0 +1,7 @@
+experience:
+  web:
+    authorization:
+      api-key:
+        enabled: true
+        path-rules:
+          - /test-api-key;test-key:testor

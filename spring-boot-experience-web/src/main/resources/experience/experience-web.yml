@@ -1,0 +1,17 @@
+experience:
+  web:
+    # Cors Filter
+    cors:
+      enabled: true
+      allow-origins:
+      parse-referer: false
+
+    # ApiKey Authorization Filter
+    authorization:
+      api-key:
+        enabled: false
+        header-keys:
+          - x-api-key
+          - api-key
+        parse-bearer: false
+        path-rules:

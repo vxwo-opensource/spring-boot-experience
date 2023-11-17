@@ -1,7 +1,6 @@
 package org.vxwo.springboot.experience.web.filter;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.FilterChain;
@@ -44,14 +43,14 @@ public class ApiKeyAuthorizationFilter extends OncePerRequestFilter {
 
     @Autowired
     public ApiKeyAuthorizationFilter(ApiKeyAuthorizationConfig value) {
-        headerKeys = Arrays.asList(value.getHeaderKeys().split(",|;")).stream().map(o -> o.trim())
-                .filter(o -> !o.isEmpty()).collect(Collectors.toList());
+        headerKeys = value.getHeaderKeys().stream().map(o -> o.trim()).filter(o -> !o.isEmpty())
+                .collect(Collectors.toList());
         parseBearer = value.isParseBearer();
         pathRuleMatcher = new ApiKeyPathRuleMatcher(
                 ConfigPrefix.AUTHORIZATION_API_KEY + ".path-rules", value.getPathRules());
 
         if (log.isInfoEnabled()) {
-            log.info(this.getClass().getSimpleName() + " actived, " + pathRuleMatcher.toString());
+            log.info(getClass().getSimpleName() + " actived, " + pathRuleMatcher.toString());
         }
     }
 

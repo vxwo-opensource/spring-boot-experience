@@ -14,7 +14,7 @@ import org.vxwo.springboot.experience.web.ConfigPrefix;
 @Configuration
 @ConfigurationProperties(prefix = ConfigPrefix.AUTHORIZATION_API_KEY)
 public class ApiKeyAuthorizationConfig {
-    private String headerKeys;
+    private List<String> headerKeys;
     private boolean parseBearer;
     private List<String> pathRules;
 }
