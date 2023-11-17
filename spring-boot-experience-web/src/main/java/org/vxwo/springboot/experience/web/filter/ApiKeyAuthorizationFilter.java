@@ -17,6 +17,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.vxwo.springboot.experience.web.ConfigPrefix;
 import org.vxwo.springboot.experience.web.CoreOrdered;
 import org.vxwo.springboot.experience.web.config.ApiKeyAuthorizationConfig;
+import org.vxwo.springboot.experience.web.handler.AuthorizationFailureHandler;
+import org.vxwo.springboot.experience.web.matcher.ApiKeyPathRuleMatcher;
 import org.vxwo.springboot.experience.web.processor.PathProcessor;
 import lombok.extern.slf4j.Slf4j;
 
