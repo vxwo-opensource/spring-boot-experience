@@ -8,6 +8,10 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.PropertySource;
 import org.springframework.core.io.ClassPathResource;
 
+/**
+ * @author vxwo-team
+ */
+
 public class PackageEnvironmentLoader implements EnvironmentPostProcessor {
 
     private final YamlPropertySourceLoader loader = new YamlPropertySourceLoader();
