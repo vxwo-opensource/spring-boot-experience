@@ -5,3 +5,9 @@ experience:
         enabled: true
         path-rules:
           - /test-api-key;test-key:testor
+
+      bearer:
+        enabled: true
+        path-rules:
+          - /test-bearer/;exclude;optional
+

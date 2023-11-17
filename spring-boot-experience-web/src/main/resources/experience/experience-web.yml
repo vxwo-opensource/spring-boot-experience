@@ -19,3 +19,10 @@ experience:
           - Bear
         path-rules:
 
+      # Bearer Authorization Filter
+      bearer:
+        enabled: false
+        bearer-keys:
+          - Bearer
+          - Bear
+        path-rules:

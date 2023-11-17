@@ -10,4 +10,6 @@ public final class ConfigPrefix {
     public final static String CORS = ATTRIBUTE_PREFIX + ".cors";
 
     public final static String AUTHORIZATION_API_KEY = ATTRIBUTE_PREFIX + ".authorization.api-key";
+
+    public final static String AUTHORIZATION_BEARER = ATTRIBUTE_PREFIX + ".authorization.bearer";
 }
