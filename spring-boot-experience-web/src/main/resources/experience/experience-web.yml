@@ -2,7 +2,7 @@ experience:
   web:
     # Cors Filter
     cors:
-      enabled: true
+      enabled: false
       allow-origins:
       parse-referer: false
 
