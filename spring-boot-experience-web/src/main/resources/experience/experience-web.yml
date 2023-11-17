@@ -6,12 +6,16 @@ experience:
       allow-origins:
       parse-referer: false
 
-    # ApiKey Authorization Filter
     authorization:
+      # ApiKey Authorization Filter
       api-key:
         enabled: false
         header-keys:
           - x-api-key
           - api-key
         parse-bearer: false
+        bearer-keys:
+          - Bearer
+          - Bear
         path-rules:
+

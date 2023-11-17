@@ -7,18 +7,18 @@ import org.springframework.util.ObjectUtils;
 /**
  * @author vxwo-team
  *
- * The path rule line example:
- * path-prefix;api-key-1:owner-1;api-key-2:owner-2;etc.
+ * The path rule example:
+ * path;key-1:owner-1;key-2:owner-2;etc.
  */
 
-public class ApiKeyPathRuleMatcher {
+public class OwnerPathRuleMatcher {
     public final static String GROUP_SEPARATOR = ";";
     public final static String FIELD_SEPARATOR = ":";
 
-    private final List<String> acceptPaths;
+    private final List<PathMatcher> acceptPaths;
     private final Map<String, Map<String, String>> acceptPathRules;
 
-    public ApiKeyPathRuleMatcher(String configName, List<String> pathRules) {
+    public OwnerPathRuleMatcher(String configName, List<String> pathRules) {
         acceptPaths = new ArrayList<>();
         acceptPathRules = new ConcurrentHashMap<>();
 
@@ -60,16 +60,16 @@ public class ApiKeyPathRuleMatcher {
                 acceptKeys.put(key, owner);
             }
 
-            acceptPaths.add(path);
+            acceptPaths.add(new PathMatcher(path));
             acceptPathRules.put(path, acceptKeys);
         }
     }
 
     public String findMatchPath(String path) {
         String matchPath = null;
-        for (String s : acceptPaths) {
-            if (path.startsWith(s)) {
-                matchPath = s;
+        for (PathMatcher s : acceptPaths) {
+            if (s.match(path)) {
+                matchPath = s.getTarget();
                 break;
             }
         }

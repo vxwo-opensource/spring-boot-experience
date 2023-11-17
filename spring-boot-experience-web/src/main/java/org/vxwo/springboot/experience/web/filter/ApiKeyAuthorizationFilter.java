@@ -18,7 +18,7 @@ import org.vxwo.springboot.experience.web.ConfigPrefix;
 import org.vxwo.springboot.experience.web.CoreOrdered;
 import org.vxwo.springboot.experience.web.config.ApiKeyAuthorizationConfig;
 import org.vxwo.springboot.experience.web.handler.AuthorizationFailureHandler;
-import org.vxwo.springboot.experience.web.matcher.ApiKeyPathRuleMatcher;
+import org.vxwo.springboot.experience.web.matcher.OwnerPathRuleMatcher;
 import org.vxwo.springboot.experience.web.processor.PathProcessor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,7 +35,8 @@ public class ApiKeyAuthorizationFilter extends OncePerRequestFilter {
 
     private final List<String> headerKeys;
     private final boolean parseBearer;
-    private final ApiKeyPathRuleMatcher pathRuleMatcher;
+    private final List<String> bearerKeys;
+    private final OwnerPathRuleMatcher pathRuleMatcher;
 
     @Autowired
     private PathProcessor pathProcessor;
@@ -48,7 +49,8 @@ public class ApiKeyAuthorizationFilter extends OncePerRequestFilter {
         headerKeys = value.getHeaderKeys().stream().map(o -> o.trim()).filter(o -> !o.isEmpty())
                 .collect(Collectors.toList());
         parseBearer = value.isParseBearer();
-        pathRuleMatcher = new ApiKeyPathRuleMatcher(
+        bearerKeys = value.getBearerKeys();
+        pathRuleMatcher = new OwnerPathRuleMatcher(
                 ConfigPrefix.AUTHORIZATION_API_KEY + ".path-rules", value.getPathRules());
 
         if (log.isInfoEnabled()) {
@@ -70,8 +72,9 @@ public class ApiKeyAuthorizationFilter extends OncePerRequestFilter {
         if (apiKey == null && parseBearer) {
             String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
             if (authorization != null) {
-                if (authorization.startsWith("Bearer ")) {
-                    apiKey = authorization.substring(7);
+                String[] fields = authorization.split(" ");
+                if (fields.length > 1 && bearerKeys.contains(fields[0])) {
+                    apiKey = fields[1];
                 }
             }
         }
@@ -88,16 +91,18 @@ public class ApiKeyAuthorizationFilter extends OncePerRequestFilter {
         }
 
         String matchPath = pathRuleMatcher.findMatchPath(pathProcessor.getRelativeURI(request));
-        String keyOwner = null;
-
-        if (matchPath != null) {
-            String apiKey = parseApiKeyFromHeader(request);
-            if (apiKey != null) {
-                keyOwner = pathRuleMatcher.findKeyOwner(matchPath, apiKey);
-            }
+        if (matchPath == null) {
+            filterChain.doFilter(request, response);
+            return;
         }
 
-        if (matchPath == null || keyOwner != null) {
+        String keyOwner = null;
+        String apiKey = parseApiKeyFromHeader(request);
+        if (apiKey != null) {
+            keyOwner = pathRuleMatcher.findKeyOwner(matchPath, apiKey);
+        }
+
+        if (keyOwner != null) {
             filterChain.doFilter(request, response);
         } else {
             failureHandler.handleAuthorizationFailure(request, response, matchPath,
