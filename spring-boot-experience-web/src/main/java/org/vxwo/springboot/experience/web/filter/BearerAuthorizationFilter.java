@@ -80,13 +80,13 @@ public class BearerAuthorizationFilter extends OncePerRequestFilter {
 
         if (bearerToken == null) {
             failureHandler.handleAuthorizationFailure(request, response, matchPath,
-                    "Invalid Bearer token");
+                    "empty-bearer-token");
         } else {
             if (processHandler.processBearerToken(request, response, matchPath, bearerToken)) {
                 filterChain.doFilter(request, response);
             } else {
                 failureHandler.handleAuthorizationFailure(request, response, matchPath,
-                        "Invalid Bearer handle");
+                        "invalid-bearer-handle");
             }
         }
     }

@@ -11,3 +11,12 @@ experience:
         path-rules:
           - /test-bearer/;exclude;optional
 
+    frequency-control:
+      enabled: true
+      concurrency:
+        include-paths:
+          - /test-frequency/concurrency
+
+      fixed-intervals:
+        - duration-ms: 30000
+          include-paths: /test-frequency/fixed-interval

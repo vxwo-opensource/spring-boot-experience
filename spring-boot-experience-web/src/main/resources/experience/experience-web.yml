@@ -26,3 +26,12 @@ experience:
           - Bearer
           - Bear
         path-rules:
+
+    # Frequency Control Filter
+    frequency-control:
+      enabled: false
+      concurrency:
+        duration-ms: 60000
+        include-paths:
+
+      fixed-intervals:

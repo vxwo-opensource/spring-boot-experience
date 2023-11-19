@@ -135,12 +135,12 @@ public class GroupPathRuleMatcher {
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append(acceptPaths.size() + " Paths");
+        sb.append(acceptPaths.size() + " paths");
         for (PathMatcher s : acceptPaths) {
-            sb.append("\n Path: " + s.getTarget());
-            sb.append(", Exclude: " + String.join(",", excludePathMacherMap.get(s.getTarget())
+            sb.append("\n path: " + s.getTarget());
+            sb.append(", exclude: " + String.join(",", excludePathMacherMap.get(s.getTarget())
                     .stream().map(o -> o.getTarget()).collect(Collectors.toList())));
-            sb.append(", Optional: " + String.join(",", optionalPathMacherMap.get(s.getTarget())
+            sb.append(", optional: " + String.join(",", optionalPathMacherMap.get(s.getTarget())
                     .stream().map(o -> o.getTarget()).collect(Collectors.toList())));
         }
 

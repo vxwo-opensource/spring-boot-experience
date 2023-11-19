@@ -32,4 +32,14 @@ public class WebApplication {
         return StringUtils.hasText(logined) ? ReturnCode.LOGINED : ReturnCode.SUCCESS;
     }
 
+    @GetMapping("/test-frequency/concurrency")
+    public String doTestFrequencyConcurrency() {
+        return ReturnCode.SUCCESS;
+    }
+
+    @GetMapping("/test-frequency/fixed-interval")
+    public String doTestFrequencyFixedInterval() {
+        return ReturnCode.SUCCESS;
+    }
+
 }

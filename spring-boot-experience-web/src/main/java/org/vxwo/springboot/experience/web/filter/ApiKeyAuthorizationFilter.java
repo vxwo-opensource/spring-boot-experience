@@ -106,7 +106,7 @@ public class ApiKeyAuthorizationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } else {
             failureHandler.handleAuthorizationFailure(request, response, matchPath,
-                    "Invalid API Key");
+                    "invalid-api-key");
         }
     }
 }

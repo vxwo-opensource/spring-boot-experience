@@ -92,9 +92,9 @@ public class OwnerPathRuleMatcher {
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append(acceptPaths.size() + " Paths");
+        sb.append(acceptPaths.size() + " paths");
         for (Map.Entry<String, Map<String, String>> pair : acceptPathRules.entrySet()) {
-            sb.append("\n Path: " + pair.getKey() + ", Owners: "
+            sb.append("\n path: " + pair.getKey() + ", owners: "
                     + String.join(",", pair.getValue().values()));
         }
 

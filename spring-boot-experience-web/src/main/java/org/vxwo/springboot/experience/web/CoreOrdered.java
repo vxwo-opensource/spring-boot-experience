@@ -15,4 +15,6 @@ public final class CoreOrdered {
     public static final int PRELOAD_LAYER = Ordered.HIGHEST_PRECEDENCE;
 
     public static final int AUTHORIZATION_LAYER = PRELOAD_LAYER + LAYER_BORDER;
+
+    public static final int FREQUENCY_CONTROL_LAYER = AUTHORIZATION_LAYER + LAYER_BORDER;
 }
