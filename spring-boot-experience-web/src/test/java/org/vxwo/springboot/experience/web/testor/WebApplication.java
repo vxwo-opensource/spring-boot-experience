@@ -3,13 +3,18 @@ package org.vxwo.springboot.experience.web.testor;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import static org.vxwo.springboot.experience.web.testor.CustomRequestBody.*;
 
 @RestController
 @SpringBootApplication
 @ComponentScan("org.vxwo.springboot.experience.web")
+@Validated
 public class WebApplication {
 
     @GetMapping("/test-api-key")
@@ -39,6 +44,21 @@ public class WebApplication {
 
     @GetMapping("/test-frequency/fixed-interval")
     public String doTestFrequencyFixedInterval() {
+        return ReturnCode.SUCCESS;
+    }
+
+    @PostMapping("/test-validation/choices")
+    public String doTestValidationChoices(@Validated @RequestBody ChoicesBody body) {
+        return ReturnCode.SUCCESS;
+    }
+
+    @PostMapping("/test-validation/multi-choices")
+    public String doTestValidationMultiChoices(@Validated @RequestBody MultiChoicesBody body) {
+        return ReturnCode.SUCCESS;
+    }
+
+    @PostMapping("/test-validation/multi-pattern")
+    public String doTestValidationMultiPattern(@Validated @RequestBody MultiPatternBody body) {
         return ReturnCode.SUCCESS;
     }
 
