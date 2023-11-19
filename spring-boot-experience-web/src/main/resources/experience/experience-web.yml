@@ -6,6 +6,16 @@ experience:
       allow-origins:
       parse-referer: false
 
+    # Request Logging Filter
+    logging:
+      enabled: false
+      ignore-request-headers: false
+      ignore-response-headers: true
+      respnse-body-limit-kb: 500
+      stacktrace-limit-lines: 10
+      include-paths:
+        - /
+
     authorization:
       # ApiKey Authorization Filter
       api-key:

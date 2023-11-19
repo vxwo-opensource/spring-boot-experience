@@ -1,5 +1,13 @@
 experience:
   web:
+    cors:
+      enabled: true
+
+    logging:
+      enabled: true
+      include-paths:
+        - /
+
     authorization:
       api-key:
         enabled: true
