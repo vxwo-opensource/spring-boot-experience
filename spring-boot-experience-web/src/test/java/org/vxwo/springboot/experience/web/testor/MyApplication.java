@@ -15,7 +15,7 @@ import static org.vxwo.springboot.experience.web.testor.CustomRequestBody.*;
 @SpringBootApplication
 @ComponentScan("org.vxwo.springboot.experience.web")
 @Validated
-public class WebApplication {
+public class MyApplication {
 
     @GetMapping("/test-api-key")
     public String doTestApiKey() {

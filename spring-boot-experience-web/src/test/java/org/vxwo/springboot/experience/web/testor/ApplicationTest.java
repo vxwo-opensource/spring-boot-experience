@@ -16,8 +16,7 @@ import org.springframework.http.ResponseEntity;
 import static org.vxwo.springboot.experience.web.testor.CustomRequestBody.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        classes = {WebApplication.class})
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ApplicationTest {
     @LocalServerPort
     private int localPort;
