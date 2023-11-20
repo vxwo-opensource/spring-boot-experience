@@ -10,7 +10,6 @@ import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Component;
 import org.vxwo.springboot.experience.redis.render.RedisTemplateRender;
-import org.vxwo.springboot.experience.redis.serializer.RedisPrefixWrapper;
 
 /**
  * @author vxwo-team
@@ -28,12 +27,10 @@ public class RedisFrequencyProcessor {
             "if redis.call('GET', KEYS[1]) == ARGV[1] then redis.call('DEL', KEYS[1]) return true else return false end",
             Boolean.class);
 
-    private final RedisPrefixWrapper prefixWrapper;
     private final RedisTemplate<String, String> redisTemplate;
 
     @Autowired
-    public RedisFrequencyProcessor(RedisPrefixWrapper wrapper, RedisTemplateRender render) {
-        prefixWrapper = wrapper;
+    public RedisFrequencyProcessor(RedisTemplateRender render) {
         redisTemplate = new RedisTemplate<String, String>();
         render.renderStringTemplate(redisTemplate);
     }
@@ -47,9 +44,9 @@ public class RedisFrequencyProcessor {
      */
     public String enterFrequencyDuration(String frequencyKey, Duration duration) {
         String frequencyValue = UUID.randomUUID().toString() + ":" + SAFE_ATOM.getAndIncrement();
-        Boolean result = redisTemplate.execute(UNSAFE_LOCK_SCRIPT,
-                Collections.singletonList(prefixWrapper.wrap(frequencyKey)), frequencyValue,
-                String.valueOf(duration.toMillis()));
+        Boolean result =
+                redisTemplate.execute(UNSAFE_LOCK_SCRIPT, Collections.singletonList(frequencyKey),
+                        frequencyValue, String.valueOf(duration.toMillis()));
         return result ? frequencyValue : null;
     }
 
@@ -61,8 +58,8 @@ public class RedisFrequencyProcessor {
      * @return false if not owned
      */
     public boolean leaveFrequencyDuration(String frequencyKey, String frequencyValue) {
-        return redisTemplate.execute(UNSAFE_UNLOCK_SCRIPT,
-                Collections.singletonList(prefixWrapper.wrap(frequencyKey)), frequencyValue);
+        return redisTemplate.execute(UNSAFE_UNLOCK_SCRIPT, Collections.singletonList(frequencyKey),
+                frequencyValue);
     }
 
 }
