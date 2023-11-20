@@ -1,5 +1,9 @@
 package org.vxwo.springboot.experience.redis.serializer;
 
+/**
+ * @author vxwo-team
+ */
+
 public class RedisPrefixWrapper {
     private final String prefix;
     private final int prefixLength;

@@ -14,7 +14,7 @@ import org.vxwo.springboot.experience.redis.serializer.RedisPrefixWrapper;
  */
 
 @Configuration
-public class RedisDefaultConfig {
+public class RedisBeanConfig {
     private static final String SEPARATOR = ":";
 
     private String redisNamespace;
