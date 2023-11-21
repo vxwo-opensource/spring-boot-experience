@@ -1,0 +1,4 @@
+experience:
+  redis:
+    namespace:
+    namespace-separator: ":"

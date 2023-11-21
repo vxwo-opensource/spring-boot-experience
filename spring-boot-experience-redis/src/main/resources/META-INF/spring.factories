@@ -1,0 +1,2 @@
+org.springframework.boot.env.EnvironmentPostProcessor=org.vxwo.springboot.experience.redis.processor.PackageEnvironmentLoader
+
