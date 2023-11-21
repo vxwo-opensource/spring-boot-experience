@@ -17,6 +17,7 @@ public class CustomRequestLoggingHandler implements RequestLoggingHandler {
     private ObjectMapper objectMapper;
 
     @Override
+    @SuppressWarnings("unchecked")
     public Map<String, Object> convertToMap(Object value) throws IOException {
         return objectMapper.convertValue(value, Map.class);
     }

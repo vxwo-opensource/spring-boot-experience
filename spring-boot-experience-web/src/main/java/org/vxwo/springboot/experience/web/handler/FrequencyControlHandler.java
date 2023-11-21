@@ -48,7 +48,7 @@ public interface FrequencyControlHandler {
      * @param request  the request wrap
      * @param response  the response wrap
      * @param keyPrefix  the key prefix for identify the function
-     * @param duration
+     * @param duration  the duration time
      * @return  success if obtaind
      * @throws ServletException  if the request cannot be handled
      * @throws IOException  if IO error occurs
