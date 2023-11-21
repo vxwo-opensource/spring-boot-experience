@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 import org.vxwo.springboot.experience.redis.render.RedisTemplateRender;
 
 /**
+ * Wrap the frequency support for Redis
+ *
  * @author vxwo-team
  */
 
@@ -36,11 +38,11 @@ public class RedisFrequencyProcessor {
     }
 
     /**
-     * enter frequency session and ownr it
+     * Enter frequency session and own it
      *
-     * @param frequencyKey
-     * @param duration
-     * @return value for leave, null if failed
+     * @param frequencyKey  the key for frequency session
+     * @param duration  the duration time
+     * @return value for leave usage, null if failed
      */
     public String enterFrequencyDuration(String frequencyKey, Duration duration) {
         String frequencyValue = UUID.randomUUID().toString() + ":" + SAFE_ATOM.getAndIncrement();
@@ -51,10 +53,10 @@ public class RedisFrequencyProcessor {
     }
 
     /**
-     * leave frequency session
+     * Leave frequency session
      *
-     * @param frequencyKey
-     * @param frequencyValue
+     * @param frequencyKey  the key for frequency session
+     * @param frequencyValue  the value for frequency session
      * @return false if not owned
      */
     public boolean leaveFrequencyDuration(String frequencyKey, String frequencyValue) {

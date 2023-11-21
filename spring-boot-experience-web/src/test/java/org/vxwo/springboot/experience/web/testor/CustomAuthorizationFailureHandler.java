@@ -12,7 +12,7 @@ public class CustomAuthorizationFailureHandler implements AuthorizationFailureHa
 
     @Override
     public void handleAuthorizationFailure(HttpServletRequest request, HttpServletResponse response,
-            String path, String detail) throws ServletException, IOException {
+            String path, String messsage) throws ServletException, IOException {
         response.getWriter().write(ReturnCode.FAILED);
     }
 

@@ -34,24 +34,22 @@ public class PathProcessor {
     }
 
     /**
-     * Create absolute URI
+     * Generateion absolute URI from relative URI
      *
-     * @param Relative Path
-     * @return Absolute URL
+     * @param  relativeURI  the relative URI
+     * @return  the absolute URI
      */
-
     @SuppressWarnings("PMD")
     public String createAbsoluteURI(String relativeURI) {
         return servletContextPath + relativeURI;
     }
 
     /**
-     * Get current relative URI
+     * Get relative URI from request
      *
-     * @param Request
-     * @return Relative URI
+     * @param  request  the request wrap
+     * @return  the relative URI
      */
-
     @SuppressWarnings("PMD")
     public String getRelativeURI(HttpServletRequest request) {
         String targetURI = request.getRequestURI();

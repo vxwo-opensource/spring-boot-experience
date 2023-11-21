@@ -29,6 +29,8 @@ import lombok.extern.slf4j.Slf4j;
 @ConditionalOnProperty(value = ConfigPrefix.CORS + ".enabled", havingValue = "true")
 @Order(CoreOrdered.PRELOAD_LAYER)
 public class CorsFilter extends OncePerRequestFilter {
+    private final static String ORIGIN_ALL = "*";
+
     private final boolean parseReferer;
     private final String firstAllowOrigin;
     private final List<String> acceptAllowOrigins;
@@ -69,7 +71,7 @@ public class CorsFilter extends OncePerRequestFilter {
         }
 
         if (!StringUtils.hasText(allowOrigin)) {
-            allowOrigin = "*";
+            allowOrigin = ORIGIN_ALL;
         }
 
         return allowOrigin;

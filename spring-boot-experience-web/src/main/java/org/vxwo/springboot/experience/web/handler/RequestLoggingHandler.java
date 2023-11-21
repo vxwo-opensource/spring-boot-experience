@@ -5,34 +5,36 @@ import java.util.Map;
 import org.vxwo.springboot.experience.web.entity.RequestLoggingEntity;
 
 /**
+ * The interface for request loging handle
+ *
  * @author vxwo-team
  */
 
 public interface RequestLoggingHandler {
 
     /**
-    * Convert to String
+    * Convert object to JSON String
     *
-    * @param value
-    * @return
-    * @throws IOException
+    * @param value  the object
+    * @return  the JSON string
+    * @throws IOException  if IO error occurs
     */
     String convertToString(Object value) throws IOException;
 
     /**
-     * Convert Object to Map
+     * Convert object to Map
      *
-     * @param value
-     * @return
-     * @throws IOException
+     * @param value  the object
+     * @return  the Map
+     * @throws IOException  if IO error occurs
      */
     Map<String, Object> convertToMap(Object value) throws IOException;
 
     /**
-     * Handle request logging
+     * Handle request logging to publish
      *
-     * @param entity
-     * @throws IOException
+     * @param entity  the logging entity
+     * @throws IOException  if IO error occurs
      */
     void handleRequestLogging(RequestLoggingEntity entity) throws IOException;
 };
