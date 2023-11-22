@@ -20,6 +20,7 @@ import org.vxwo.springboot.experience.web.handler.AuthorizationFailureHandler;
 import org.vxwo.springboot.experience.web.handler.BearerAuthorizationHandler;
 import org.vxwo.springboot.experience.web.matcher.GroupPathRuleMatcher;
 import org.vxwo.springboot.experience.web.processor.PathProcessor;
+import org.vxwo.springboot.experience.web.util.SplitUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -63,7 +64,9 @@ public class BearerAuthorizationFilter extends OncePerRequestFilter {
             return;
         }
 
-        String matchPath = pathRuleMatcher.findMatchPath(pathProcessor.getRelativeURI(request));
+        String relativePath = pathProcessor.getRelativeURI(request);
+
+        String matchPath = pathRuleMatcher.findMatchPath(relativePath);
         if (matchPath == null) {
             filterChain.doFilter(request, response);
             return;
@@ -72,10 +75,16 @@ public class BearerAuthorizationFilter extends OncePerRequestFilter {
         String bearerToken = null;
         String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (authorization != null) {
-            String[] fields = authorization.split(" ");
-            if (fields.length > 1 && bearerKeys.contains(fields[0])) {
-                bearerToken = fields[1];
+            List<String> fields = SplitUtil.splitToList(authorization, " ");
+            if (fields.size() > 1 && bearerKeys.contains(fields.get(0))) {
+                bearerToken = fields.get(1);
             }
+        }
+
+        // Skip the optional path, when no token
+        if (bearerToken == null && pathRuleMatcher.isOptionalPath(matchPath, relativePath)) {
+            filterChain.doFilter(request, response);
+            return;
         }
 
         if (bearerToken == null) {

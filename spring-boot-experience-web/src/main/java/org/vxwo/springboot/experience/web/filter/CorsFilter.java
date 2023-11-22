@@ -1,9 +1,7 @@
 package org.vxwo.springboot.experience.web.filter;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.vxwo.springboot.experience.web.ConfigPrefix;
 import org.vxwo.springboot.experience.web.CoreOrdered;
 import org.vxwo.springboot.experience.web.config.CorsConfig;
+import org.vxwo.springboot.experience.web.util.SplitUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -39,8 +38,7 @@ public class CorsFilter extends OncePerRequestFilter {
     public CorsFilter(CorsConfig value) {
         parseReferer = value.isParseReferer();
 
-        acceptAllowOrigins = Arrays.asList(value.getAllowOrigins().split(",|;")).stream()
-                .map(o -> o.trim()).filter(o -> !o.isEmpty()).collect(Collectors.toList());
+        acceptAllowOrigins = SplitUtil.splitToList(value.getAllowOrigins(), ",|;");
         firstAllowOrigin = acceptAllowOrigins.isEmpty() ? null : acceptAllowOrigins.get(0);
 
         if (log.isInfoEnabled()) {

@@ -2,7 +2,6 @@ package org.vxwo.springboot.experience.web.filter;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +19,7 @@ import org.vxwo.springboot.experience.web.config.ApiKeyAuthorizationConfig;
 import org.vxwo.springboot.experience.web.handler.AuthorizationFailureHandler;
 import org.vxwo.springboot.experience.web.matcher.OwnerPathRuleMatcher;
 import org.vxwo.springboot.experience.web.processor.PathProcessor;
+import org.vxwo.springboot.experience.web.util.SplitUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -46,8 +46,7 @@ public class ApiKeyAuthorizationFilter extends OncePerRequestFilter {
 
     @Autowired
     public ApiKeyAuthorizationFilter(ApiKeyAuthorizationConfig value) {
-        headerKeys = value.getHeaderKeys().stream().map(o -> o.trim()).filter(o -> !o.isEmpty())
-                .collect(Collectors.toList());
+        headerKeys = SplitUtil.shrinkList(value.getHeaderKeys());
         parseBearer = value.isParseBearer();
         bearerKeys = value.getBearerKeys();
         pathRuleMatcher = new OwnerPathRuleMatcher(
@@ -72,9 +71,9 @@ public class ApiKeyAuthorizationFilter extends OncePerRequestFilter {
         if (apiKey == null && parseBearer) {
             String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
             if (authorization != null) {
-                String[] fields = authorization.split(" ");
-                if (fields.length > 1 && bearerKeys.contains(fields[0])) {
-                    apiKey = fields[1];
+                List<String> fields = SplitUtil.splitToList(authorization, " ");
+                if (fields.size() > 1 && bearerKeys.contains(fields.get(0))) {
+                    apiKey = fields.get(1);
                 }
             }
         }

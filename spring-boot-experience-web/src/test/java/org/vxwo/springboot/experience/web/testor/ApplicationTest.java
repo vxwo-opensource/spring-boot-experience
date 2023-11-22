@@ -1,6 +1,5 @@
 package org.vxwo.springboot.experience.web.testor;
 
-import java.util.HashMap;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -63,12 +62,21 @@ public class ApplicationTest {
 
     @Test
     @Order(105)
-    public void testBearerOptionalShouldReturnLogined() {
+    public void testBearerLoginedOptionalShouldReturnLogined() {
         RequestEntity<?> request = RequestEntity
                 .get(String.format("http://localhost:%s/test-bearer/optional", localPort))
-                .header(HttpHeaders.AUTHORIZATION, "Bearer testor").build();
+                .header(HttpHeaders.AUTHORIZATION, "Bearer    testor").build();
         ResponseEntity<String> response = this.restTemplate.exchange(request, String.class);
         Assertions.assertEquals(ReturnCode.LOGINED, response.getBody());
+    }
+
+    @Test
+    @Order(105)
+    public void testBearerUnloginedOptionalShouldReturnSuccess() {
+        RequestEntity<?> request = RequestEntity
+                .get(String.format("http://localhost:%s/test-bearer/optional", localPort)).build();
+        ResponseEntity<String> response = this.restTemplate.exchange(request, String.class);
+        Assertions.assertEquals(ReturnCode.SUCCESS, response.getBody());
     }
 
     @Test

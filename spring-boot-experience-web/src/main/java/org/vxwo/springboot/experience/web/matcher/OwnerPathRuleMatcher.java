@@ -3,6 +3,7 @@ package org.vxwo.springboot.experience.web.matcher;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.util.ObjectUtils;
+import org.vxwo.springboot.experience.web.util.SplitUtil;
 
 /**
  * @author vxwo-team
@@ -12,8 +13,8 @@ import org.springframework.util.ObjectUtils;
  */
 
 public class OwnerPathRuleMatcher {
-    public final static String GROUP_SEPARATOR = ";";
-    public final static String FIELD_SEPARATOR = ":";
+    public final static String FIELD_SEPARATOR = ";";
+    public final static String PAIR_SEPARATOR = ":";
 
     private final List<PathMatcher> acceptPaths;
     private final Map<String, Map<String, String>> acceptPathRules;
@@ -32,27 +33,27 @@ public class OwnerPathRuleMatcher {
                 continue;
             }
 
-            String[] fields = target.split(GROUP_SEPARATOR);
-            String path = fields[0].trim();
-            if (path.isEmpty()) {
+            List<String> fields = SplitUtil.splitToList(target, FIELD_SEPARATOR);
+            if (fields.isEmpty()) {
                 continue;
             }
 
+            String path = fields.get(0);
+
             Map<String, String> acceptKeys = new ConcurrentHashMap<String, String>();
-            for (int i = 1; i < fields.length; ++i) {
-                String field = fields[i].trim();
+            for (int i = 1; i < fields.size(); ++i) {
+                String field = fields.get(i);
                 if (field.isEmpty()) {
                     continue;
                 }
 
-                String[] pair = field.split(FIELD_SEPARATOR);
-                String key = pair[0].trim();
-                String owner = (pair.length > 1 ? pair[1] : "").trim();
-
-                if (key.isEmpty()) {
+                List<String> pair = SplitUtil.splitToList(field, PAIR_SEPARATOR);
+                if (pair.isEmpty()) {
                     continue;
                 }
 
+                String key = pair.get(0);
+                String owner = pair.size() > 1 ? pair.get(1) : "";
                 if (owner.isEmpty()) {
                     owner = "unknow";
                 }

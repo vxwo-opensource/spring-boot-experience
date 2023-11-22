@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import org.springframework.util.ObjectUtils;
+import org.vxwo.springboot.experience.web.util.SplitUtil;
 
 /**
  * @author vxwo-team
@@ -13,11 +14,11 @@ import org.springframework.util.ObjectUtils;
  */
 
 public class GroupPathRuleMatcher {
-    public final static String GROUP_SEPARATOR = ";";
+    public final static String FIELD_SEPARATOR = ";";
     public final static String PATHS_SEPARATOR = ",";
 
-    public final static int GROUP_EXCLUDE_PATHS = 1;
-    public final static int GROUP_OPTIONAL_PATHS = 2;
+    public final static int FIELD_EXCLUDE_PATHS = 1;
+    public final static int FIELD_OPTIONAL_PATHS = 2;
 
     private final List<PathMatcher> acceptPaths;
     private final Map<String, List<PathMatcher>> excludePathMatcherMap;
@@ -39,24 +40,20 @@ public class GroupPathRuleMatcher {
                 continue;
             }
 
-            String[] fields = target.split(GROUP_SEPARATOR);
-            String path = fields[0].trim();
-            if (path.isEmpty()) {
+            List<String> fields = SplitUtil.splitToList(target, FIELD_SEPARATOR);
+            if (fields.isEmpty()) {
                 continue;
             }
 
+            String path = fields.get(0);
             if (!path.endsWith("/")) {
                 path += "/";
             }
 
             List<PathMatcher> excludePathMatchers = new ArrayList<>();
-            if (fields.length > GROUP_EXCLUDE_PATHS) {
-                for (String o : fields[GROUP_EXCLUDE_PATHS].split(PATHS_SEPARATOR)) {
-                    String exclude = o.trim();
-                    if (exclude.isEmpty()) {
-                        continue;
-                    }
-
+            if (fields.size() > FIELD_EXCLUDE_PATHS) {
+                for (String exclude : SplitUtil.splitToList(fields.get(FIELD_EXCLUDE_PATHS),
+                        PATHS_SEPARATOR)) {
                     if (exclude.startsWith("/")) {
                         throw new RuntimeException(
                                 "Configuration: [" + configName + "] Failed on path: " + path
@@ -73,13 +70,9 @@ public class GroupPathRuleMatcher {
             }
 
             List<PathMatcher> optionalPathMatchers = new ArrayList<>();
-            if (fields.length > GROUP_OPTIONAL_PATHS) {
-                for (String o : fields[GROUP_OPTIONAL_PATHS].split(PATHS_SEPARATOR)) {
-                    String optional = o.trim();
-                    if (optional.isEmpty()) {
-                        continue;
-                    }
-
+            if (fields.size() > FIELD_OPTIONAL_PATHS) {
+                for (String optional : SplitUtil.splitToList(fields.get(FIELD_OPTIONAL_PATHS),
+                        PATHS_SEPARATOR)) {
                     if (optional.startsWith("/")) {
                         throw new RuntimeException(
                                 "Configuration: [" + configName + "] failed on path: " + path

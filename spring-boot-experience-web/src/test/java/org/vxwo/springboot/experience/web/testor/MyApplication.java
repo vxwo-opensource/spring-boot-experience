@@ -33,7 +33,8 @@ public class MyApplication {
     }
 
     @GetMapping("/test-bearer/optional")
-    public String doTestBearerOptional(@RequestAttribute(ReturnCode.LOGINED) String logined) {
+    public String doTestBearerOptional(
+            @RequestAttribute(value = ReturnCode.LOGINED, required = false) String logined) {
         return StringUtils.hasText(logined) ? ReturnCode.LOGINED : ReturnCode.SUCCESS;
     }
 
