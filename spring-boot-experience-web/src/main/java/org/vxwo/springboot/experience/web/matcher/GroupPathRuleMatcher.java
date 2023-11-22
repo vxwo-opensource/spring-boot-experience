@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import org.springframework.util.ObjectUtils;
+import org.vxwo.springboot.experience.web.config.GroupPathRule;
 import org.vxwo.springboot.experience.web.util.SplitUtil;
 
 /**
@@ -14,17 +15,12 @@ import org.vxwo.springboot.experience.web.util.SplitUtil;
  */
 
 public class GroupPathRuleMatcher {
-    public final static String FIELD_SEPARATOR = ";";
-    public final static String PATHS_SEPARATOR = ",";
-
-    public final static int FIELD_EXCLUDE_PATHS = 1;
-    public final static int FIELD_OPTIONAL_PATHS = 2;
-
     private final List<PathMatcher> acceptPaths;
     private final Map<String, List<PathMatcher>> excludePathMatcherMap;
     private final Map<String, List<PathMatcher>> optionalPathMatcherMap;
 
-    public GroupPathRuleMatcher(String configName, List<String> pathRules) {
+    @SuppressWarnings("PMD.AvoidComplexConditionRule")
+    public GroupPathRuleMatcher(String configName, List<GroupPathRule> pathRules) {
         acceptPaths = new ArrayList<>();
         excludePathMatcherMap = new ConcurrentHashMap<>();
         optionalPathMatcherMap = new ConcurrentHashMap<>();
@@ -34,26 +30,21 @@ public class GroupPathRuleMatcher {
         }
 
         Set<String> excludeOrOptionalPathSet = new HashSet<>();
-        for (String line : pathRules) {
-            String target = line.trim();
-            if (target.isEmpty()) {
+        for (GroupPathRule pathRule : pathRules) {
+            String path = pathRule.getPath();
+            if (path.isEmpty()) {
                 continue;
             }
 
-            List<String> fields = SplitUtil.splitToList(target, FIELD_SEPARATOR);
-            if (fields.isEmpty()) {
-                continue;
-            }
-
-            String path = fields.get(0);
-            if (!path.endsWith("/")) {
+            boolean existExcludes = !ObjectUtils.isEmpty(pathRule.getExcludes());
+            boolean existOptionals = !ObjectUtils.isEmpty(pathRule.getOptionals());
+            if ((existExcludes || existOptionals) && !path.endsWith("/")) {
                 path += "/";
             }
 
             List<PathMatcher> excludePathMatchers = new ArrayList<>();
-            if (fields.size() > FIELD_EXCLUDE_PATHS) {
-                for (String exclude : SplitUtil.splitToList(fields.get(FIELD_EXCLUDE_PATHS),
-                        PATHS_SEPARATOR)) {
+            if (existExcludes) {
+                for (String exclude : SplitUtil.shrinkList(pathRule.getExcludes())) {
                     if (exclude.startsWith("/")) {
                         throw new RuntimeException(
                                 "Configuration: [" + configName + "] Failed on path: " + path
@@ -70,9 +61,8 @@ public class GroupPathRuleMatcher {
             }
 
             List<PathMatcher> optionalPathMatchers = new ArrayList<>();
-            if (fields.size() > FIELD_OPTIONAL_PATHS) {
-                for (String optional : SplitUtil.splitToList(fields.get(FIELD_OPTIONAL_PATHS),
-                        PATHS_SEPARATOR)) {
+            if (existOptionals) {
+                for (String optional : SplitUtil.shrinkList(pathRule.getOptionals())) {
                     if (optional.startsWith("/")) {
                         throw new RuntimeException(
                                 "Configuration: [" + configName + "] failed on path: " + path
@@ -134,13 +124,13 @@ public class GroupPathRuleMatcher {
 
             List<PathMatcher> pathMatchers = excludePathMatcherMap.get(s.getTarget());
             if (!pathMatchers.isEmpty()) {
-                sb.append(", exclude: " + String.join(",", pathMatchers.stream()
+                sb.append(", excludes: " + String.join(",", pathMatchers.stream()
                         .map(o -> o.getTarget()).collect(Collectors.toList())));
             }
 
             pathMatchers = optionalPathMatcherMap.get(s.getTarget());
             if (!pathMatchers.isEmpty()) {
-                sb.append(", optional: " + String.join(",", pathMatchers.stream()
+                sb.append(", optionals: " + String.join(",", pathMatchers.stream()
                         .map(o -> o.getTarget()).collect(Collectors.toList())));
             }
         }

@@ -46,7 +46,8 @@ public class ApplicationTest {
     @Order(103)
     public void testBearerIncludeShouldReturnFailed() {
         RequestEntity<?> request = RequestEntity
-                .get(String.format("http://localhost:%s/test-bearer/include", localPort)).build();
+                .get(String.format("http://localhost:%s/test-bearer/include-path", localPort))
+                .build();
         ResponseEntity<String> response = this.restTemplate.exchange(request, String.class);
         Assertions.assertEquals(ReturnCode.FAILED, response.getBody());
     }
@@ -55,7 +56,8 @@ public class ApplicationTest {
     @Order(104)
     public void testBearerExcludeShouldReturnSuccess() {
         RequestEntity<?> request = RequestEntity
-                .get(String.format("http://localhost:%s/test-bearer/exclude", localPort)).build();
+                .get(String.format("http://localhost:%s/test-bearer/exclude-path", localPort))
+                .build();
         ResponseEntity<String> response = this.restTemplate.exchange(request, String.class);
         Assertions.assertEquals(ReturnCode.SUCCESS, response.getBody());
     }
@@ -64,7 +66,7 @@ public class ApplicationTest {
     @Order(105)
     public void testBearerLoginedOptionalShouldReturnLogined() {
         RequestEntity<?> request = RequestEntity
-                .get(String.format("http://localhost:%s/test-bearer/optional", localPort))
+                .get(String.format("http://localhost:%s/test-bearer/optional-path", localPort))
                 .header(HttpHeaders.AUTHORIZATION, "Bearer    testor").build();
         ResponseEntity<String> response = this.restTemplate.exchange(request, String.class);
         Assertions.assertEquals(ReturnCode.LOGINED, response.getBody());
@@ -74,7 +76,8 @@ public class ApplicationTest {
     @Order(105)
     public void testBearerUnloginedOptionalShouldReturnSuccess() {
         RequestEntity<?> request = RequestEntity
-                .get(String.format("http://localhost:%s/test-bearer/optional", localPort)).build();
+                .get(String.format("http://localhost:%s/test-bearer/optional-path", localPort))
+                .build();
         ResponseEntity<String> response = this.restTemplate.exchange(request, String.class);
         Assertions.assertEquals(ReturnCode.SUCCESS, response.getBody());
     }

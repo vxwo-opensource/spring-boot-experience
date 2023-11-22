@@ -17,5 +17,5 @@ public class ApiKeyAuthorizationConfig {
     private List<String> headerKeys;
     private boolean parseBearer;
     private List<String> bearerKeys;
-    private List<String> pathRules;
+    private List<OwnerPathRule> pathRules;
 }

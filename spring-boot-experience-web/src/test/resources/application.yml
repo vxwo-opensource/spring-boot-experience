@@ -12,12 +12,19 @@ sbexp:
       api-key:
         enabled: true
         path-rules:
-          - /test-api-key;test-key:testor
+          - path: /test-api-key
+            owners:
+              - key: test-key
+                owner: testor
 
       bearer:
         enabled: true
         path-rules:
-          - /test-bearer/;exclude;optional
+          - path: /test-bearer
+            excludes:
+              - exclude-path
+            optionals:
+              - optional-path
 
     frequency-control:
       enabled: true

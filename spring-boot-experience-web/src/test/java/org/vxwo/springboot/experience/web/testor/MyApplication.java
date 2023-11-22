@@ -22,17 +22,17 @@ public class MyApplication {
         return ReturnCode.SUCCESS;
     }
 
-    @GetMapping("/test-bearer/include")
+    @GetMapping("/test-bearer/include-path")
     public String doTestBearerInclude() {
         return ReturnCode.SUCCESS;
     }
 
-    @GetMapping("/test-bearer/exclude")
+    @GetMapping("/test-bearer/exclude-path")
     public String doTestBearerExclude() {
         return ReturnCode.SUCCESS;
     }
 
-    @GetMapping("/test-bearer/optional")
+    @GetMapping("/test-bearer/optional-path")
     public String doTestBearerOptional(
             @RequestAttribute(value = ReturnCode.LOGINED, required = false) String logined) {
         return StringUtils.hasText(logined) ? ReturnCode.LOGINED : ReturnCode.SUCCESS;

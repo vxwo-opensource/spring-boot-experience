@@ -15,5 +15,5 @@ import org.vxwo.springboot.experience.web.ConfigPrefix;
 @ConfigurationProperties(prefix = ConfigPrefix.AUTHORIZATION_BEARER)
 public class BearerAuthorizationConfig {
     private List<String> bearerKeys;
-    private List<String> pathRules;
+    private List<GroupPathRule> pathRules;
 }
