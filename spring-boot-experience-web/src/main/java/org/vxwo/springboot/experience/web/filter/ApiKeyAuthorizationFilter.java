@@ -53,7 +53,7 @@ public class ApiKeyAuthorizationFilter extends OncePerRequestFilter {
                 ConfigPrefix.AUTHORIZATION_API_KEY + ".path-rules", value.getPathRules());
 
         if (log.isInfoEnabled()) {
-            log.info(getClass().getSimpleName() + " actived, " + pathRuleMatcher.toString());
+            log.info("ApiKey authorization actived, " + pathRuleMatcher.toString());
         }
     }
 

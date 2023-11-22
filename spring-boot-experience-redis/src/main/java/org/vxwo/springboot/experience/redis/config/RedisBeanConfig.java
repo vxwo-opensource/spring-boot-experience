@@ -7,12 +7,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.vxwo.springboot.experience.redis.render.RedisTemplateRender;
 import org.vxwo.springboot.experience.redis.serializer.RedisPrefixWrapper;
+import lombok.extern.slf4j.Slf4j;
 
 
 /**
  * @author vxwo-team
  */
 
+@Slf4j
 @Configuration
 @AutoConfigureAfter(RedisConfig.class)
 public class RedisBeanConfig {
@@ -23,6 +25,10 @@ public class RedisBeanConfig {
         redisNamespace = value.getNamespace();
         if (!redisNamespace.isEmpty() && !redisNamespace.endsWith(value.getNamespaceSeparator())) {
             redisNamespace += value.getNamespaceSeparator();
+        }
+
+        if (log.isInfoEnabled()) {
+            log.info("Redis actived, namespace: \"" + redisNamespace + "\"");
         }
     }
 

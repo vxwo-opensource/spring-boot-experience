@@ -52,7 +52,7 @@ public class BearerAuthorizationFilter extends OncePerRequestFilter {
                 ConfigPrefix.AUTHORIZATION_BEARER + ".path-rules", value.getPathRules());
 
         if (log.isInfoEnabled()) {
-            log.info(getClass().getSimpleName() + " actived, " + pathRuleMatcher.toString());
+            log.info("Bearer authorization actived, " + pathRuleMatcher.toString());
         }
     }
 

@@ -72,7 +72,7 @@ public class FrequencyControlFilter extends OncePerRequestFilter {
 
         if (log.isInfoEnabled()) {
             StringBuffer sb = new StringBuffer();
-            sb.append(getClass().getSimpleName() + " actived");
+            sb.append("Request frequency control actived");
 
             sb.append("\n fixed-intervals:");
             if (fixedIntervals.isEmpty()) {

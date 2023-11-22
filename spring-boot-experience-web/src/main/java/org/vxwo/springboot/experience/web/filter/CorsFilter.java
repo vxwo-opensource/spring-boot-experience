@@ -42,7 +42,7 @@ public class CorsFilter extends OncePerRequestFilter {
         firstAllowOrigin = acceptAllowOrigins.isEmpty() ? null : acceptAllowOrigins.get(0);
 
         if (log.isInfoEnabled()) {
-            log.info(getClass().getSimpleName() + " actived");
+            log.info("CORS actived");
         }
     }
 

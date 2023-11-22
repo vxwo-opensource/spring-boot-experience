@@ -62,7 +62,7 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
 
         if (log.isInfoEnabled()) {
             StringBuffer sb = new StringBuffer();
-            sb.append(getClass().getSimpleName() + " actived, " + includePaths.size() + " paths");
+            sb.append("Request loggging actived, " + includePaths.size() + " paths");
             for (PathMatcher s : includePaths) {
                 sb.append("\n " + s.getTarget());
             }
