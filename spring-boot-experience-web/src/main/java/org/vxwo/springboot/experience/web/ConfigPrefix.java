@@ -5,7 +5,7 @@ package org.vxwo.springboot.experience.web;
  */
 
 public final class ConfigPrefix {
-    private final static String ATTRIBUTE_PREFIX = "experience.web";
+    private final static String ATTRIBUTE_PREFIX = "sbexp.web";
 
     public final static String CORS = ATTRIBUTE_PREFIX + ".cors";
 

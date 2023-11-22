@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.vxwo.springboot.experience.redis.serializer.RedisPrefixWrapper;
 import org.vxwo.springboot.experience.redis.serializer.RedisPrefixKeySerializer;
+import org.vxwo.springboot.experience.redis.entity.FrequencyDurationSession;
 import org.vxwo.springboot.experience.redis.processor.RedisFrequencyProcessor;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -52,20 +53,18 @@ public class ApplicationTest {
     @Order(201)
     @EnabledIfEnvironmentVariable(named = "EXPERIENCE_TEST_REDIS_HOST", matches = "[^\\ ]+")
     public void testFrequencyConcurrencyFirstShouldSuccess() {
-        String frequencyValue = redisFrequencyProcessor
+        FrequencyDurationSession session = redisFrequencyProcessor
                 .enterFrequencyDuration(FREQUENCY_CONCURRENCY_KEY, FREQUENCY_DURATION);
-        Assertions.assertEquals(true, redisFrequencyProcessor
-                .leaveFrequencyDuration(FREQUENCY_CONCURRENCY_KEY, frequencyValue));
+        Assertions.assertEquals(true, redisFrequencyProcessor.leaveFrequencyDuration(session));
     }
 
     @Test
     @Order(202)
     @EnabledIfEnvironmentVariable(named = "EXPERIENCE_TEST_REDIS_HOST", matches = "[^\\ ]+")
     public void testFrequencyConcurrencySecondShouldSuccess() {
-        String frequencyValue = redisFrequencyProcessor
+        FrequencyDurationSession session = redisFrequencyProcessor
                 .enterFrequencyDuration(FREQUENCY_CONCURRENCY_KEY, FREQUENCY_DURATION);
-        Assertions.assertEquals(true, redisFrequencyProcessor
-                .leaveFrequencyDuration(FREQUENCY_CONCURRENCY_KEY, frequencyValue));
+        Assertions.assertEquals(true, redisFrequencyProcessor.leaveFrequencyDuration(session));
     }
 
     @Test
@@ -74,26 +73,27 @@ public class ApplicationTest {
     public void testFrequencyConcurrencyBadValueShouldFailed() {
         redisFrequencyProcessor.enterFrequencyDuration(FREQUENCY_CONCURRENCY_KEY,
                 FREQUENCY_DURATION);
-        Assertions.assertEquals(false, redisFrequencyProcessor
-                .leaveFrequencyDuration(FREQUENCY_CONCURRENCY_KEY, "bad-key"));
+        FrequencyDurationSession session =
+                new FrequencyDurationSession(FREQUENCY_CONCURRENCY_KEY, "bad-value");
+        Assertions.assertEquals(false, redisFrequencyProcessor.leaveFrequencyDuration(session));
     }
 
     @Test
     @Order(211)
     @EnabledIfEnvironmentVariable(named = "EXPERIENCE_TEST_REDIS_HOST", matches = "[^\\ ]+")
     public void testFrequencyIntervalFirstShouldSuccess() {
-        String frequencyValue = redisFrequencyProcessor
+        FrequencyDurationSession session = redisFrequencyProcessor
                 .enterFrequencyDuration(FREQUENCY_INTERVAL_KEY, FREQUENCY_DURATION);
-        Assertions.assertEquals(true, frequencyValue != null);
+        Assertions.assertEquals(true, session != null);
     }
 
     @Test
     @Order(212)
     @EnabledIfEnvironmentVariable(named = "EXPERIENCE_TEST_REDIS_HOST", matches = "[^\\ ]+")
     public void testFrequencyIntervalSecondShouldFailed() {
-        String frequencyValue = redisFrequencyProcessor
+        FrequencyDurationSession session = redisFrequencyProcessor
                 .enterFrequencyDuration(FREQUENCY_INTERVAL_KEY, FREQUENCY_DURATION);
-        Assertions.assertEquals(true, frequencyValue == null);
+        Assertions.assertEquals(true, session == null);
     }
 
 }

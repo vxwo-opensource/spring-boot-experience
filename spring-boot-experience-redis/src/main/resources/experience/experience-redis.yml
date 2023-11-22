@@ -1,4 +1,4 @@
-experience:
+sbexp:
   redis:
     namespace:
     namespace-separator: ":"

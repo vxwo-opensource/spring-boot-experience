@@ -4,7 +4,7 @@ spring:
     port: ${EXPERIENCE_TEST_REDIS_PORT:6379}
     password: ${EXPERIENCE_TEST_REDIS_PWD:}
 
-experience:
+sbexp:
   redis:
     namespace: test
 

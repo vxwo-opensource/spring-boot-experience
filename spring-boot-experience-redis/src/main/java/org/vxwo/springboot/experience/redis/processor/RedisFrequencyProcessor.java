@@ -9,6 +9,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Component;
+import org.vxwo.springboot.experience.redis.entity.FrequencyDurationSession;
 import org.vxwo.springboot.experience.redis.render.RedisTemplateRender;
 
 /**
@@ -42,26 +43,25 @@ public class RedisFrequencyProcessor {
      *
      * @param frequencyKey  the key for frequency session
      * @param duration  the duration time
-     * @return value for leave usage, null if failed
+     * @return session for leave usage, null if failed
      */
-    public String enterFrequencyDuration(String frequencyKey, Duration duration) {
+    public FrequencyDurationSession enterFrequencyDuration(String frequencyKey, Duration duration) {
         String frequencyValue = UUID.randomUUID().toString() + ":" + SAFE_ATOM.getAndIncrement();
         Boolean result =
                 redisTemplate.execute(UNSAFE_LOCK_SCRIPT, Collections.singletonList(frequencyKey),
                         frequencyValue, String.valueOf(duration.toMillis()));
-        return result ? frequencyValue : null;
+        return result ? new FrequencyDurationSession(frequencyKey, frequencyValue) : null;
     }
 
     /**
      * Leave frequency session
      *
-     * @param frequencyKey  the key for frequency session
-     * @param frequencyValue  the value for frequency session
+     * @param session  the session for leave
      * @return false if not owned
      */
-    public boolean leaveFrequencyDuration(String frequencyKey, String frequencyValue) {
-        return redisTemplate.execute(UNSAFE_UNLOCK_SCRIPT, Collections.singletonList(frequencyKey),
-                frequencyValue);
+    public boolean leaveFrequencyDuration(FrequencyDurationSession session) {
+        return redisTemplate.execute(UNSAFE_UNLOCK_SCRIPT,
+                Collections.singletonList(session.getFrequencyKey()), session.getFrequencyValue());
     }
 
 }
