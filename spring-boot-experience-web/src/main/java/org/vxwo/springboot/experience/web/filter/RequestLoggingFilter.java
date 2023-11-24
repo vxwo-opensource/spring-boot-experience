@@ -183,9 +183,9 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
             }
 
             try {
-                processHandler.handleRequestLogging(entity);
+                processHandler.publishRequestLogging(entity);
             } catch (Exception ex) {
-                log.error("handleRequestLogging", ex);
+                log.error("publishRequestLogging", ex);
             }
         }
     }

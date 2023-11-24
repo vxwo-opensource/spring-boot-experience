@@ -31,10 +31,10 @@ public interface RequestLoggingHandler {
     Map<String, Object> convertToMap(Object value) throws IOException;
 
     /**
-     * Handle request logging to publish
+     * Publish request logging to repository
      *
      * @param entity  the logging entity
      * @throws IOException  if IO error occurs
      */
-    void handleRequestLogging(RequestLoggingEntity entity) throws IOException;
+    void publishRequestLogging(RequestLoggingEntity entity) throws IOException;
 };

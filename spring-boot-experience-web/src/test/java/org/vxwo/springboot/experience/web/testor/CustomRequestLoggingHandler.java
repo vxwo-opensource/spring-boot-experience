@@ -28,7 +28,7 @@ public class CustomRequestLoggingHandler implements RequestLoggingHandler {
     }
 
     @Override
-    public void handleRequestLogging(RequestLoggingEntity entity) throws IOException {
+    public void publishRequestLogging(RequestLoggingEntity entity) throws IOException {
         log.info(convertToString(entity));
     }
 

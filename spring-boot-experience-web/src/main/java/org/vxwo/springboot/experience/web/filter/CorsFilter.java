@@ -38,7 +38,7 @@ public class CorsFilter extends OncePerRequestFilter {
     public CorsFilter(CorsConfig value) {
         parseReferer = value.isParseReferer();
 
-        acceptAllowOrigins = SplitUtil.splitToList(value.getAllowOrigins(), ",|;");
+        acceptAllowOrigins = SplitUtil.shrinkList(value.getAllowOrigins());
         firstAllowOrigin = acceptAllowOrigins.isEmpty() ? null : acceptAllowOrigins.get(0);
 
         if (log.isInfoEnabled()) {

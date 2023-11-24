@@ -3,8 +3,8 @@ sbexp:
     # Cors Filter
     cors:
       enabled: false
-      allow-origins:
       parse-referer: false
+      allow-origins:
 
     # Request Logging Filter
     logging:
@@ -21,8 +21,8 @@ sbexp:
       api-key:
         enabled: false
         header-keys:
-          - x-api-key
-          - api-key
+          - X-Api-Key
+          - Api-Key
         parse-bearer: false
         bearer-keys:
           - Bearer
