@@ -13,5 +13,5 @@ import lombok.Data;
 @ConfigurationProperties(prefix = "sbexp.redis")
 public class RedisConfig {
     private String namespace;
-    private String namespaceSeparator;
+    private String namespaceStuffix;
 }

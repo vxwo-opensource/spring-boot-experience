@@ -23,8 +23,8 @@ public class RedisBeanConfig {
     @Autowired
     public RedisBeanConfig(RedisConfig value) {
         redisNamespace = value.getNamespace();
-        if (!redisNamespace.isEmpty() && !redisNamespace.endsWith(value.getNamespaceSeparator())) {
-            redisNamespace += value.getNamespaceSeparator();
+        if (!redisNamespace.isEmpty() && !redisNamespace.endsWith(value.getNamespaceStuffix())) {
+            redisNamespace += value.getNamespaceStuffix();
         }
 
         if (log.isInfoEnabled()) {

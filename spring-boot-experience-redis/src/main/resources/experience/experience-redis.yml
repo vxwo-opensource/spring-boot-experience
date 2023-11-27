@@ -1,4 +1,4 @@
 sbexp:
   redis:
     namespace:
-    namespace-separator: ":"
+    namespace-stuffix: ":"
