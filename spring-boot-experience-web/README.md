@@ -1,6 +1,20 @@
 spring-boot-experience-web
 ==============================================
 
+# Processors
+
+## org.vxwo.springboot.experience.web.processor.PathProcessor
+
+### Methods
+
+- String createAbsoluteURI(String)
+
+Generateion absolute URI from relative URI
+
+- String getRelativeURI(HttpServletRequest)
+
+Get relative URI from request
+
 # Filters
 
 ## Chain
@@ -34,11 +48,11 @@ prefix: sbexp.web.logging
 | stacktrace-limit-lines  | int           |            | 5         | Lines limit for Exception stack trace  |
 | include-paths           | Array[String] |            | [/]       | Paths for logging                      |
 
-### Implementation
+### Implementations
 
-#### org.vxwo.springboot.experience.web.handler.RequestLoggingHandler
+- org.vxwo.springboot.experience.web.handler.RequestLoggingHandler
 
-Handle the logging
+  Handle the logging
 
 ## ApiKey Authorization
 
@@ -68,11 +82,11 @@ prefix: sbexp.web.api-key
 | key   | String  | Y          |           | The *key*     |
 | owner | String] |            | unknow    | Onwer of key  |
 
-### Implementation
+### Implementations
 
-#### org.vxwo.springboot.experience.web.handler.AuthorizationFailureHandler
+- org.vxwo.springboot.experience.web.handler.AuthorizationFailureHandler
 
-Handle the authorization failure
+  Handle the authorization failure
 
 ## Bearer Authorization
 
@@ -95,15 +109,15 @@ prefix: sbexp.web.bearer
 | optionals | Array[String] |            |           | Child paths for processing or not  |
 
 
-### Implementation
+### Implementations
 
-#### org.vxwo.springboot.experience.web.handler.AuthorizationFailureHandler
+- org.vxwo.springboot.experience.web.handler.AuthorizationFailureHandler
 
-Handle the authorization failure
+  Handle the authorization failure
 
-#### org.vxwo.springboot.experience.web.handler.BearerAuthorizationHandler
+- org.vxwo.springboot.experience.web.handler.BearerAuthorizationHandler
 
-Handle the bearer authorization
+  Handle the bearer authorization
 
 ## Frequency Control
 
@@ -131,12 +145,12 @@ prefix: sbexp.web.frequency-control
 | duration-ms   | int           | Y          |           | Milliseconds for fixed duration  |
 | include-paths | Array[String] | Y          |           | Paths for fixed interval control |
 
-### Implementation
+### Implementations
 
-#### org.vxwo.springboot.experience.web.handler.FrequencyControlFailureHandler
+- org.vxwo.springboot.experience.web.handler.FrequencyControlFailureHandler
 
-Handle the frequency control failure
+  Handle the frequency control failure
 
-#### org.vxwo.springboot.experience.web.handler.FrequencyControlHandler
+- org.vxwo.springboot.experience.web.handler.FrequencyControlHandler
 
-Handle the frequency control
+  Handle the frequency control
