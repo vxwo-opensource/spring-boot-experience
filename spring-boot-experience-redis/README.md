@@ -3,6 +3,9 @@ spring-boot-experience-redis
 
 # Configuration
 
+- [Default Settings](src/main/resources/experience/experience-redis.yml)
+- [Example Settings](src/test/resources/application.yml)
+
 prefix: sbexp.redis
 
 | *Key*             | *Type* | *Required* | *Default* | *Description*                    |

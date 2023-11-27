@@ -1,6 +1,11 @@
 spring-boot-experience-web
 ==============================================
 
+# Configuration
+
+- [Default Settings](src/main/resources/experience/experience-web.yml)
+- [Example Settings](src/test/resources/application.yml)
+
 # Processors
 
 ## org.vxwo.springboot.experience.web.processor.PathProcessor
@@ -9,11 +14,11 @@ spring-boot-experience-web
 
 - String createAbsoluteURI(String)
 
-Generateion absolute URI from relative URI
+  Generateion absolute URI from relative URI
 
 - String getRelativeURI(HttpServletRequest)
 
-Get relative URI from request
+  Get relative URI from request
 
 # Filters
 
