@@ -35,6 +35,3 @@ sbexp:
       fixed-intervals:
         - duration-ms: 30000
           include-paths: /test-frequency/fixed-interval
-
-  redis:
-    namespace: test
