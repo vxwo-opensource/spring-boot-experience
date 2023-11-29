@@ -7,14 +7,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.vxwo.springboot.experience.web.ConfigPrefix;
-import org.vxwo.springboot.experience.web.CoreOrdered;
 import org.vxwo.springboot.experience.web.config.BearerAuthorizationConfig;
 import org.vxwo.springboot.experience.web.handler.AuthorizationFailureHandler;
 import org.vxwo.springboot.experience.web.handler.BearerAuthorizationHandler;
@@ -28,9 +24,6 @@ import lombok.extern.slf4j.Slf4j;
  */
 
 @Slf4j
-@Component
-@ConditionalOnProperty(value = ConfigPrefix.AUTHORIZATION_BEARER + ".enabled", havingValue = "true")
-@Order(CoreOrdered.AUTHORIZATION_LAYER)
 public class BearerAuthorizationFilter extends OncePerRequestFilter {
 
     private final List<String> bearerKeys;
@@ -45,7 +38,6 @@ public class BearerAuthorizationFilter extends OncePerRequestFilter {
     @Autowired
     private AuthorizationFailureHandler failureHandler;
 
-    @Autowired
     public BearerAuthorizationFilter(BearerAuthorizationConfig value) {
         bearerKeys = value.getBearerKeys();
         pathRuleMatcher = new GroupPathRuleMatcher(

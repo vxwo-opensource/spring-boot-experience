@@ -10,14 +10,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingResponseWrapper;
-import org.vxwo.springboot.experience.web.ConfigPrefix;
-import org.vxwo.springboot.experience.web.CoreOrdered;
 import org.vxwo.springboot.experience.web.config.RequestLoggingConfig;
 import org.vxwo.springboot.experience.web.entity.RequestLoggingEntity;
 import org.vxwo.springboot.experience.web.handler.RequestLoggingHandler;
@@ -30,9 +25,6 @@ import lombok.extern.slf4j.Slf4j;
  */
 
 @Slf4j
-@Component
-@ConditionalOnProperty(value = ConfigPrefix.REQUEST_LOGGING + ".enabled", havingValue = "true")
-@Order(CoreOrdered.PRELOAD_LAYER + CoreOrdered.LAYER_NEAR)
 public class RequestLoggingFilter extends OncePerRequestFilter {
 
     private final boolean ignoreRequestHeaders;
@@ -46,7 +38,6 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
     @Autowired
     private RequestLoggingHandler processHandler;
 
-    @Autowired
     public RequestLoggingFilter(RequestLoggingConfig value) {
         ignoreRequestHeaders = value.isIgnoreRequestHeaders();
         ignoreResponseHeaders = value.isIgnoreResponseHeaders();

@@ -4,7 +4,6 @@ import java.net.URI;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -14,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
  */
 
 @Slf4j
-@Component
 public class PathProcessor {
     private final static String FAKE_HOST = "http://localhost";
     private final static int FAKE_LENGTH = FAKE_HOST.length();

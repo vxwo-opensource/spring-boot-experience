@@ -7,14 +7,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.vxwo.springboot.experience.web.ConfigPrefix;
-import org.vxwo.springboot.experience.web.CoreOrdered;
 import org.vxwo.springboot.experience.web.config.ApiKeyAuthorizationConfig;
 import org.vxwo.springboot.experience.web.handler.AuthorizationFailureHandler;
 import org.vxwo.springboot.experience.web.matcher.OwnerPathRuleMatcher;
@@ -27,10 +23,6 @@ import lombok.extern.slf4j.Slf4j;
  */
 
 @Slf4j
-@Component
-@ConditionalOnProperty(value = ConfigPrefix.AUTHORIZATION_API_KEY + ".enabled",
-        havingValue = "true")
-@Order(CoreOrdered.AUTHORIZATION_LAYER)
 public class ApiKeyAuthorizationFilter extends OncePerRequestFilter {
 
     private final List<String> headerKeys;
@@ -44,7 +36,6 @@ public class ApiKeyAuthorizationFilter extends OncePerRequestFilter {
     @Autowired
     private AuthorizationFailureHandler failureHandler;
 
-    @Autowired
     public ApiKeyAuthorizationFilter(ApiKeyAuthorizationConfig value) {
         headerKeys = SplitUtil.shrinkList(value.getHeaderKeys());
         parseBearer = value.isParseBearer();

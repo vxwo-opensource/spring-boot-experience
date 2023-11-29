@@ -1,2 +1,6 @@
-org.springframework.boot.env.EnvironmentPostProcessor=org.vxwo.springboot.experience.redis.processor.PackageEnvironmentLoader
+org.springframework.boot.env.EnvironmentPostProcessor=\
+org.vxwo.springboot.experience.redis.processor.PackageEnvironmentLoader
 
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+org.vxwo.springboot.experience.redis.config.RedisConfig,\
+org.vxwo.springboot.experience.redis.config.RedisAutoConfiguration

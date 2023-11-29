@@ -1,7 +1,6 @@
 package org.vxwo.springboot.experience.web.testor;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +12,6 @@ import static org.vxwo.springboot.experience.web.testor.CustomRequestBody.*;
 
 @RestController
 @SpringBootApplication
-@ComponentScan("org.vxwo.springboot.experience.web")
 @Validated
 public class MyApplication {
 

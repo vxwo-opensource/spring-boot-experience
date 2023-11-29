@@ -4,11 +4,9 @@ import java.time.Duration;
 import java.util.Collections;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
-import org.springframework.stereotype.Component;
 import org.vxwo.springboot.experience.redis.entity.FrequencyDurationSession;
 import org.vxwo.springboot.experience.redis.render.RedisTemplateRender;
 
@@ -18,7 +16,6 @@ import org.vxwo.springboot.experience.redis.render.RedisTemplateRender;
  * @author vxwo-team
  */
 
-@Component
 public class RedisFrequencyProcessor {
     private static final AtomicLong SAFE_ATOM = new AtomicLong();
 
@@ -32,7 +29,6 @@ public class RedisFrequencyProcessor {
 
     private final RedisTemplate<String, String> redisTemplate;
 
-    @Autowired
     public RedisFrequencyProcessor(RedisTemplateRender render) {
         redisTemplate = new RedisTemplate<String, String>();
         render.renderStringTemplate(redisTemplate);

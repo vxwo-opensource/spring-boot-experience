@@ -11,11 +11,9 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.SynthesizingMethodParameter;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestAttribute;
@@ -27,7 +25,6 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
-import org.vxwo.springboot.experience.web.ConfigPrefix;
 import org.vxwo.springboot.experience.web.config.RequestLoggingConfig;
 import org.vxwo.springboot.experience.web.entity.RequestLoggingEntity;
 import org.vxwo.springboot.experience.web.handler.RequestLoggingHandler;
@@ -37,8 +34,6 @@ import org.vxwo.springboot.experience.web.handler.RequestLoggingHandler;
  */
 
 @Aspect
-@Component
-@ConditionalOnProperty(value = ConfigPrefix.REQUEST_LOGGING + ".enabled", havingValue = "true")
 public class RequestLoggingAspect {
 
     private final int stacktraceLimitLines;
@@ -49,7 +44,6 @@ public class RequestLoggingAspect {
     @Autowired
     private RequestLoggingHandler processHandler;
 
-    @Autowired
     public RequestLoggingAspect(RequestLoggingConfig value) {
         stacktraceLimitLines = value.getStacktraceLimitLines();
     }

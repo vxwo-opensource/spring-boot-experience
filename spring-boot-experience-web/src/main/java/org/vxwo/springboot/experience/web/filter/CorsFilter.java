@@ -6,15 +6,9 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.vxwo.springboot.experience.web.ConfigPrefix;
-import org.vxwo.springboot.experience.web.CoreOrdered;
 import org.vxwo.springboot.experience.web.config.CorsConfig;
 import org.vxwo.springboot.experience.web.util.SplitUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -24,9 +18,6 @@ import lombok.extern.slf4j.Slf4j;
  */
 
 @Slf4j
-@Component
-@ConditionalOnProperty(value = ConfigPrefix.CORS + ".enabled", havingValue = "true")
-@Order(CoreOrdered.PRELOAD_LAYER)
 public class CorsFilter extends OncePerRequestFilter {
     private final static String ORIGIN_ALL = "*";
 
@@ -34,7 +25,6 @@ public class CorsFilter extends OncePerRequestFilter {
     private final String firstAllowOrigin;
     private final List<String> acceptAllowOrigins;
 
-    @Autowired
     public CorsFilter(CorsConfig value) {
         parseReferer = value.isParseReferer();
 

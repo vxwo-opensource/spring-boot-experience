@@ -9,13 +9,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.vxwo.springboot.experience.web.ConfigPrefix;
-import org.vxwo.springboot.experience.web.CoreOrdered;
 import org.vxwo.springboot.experience.web.config.FrequencyControlConfig;
 import org.vxwo.springboot.experience.web.handler.FrequencyControlFailureHandler;
 import org.vxwo.springboot.experience.web.handler.FrequencyControlHandler;
@@ -29,9 +24,6 @@ import lombok.extern.slf4j.Slf4j;
  */
 
 @Slf4j
-@Component
-@ConditionalOnProperty(value = ConfigPrefix.FREQUENCY_CONTROL + ".enabled", havingValue = "true")
-@Order(CoreOrdered.FREQUENCY_CONTROL_LAYER)
 public class FrequencyControlFilter extends OncePerRequestFilter {
 
     private final Duration concurrencyDuration;

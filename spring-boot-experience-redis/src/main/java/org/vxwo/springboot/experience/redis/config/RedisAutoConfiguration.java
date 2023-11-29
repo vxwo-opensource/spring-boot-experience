@@ -1,10 +1,10 @@
 package org.vxwo.springboot.experience.redis.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.vxwo.springboot.experience.redis.processor.RedisFrequencyProcessor;
 import org.vxwo.springboot.experience.redis.render.RedisTemplateRender;
 import org.vxwo.springboot.experience.redis.serializer.RedisPrefixWrapper;
 import lombok.extern.slf4j.Slf4j;
@@ -16,12 +16,11 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Configuration
-@AutoConfigureAfter(RedisConfig.class)
-public class RedisBeanConfig {
+public class RedisAutoConfiguration {
     private String redisNamespace;
 
     @Autowired
-    public RedisBeanConfig(RedisConfig value) {
+    public RedisAutoConfiguration(RedisConfig value) {
         redisNamespace = value.getNamespace();
         if (!redisNamespace.isEmpty() && !redisNamespace.endsWith(value.getNamespaceStuffix())) {
             redisNamespace += value.getNamespaceStuffix();
@@ -41,5 +40,9 @@ public class RedisBeanConfig {
     public RedisTemplateRender redisTemplateRender(RedisConnectionFactory redisConnectionFactory) {
         return new RedisTemplateRender(redisNamespace, redisConnectionFactory);
     }
-}
 
+    @Bean
+    public RedisFrequencyProcessor redisFrequencyProcessor(RedisTemplateRender render) {
+        return new RedisFrequencyProcessor(render);
+    }
+}
