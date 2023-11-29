@@ -32,11 +32,11 @@ CORS -> Request Logging -> Authorization -> Frequency Control -> Request Logging
 
 prefix: sbexp.web.cors
 
-| *Key*         | *Type*        | *Required* | *Default* | *Description*                                              |
-|---------------|---------------|------------|-----------|------------------------------------------------------------|
-| enabled       | boolean       |            | false     | Switch                                                     |
-| parse-referer | boolean       |            | false     | Parse *Origin* from *Referer* when it was lossed           |
-| allow-origins | Array[String] | Y          |           | Allowed *Access-Control-Allow-Origin* values, empty is _*_ |
+| *Key*         | *Type*        | *Required* | *Default* | *Description*                                       |
+|---------------|---------------|------------|-----------|-----------------------------------------------------|
+| enabled       | boolean       |            | false     | Switch                                              |
+| parse-referer | boolean       |            | false     | Parse *Origin* from *Referer* when it was lossed    |
+| allow-origins | Array[String] |            |           | *Access-Control-Allow-Origin* values, empty is AUTO |
 
 ## Request logging
 
@@ -65,22 +65,22 @@ prefix: sbexp.web.logging
 
 prefix: sbexp.web.api-key
 
-| *Key*        | *Type*               | *Required* | *Default*            | *Description*                                                 |
-|--------------|----------------------|------------|----------------------|---------------------------------------------------------------|
-| enabled      | boolean              |            | false                | Switch                                                        |
-| header-keys  | Array[String]        |            | [X-Api-Key, Api-Key] | Which *Header* for get the *ApiKey* value                     |
-| parse-bearer | boolean              |            | false                | Use *Bearer Token* as *ApiKey* when no found in *header-keys* |
-| bearer-keys  | Array[String]        |            | [Bearer, Bear]       | Which *Key* for parse *Bearer Token* value                    |
-| path-rules   | Array[OwnerPathRule] | Y          |                      | Path Rules                                                    |
+| *Key*        | *Type*               | *Required* | *Default*            | *Description*                               |
+|--------------|----------------------|------------|----------------------|---------------------------------------------|
+| enabled      | boolean              |            | false                | Switch                                      |
+| header-keys  | Array[String]        |            | [X-Api-Key, Api-Key] | *Header* for get the *ApiKey* value         |
+| parse-bearer | boolean              |            | false                | *Bearer Token* as *ApiKey* when no *Header* |
+| bearer-keys  | Array[String]        |            | [Bearer, Bear]       | *Key* for parse *Bearer Token* value        |
+| path-rules   | Array[OwnerPathRule] | Y          |                      | Path Rules                                  |
 
 #### OwnerPathRule
 
-| *Key*  | *Type*       | *Required* | *Default* | *Description*         |
-|--------|--------------|------------|-----------|-----------------------|
-| path   | String       | Y          |           | Path prefix           |
-| owners | Array[Owner] | Y          |           | Pair of key and owner |
+| *Key*  | *Type*          | *Required* | *Default* | *Description*         |
+|--------|-----------------|------------|-----------|-----------------------|
+| path   | String          | Y          |           | Path prefix           |
+| owners | Array[KeyOwner] | Y          |           | Pair of key and owner |
 
-##### Owner
+##### KeyOwner
 
 | *Key* | *Type*  | *Required* | *Default* | *Description* |
 |-------|---------|------------|-----------|---------------|
@@ -99,11 +99,11 @@ prefix: sbexp.web.api-key
 
 prefix: sbexp.web.bearer
 
-| *Key*       | *Type*               | *Required* | *Default*      | *Description*                              |
-|-------------|----------------------|------------|----------------|--------------------------------------------|
-| enabled     | boolean              |            | false          | Switch                                     |
-| bearer-keys | Array[String]        |            | [Bearer, Bear] | Which *Key* for parse *Bearer Token* value |
-| path-rules  | Array[GroupPathRule] | Y          |                | Path Rules                                 |
+| *Key*       | *Type*               | *Required* | *Default*      | *Description*                        |
+|-------------|----------------------|------------|----------------|--------------------------------------|
+| enabled     | boolean              |            | false          | Switch                               |
+| bearer-keys | Array[String]        |            | [Bearer, Bear] | *Key* for parse *Bearer Token* value |
+| path-rules  | Array[GroupPathRule] | Y          |                | Path Rules                           |
 
 #### GroupPathRule
 

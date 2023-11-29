@@ -31,7 +31,7 @@ public class OwnerPathRuleMatcher {
             }
 
             Map<String, String> acceptKeys = new ConcurrentHashMap<String, String>();
-            for (OwnerPathRule.Owner target : pathRule.getOwners()) {
+            for (OwnerPathRule.KeyOwner target : pathRule.getOwners()) {
                 String key = target.getKey();
                 if (ObjectUtils.isEmpty(key.isEmpty())) {
                     continue;

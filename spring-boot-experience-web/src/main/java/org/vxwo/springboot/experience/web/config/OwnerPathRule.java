@@ -11,11 +11,11 @@ import lombok.Data;
 public class OwnerPathRule {
 
     @Data
-    public static class Owner {
+    public static class KeyOwner {
         private String key;
         private String owner;
     }
 
     private String path;
-    private List<Owner> owners;
+    private List<KeyOwner> owners;
 }
