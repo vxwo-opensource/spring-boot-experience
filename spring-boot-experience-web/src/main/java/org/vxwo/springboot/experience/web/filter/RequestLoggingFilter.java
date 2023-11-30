@@ -16,7 +16,7 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 import org.vxwo.springboot.experience.web.config.RequestLoggingConfig;
 import org.vxwo.springboot.experience.web.entity.RequestLoggingEntity;
 import org.vxwo.springboot.experience.web.handler.RequestLoggingHandler;
-import org.vxwo.springboot.experience.web.matcher.PathMatcher;
+import org.vxwo.springboot.experience.web.matcher.PathTester;
 import org.vxwo.springboot.experience.web.processor.PathProcessor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,7 +30,7 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
     private final boolean ignoreRequestHeaders;
     private final boolean ignoreResponseHeaders;
     private final int responseBodyLimit;
-    private final List<PathMatcher> includePaths;
+    private final List<PathTester> includePaths;
 
     @Autowired
     private PathProcessor pathProcessor;
@@ -48,13 +48,13 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
             if (target.isEmpty()) {
                 continue;
             }
-            includePaths.add(new PathMatcher(target));
+            includePaths.add(new PathTester(target));
         }
 
         if (log.isInfoEnabled()) {
             StringBuffer sb = new StringBuffer();
             sb.append("Request loggging actived, " + includePaths.size() + " paths");
-            for (PathMatcher s : includePaths) {
+            for (PathTester s : includePaths) {
                 sb.append("\n " + s.getTarget());
             }
 
@@ -117,9 +117,9 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
 
         String relativePath = pathProcessor.getRelativeURI(request);
 
-        PathMatcher matcher = null;
-        for (PathMatcher s : includePaths) {
-            if (s.match(relativePath)) {
+        PathTester matcher = null;
+        for (PathTester s : includePaths) {
+            if (s.test(relativePath)) {
                 matcher = s;
                 break;
             }

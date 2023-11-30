@@ -13,7 +13,7 @@ import org.vxwo.springboot.experience.web.config.OwnerPathRule;
  */
 
 public class OwnerPathRuleMatcher {
-    private final List<PathMatcher> acceptPaths;
+    private final List<PathTester> acceptPaths;
     private final Map<String, Map<String, String>> acceptPathRules;
 
     public OwnerPathRuleMatcher(String configName, List<OwnerPathRule> pathRules) {
@@ -45,15 +45,15 @@ public class OwnerPathRuleMatcher {
                 acceptKeys.put(key, owner);
             }
 
-            acceptPaths.add(new PathMatcher(path));
+            acceptPaths.add(new PathTester(path));
             acceptPathRules.put(path, acceptKeys);
         }
     }
 
     public String findMatchPath(String path) {
         String matchPath = null;
-        for (PathMatcher s : acceptPaths) {
-            if (s.match(path)) {
+        for (PathTester s : acceptPaths) {
+            if (s.test(path)) {
                 matchPath = s.getTarget();
                 break;
             }

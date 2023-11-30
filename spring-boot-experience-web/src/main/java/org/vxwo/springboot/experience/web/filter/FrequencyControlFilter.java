@@ -14,8 +14,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.vxwo.springboot.experience.web.config.FrequencyControlConfig;
 import org.vxwo.springboot.experience.web.handler.FrequencyControlFailureHandler;
 import org.vxwo.springboot.experience.web.handler.FrequencyControlHandler;
-import org.vxwo.springboot.experience.web.matcher.ExtraPathMatcher;
-import org.vxwo.springboot.experience.web.matcher.PathMatcher;
+import org.vxwo.springboot.experience.web.matcher.ExtraPathTester;
+import org.vxwo.springboot.experience.web.matcher.PathTester;
 import org.vxwo.springboot.experience.web.processor.PathProcessor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,8 +27,8 @@ import lombok.extern.slf4j.Slf4j;
 public class FrequencyControlFilter extends OncePerRequestFilter {
 
     private final Duration concurrencyDuration;
-    private final List<PathMatcher> concurrencyIncludePaths;
-    private final List<ExtraPathMatcher<Duration>> fixedIntervals;
+    private final List<PathTester> concurrencyIncludePaths;
+    private final List<ExtraPathTester<Duration>> fixedIntervals;
 
     @Autowired
     private PathProcessor pathProcessor;
@@ -47,7 +47,7 @@ public class FrequencyControlFilter extends OncePerRequestFilter {
             if (target.isEmpty()) {
                 continue;
             }
-            concurrencyIncludePaths.add(new PathMatcher(target));
+            concurrencyIncludePaths.add(new PathTester(target));
         }
 
         fixedIntervals = new ArrayList<>();
@@ -58,7 +58,7 @@ public class FrequencyControlFilter extends OncePerRequestFilter {
                 if (target.isEmpty()) {
                     continue;
                 }
-                fixedIntervals.add(new ExtraPathMatcher<>(target, duration));
+                fixedIntervals.add(new ExtraPathTester<>(target, duration));
             }
         }
 
@@ -70,7 +70,7 @@ public class FrequencyControlFilter extends OncePerRequestFilter {
             if (fixedIntervals.isEmpty()) {
                 sb.append(" disabled");
             } else {
-                for (ExtraPathMatcher<Duration> s : fixedIntervals) {
+                for (ExtraPathTester<Duration> s : fixedIntervals) {
                     sb.append("\n  duration: " + s.getExtra().toMillis() + "ms, path: "
                             + s.getTarget());
                 }
@@ -103,9 +103,9 @@ public class FrequencyControlFilter extends OncePerRequestFilter {
         String method = request.getMethod();
         String relativePath = pathProcessor.getRelativeURI(request);
 
-        ExtraPathMatcher<Duration> fixedInterval = null;
-        for (ExtraPathMatcher<Duration> s : fixedIntervals) {
-            if (s.match(relativePath)) {
+        ExtraPathTester<Duration> fixedInterval = null;
+        for (ExtraPathTester<Duration> s : fixedIntervals) {
+            if (s.test(relativePath)) {
                 fixedInterval = s;
                 break;
             }
@@ -128,9 +128,9 @@ public class FrequencyControlFilter extends OncePerRequestFilter {
             return;
         }
 
-        PathMatcher concurrency = null;
-        for (PathMatcher s : concurrencyIncludePaths) {
-            if (s.match(relativePath)) {
+        PathTester concurrency = null;
+        for (PathTester s : concurrencyIncludePaths) {
+            if (s.test(relativePath)) {
                 concurrency = s;
                 break;
             }

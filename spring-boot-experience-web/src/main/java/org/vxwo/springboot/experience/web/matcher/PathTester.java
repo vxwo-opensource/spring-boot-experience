@@ -1,29 +1,32 @@
 package org.vxwo.springboot.experience.web.matcher;
 
+import java.util.function.Predicate;
+
 /**
- * Simple path matcher
+ * Simple path tester
  *
  * @author vxwo-team
  */
 
-public class PathMatcher {
+public class PathTester implements Predicate<String> {
     private final static String END_FLAG = "$";
 
     private final String target;
     private final boolean matchFull;
     private final String matchValue;
 
-    public PathMatcher(String path) {
+    public PathTester(String path) {
         target = path;
         matchFull = path.endsWith(END_FLAG);
         matchValue = !matchFull ? path : path.substring(0, path.length() - 1);
     }
 
-    public boolean match(String path) {
-        return matchFull ? path.equals(matchValue) : path.startsWith(matchValue);
-    }
-
     public String getTarget() {
         return target;
+    }
+
+    @Override
+    public boolean test(String input) {
+        return matchFull ? input.equals(matchValue) : input.startsWith(matchValue);
     }
 }

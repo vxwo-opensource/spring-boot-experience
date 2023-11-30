@@ -15,15 +15,15 @@ import org.vxwo.springboot.experience.web.util.SplitUtil;
  */
 
 public class GroupPathRuleMatcher {
-    private final List<PathMatcher> acceptPaths;
-    private final Map<String, List<PathMatcher>> excludePathMatcherMap;
-    private final Map<String, List<PathMatcher>> optionalPathMatcherMap;
+    private final List<PathTester> acceptPaths;
+    private final Map<String, List<PathTester>> excludePathTesterMap;
+    private final Map<String, List<PathTester>> optionalPathTesterMap;
 
     @SuppressWarnings("PMD.AvoidComplexConditionRule")
     public GroupPathRuleMatcher(String configName, List<GroupPathRule> pathRules) {
         acceptPaths = new ArrayList<>();
-        excludePathMatcherMap = new ConcurrentHashMap<>();
-        optionalPathMatcherMap = new ConcurrentHashMap<>();
+        excludePathTesterMap = new ConcurrentHashMap<>();
+        optionalPathTesterMap = new ConcurrentHashMap<>();
 
         if (ObjectUtils.isEmpty(pathRules)) {
             throw new RuntimeException("Configuration: [" + configName + "] Empty");
@@ -42,7 +42,7 @@ public class GroupPathRuleMatcher {
                 path += "/";
             }
 
-            List<PathMatcher> excludePathMatchers = new ArrayList<>();
+            List<PathTester> excludePathTesters = new ArrayList<>();
             if (existExcludes) {
                 for (String exclude : SplitUtil.shrinkList(pathRule.getExcludes())) {
                     if (exclude.startsWith("/")) {
@@ -52,15 +52,15 @@ public class GroupPathRuleMatcher {
                     }
 
                     String excludePath = path + exclude;
-                    PathMatcher matcher = new PathMatcher(excludePath);
+                    PathTester matcher = new PathTester(excludePath);
                     if (!excludeOrOptionalPathSet.contains(excludePath)) {
-                        excludePathMatchers.add(matcher);
+                        excludePathTesters.add(matcher);
                         excludeOrOptionalPathSet.add(excludePath);
                     }
                 }
             }
 
-            List<PathMatcher> optionalPathMatchers = new ArrayList<>();
+            List<PathTester> optionalPathTesters = new ArrayList<>();
             if (existOptionals) {
                 for (String optional : SplitUtil.shrinkList(pathRule.getOptionals())) {
                     if (optional.startsWith("/")) {
@@ -70,32 +70,32 @@ public class GroupPathRuleMatcher {
                     }
 
                     String optionalPath = path + optional;
-                    PathMatcher matcher = new PathMatcher(optionalPath);
+                    PathTester matcher = new PathTester(optionalPath);
                     if (!excludeOrOptionalPathSet.contains(optionalPath)) {
-                        optionalPathMatchers.add(matcher);
+                        optionalPathTesters.add(matcher);
                         excludeOrOptionalPathSet.add(optionalPath);
                     }
                 }
             }
 
-            acceptPaths.add(new PathMatcher(path));
-            excludePathMatcherMap.put(path, excludePathMatchers);
-            optionalPathMatcherMap.put(path, optionalPathMatchers);
+            acceptPaths.add(new PathTester(path));
+            excludePathTesterMap.put(path, excludePathTesters);
+            optionalPathTesterMap.put(path, optionalPathTesters);
         }
     }
 
     public String findMatchPath(String path) {
         String matchPath = null;
-        for (PathMatcher s : acceptPaths) {
-            if (s.match(path)) {
+        for (PathTester s : acceptPaths) {
+            if (s.test(path)) {
                 matchPath = s.getTarget();
                 break;
             }
         }
 
         if (matchPath != null) {
-            for (PathMatcher s : excludePathMatcherMap.get(matchPath)) {
-                if (s.match(path)) {
+            for (PathTester s : excludePathTesterMap.get(matchPath)) {
+                if (s.test(path)) {
                     matchPath = null;
                     break;
                 }
@@ -106,8 +106,8 @@ public class GroupPathRuleMatcher {
     }
 
     public boolean isOptionalPath(String matchPath, String path) {
-        for (PathMatcher s : optionalPathMatcherMap.get(matchPath)) {
-            if (s.match(path)) {
+        for (PathTester s : optionalPathTesterMap.get(matchPath)) {
+            if (s.test(path)) {
                 return true;
             }
         }
@@ -119,16 +119,16 @@ public class GroupPathRuleMatcher {
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append(acceptPaths.size() + " paths");
-        for (PathMatcher s : acceptPaths) {
+        for (PathTester s : acceptPaths) {
             sb.append("\n path: " + s.getTarget());
 
-            List<PathMatcher> pathMatchers = excludePathMatcherMap.get(s.getTarget());
+            List<PathTester> pathMatchers = excludePathTesterMap.get(s.getTarget());
             if (!pathMatchers.isEmpty()) {
                 sb.append(", excludes: " + String.join(",", pathMatchers.stream()
                         .map(o -> o.getTarget()).collect(Collectors.toList())));
             }
 
-            pathMatchers = optionalPathMatcherMap.get(s.getTarget());
+            pathMatchers = optionalPathTesterMap.get(s.getTarget());
             if (!pathMatchers.isEmpty()) {
                 sb.append(", optionals: " + String.join(",", pathMatchers.stream()
                         .map(o -> o.getTarget()).collect(Collectors.toList())));
