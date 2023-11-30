@@ -18,7 +18,7 @@ Organize various experience tools accumulated using SpringBoot in various projec
   ... others
 
   <properties>
-    <sbexp.version>1.0.0-SNAPSHOT</spexp.version>
+    <sbexp.version>1.0.0-SNAPSHOT</sbexp.version>
     ... others
   </properties>
 
