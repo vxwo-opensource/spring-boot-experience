@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Data
 public class RequestLoggingEntity {
-    public final static String ATTRIBUTE_NAME = "X-RequestLogging";
+    public final static String ATTRIBUTE_NAME = "SBEXP-RequestLogging";
 
     private String requestUri;
     private String requestMethod;

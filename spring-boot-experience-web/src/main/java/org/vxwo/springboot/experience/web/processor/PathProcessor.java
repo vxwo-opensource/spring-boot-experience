@@ -4,6 +4,7 @@ import java.net.URI;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -16,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 public class PathProcessor {
     private final static String FAKE_HOST = "http://localhost";
     private final static int FAKE_LENGTH = FAKE_HOST.length();
+    private final static String ATTRIBUTE_NAME = "SBEXP-RelativeURI";
 
     private String servletContextPath;
     private int servletContextPathLength = 0;
@@ -50,8 +52,12 @@ public class PathProcessor {
      */
     @SuppressWarnings("PMD")
     public String getRelativeURI(HttpServletRequest request) {
-        String targetURI = request.getRequestURI();
+        String targetURI = (String) request.getAttribute(ATTRIBUTE_NAME);
+        if (StringUtils.hasText(targetURI)) {
+            return targetURI;
+        }
 
+        targetURI = request.getRequestURI();
         try {
             targetURI =
                     URI.create(FAKE_HOST + targetURI).normalize().toString().substring(FAKE_LENGTH);
@@ -62,6 +68,7 @@ public class PathProcessor {
             targetURI = targetURI.substring(servletContextPathLength);
         }
 
+        request.setAttribute(ATTRIBUTE_NAME, targetURI);
         return targetURI;
     }
 
