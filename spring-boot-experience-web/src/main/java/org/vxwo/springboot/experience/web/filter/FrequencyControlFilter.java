@@ -72,7 +72,7 @@ public class FrequencyControlFilter extends OncePerRequestFilter {
             } else {
                 for (ExtraPathTester<Duration> s : fixedIntervals) {
                     sb.append("\n  duration: " + s.getExtra().toMillis() + "ms, path: "
-                            + s.getTarget());
+                            + s.getPath());
                 }
             }
 
@@ -82,7 +82,7 @@ public class FrequencyControlFilter extends OncePerRequestFilter {
             } else {
                 sb.append("\n  duration: " + concurrencyDuration.toMillis() + "ms");
                 sb.append("\n  include-paths:" + String.join("", concurrencyIncludePaths.stream()
-                        .map((o) -> "\n   " + o.getTarget()).collect(Collectors.toList())));
+                        .map((o) -> "\n   " + o.getPath()).collect(Collectors.toList())));
             }
             log.info(sb.toString());
         }
@@ -122,7 +122,7 @@ public class FrequencyControlFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
             } else {
                 failureHandler.handleFrequencyControlFailure(request, response, method,
-                        fixedInterval.getTarget(), "reject-fixed-interval");
+                        fixedInterval.getPath(), "reject-fixed-interval");
             }
 
             return;
@@ -154,7 +154,7 @@ public class FrequencyControlFilter extends OncePerRequestFilter {
             }
         } else {
             failureHandler.handleFrequencyControlFailure(request, response, method,
-                    concurrency.getTarget(), "reject-concurrency");
+                    concurrency.getPath(), "reject-concurrency");
         }
     }
 }

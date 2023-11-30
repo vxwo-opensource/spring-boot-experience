@@ -14,6 +14,7 @@ import org.vxwo.springboot.experience.web.ConfigPrefix;
 import org.vxwo.springboot.experience.web.config.BearerAuthorizationConfig;
 import org.vxwo.springboot.experience.web.handler.AuthorizationFailureHandler;
 import org.vxwo.springboot.experience.web.handler.BearerAuthorizationHandler;
+import org.vxwo.springboot.experience.web.matcher.ExtraPathTester;
 import org.vxwo.springboot.experience.web.matcher.GroupPathRuleMatcher;
 import org.vxwo.springboot.experience.web.processor.PathProcessor;
 import org.vxwo.springboot.experience.web.util.SplitUtil;
@@ -58,8 +59,9 @@ public class BearerAuthorizationFilter extends OncePerRequestFilter {
 
         String relativePath = pathProcessor.getRelativeURI(request);
 
-        String matchPath = pathRuleMatcher.findMatchPath(relativePath);
-        if (matchPath == null) {
+        ExtraPathTester<GroupPathRuleMatcher.ExcludesAndOptionals> tester =
+                pathRuleMatcher.findMatchTester(relativePath);
+        if (tester == null) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -74,19 +76,20 @@ public class BearerAuthorizationFilter extends OncePerRequestFilter {
         }
 
         // Skip the optional path, when no token
-        if (bearerToken == null && pathRuleMatcher.isOptionalPath(matchPath, relativePath)) {
+        if (bearerToken == null && tester.getExtra().isOptional(relativePath)) {
             filterChain.doFilter(request, response);
             return;
         }
 
         if (bearerToken == null) {
-            failureHandler.handleAuthorizationFailure(request, response, matchPath,
+            failureHandler.handleAuthorizationFailure(request, response, tester.getPath(),
                     "empty-bearer-token");
         } else {
-            if (processHandler.processBearerToken(request, response, matchPath, bearerToken)) {
+            if (processHandler.processBearerToken(request, response, tester.getPath(),
+                    bearerToken)) {
                 filterChain.doFilter(request, response);
             } else {
-                failureHandler.handleAuthorizationFailure(request, response, matchPath,
+                failureHandler.handleAuthorizationFailure(request, response, tester.getPath(),
                         "invalid-bearer-handle");
             }
         }

@@ -2,6 +2,7 @@ package org.vxwo.springboot.experience.web.filter;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +14,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.vxwo.springboot.experience.web.ConfigPrefix;
 import org.vxwo.springboot.experience.web.config.ApiKeyAuthorizationConfig;
 import org.vxwo.springboot.experience.web.handler.AuthorizationFailureHandler;
+import org.vxwo.springboot.experience.web.matcher.ExtraPathTester;
 import org.vxwo.springboot.experience.web.matcher.OwnerPathRuleMatcher;
 import org.vxwo.springboot.experience.web.processor.PathProcessor;
 import org.vxwo.springboot.experience.web.util.SplitUtil;
@@ -80,8 +82,9 @@ public class ApiKeyAuthorizationFilter extends OncePerRequestFilter {
             return;
         }
 
-        String matchPath = pathRuleMatcher.findMatchPath(pathProcessor.getRelativeURI(request));
-        if (matchPath == null) {
+        ExtraPathTester<Map<String, String>> tester =
+                pathRuleMatcher.findMatchTester(pathProcessor.getRelativeURI(request));
+        if (tester == null) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -89,13 +92,13 @@ public class ApiKeyAuthorizationFilter extends OncePerRequestFilter {
         String keyOwner = null;
         String apiKey = parseApiKeyFromHeader(request);
         if (apiKey != null) {
-            keyOwner = pathRuleMatcher.findKeyOwner(matchPath, apiKey);
+            keyOwner = tester.getExtra().get(apiKey);
         }
 
         if (keyOwner != null) {
             filterChain.doFilter(request, response);
         } else {
-            failureHandler.handleAuthorizationFailure(request, response, matchPath,
+            failureHandler.handleAuthorizationFailure(request, response, tester.getPath(),
                     "invalid-api-key");
         }
     }

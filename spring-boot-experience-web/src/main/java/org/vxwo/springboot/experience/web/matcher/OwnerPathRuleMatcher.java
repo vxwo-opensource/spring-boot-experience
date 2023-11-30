@@ -1,7 +1,6 @@
 package org.vxwo.springboot.experience.web.matcher;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.util.ObjectUtils;
 import org.vxwo.springboot.experience.web.config.OwnerPathRule;
 
@@ -13,12 +12,10 @@ import org.vxwo.springboot.experience.web.config.OwnerPathRule;
  */
 
 public class OwnerPathRuleMatcher {
-    private final List<PathTester> acceptPaths;
-    private final Map<String, Map<String, String>> acceptPathRules;
+    private final List<ExtraPathTester<Map<String, String>>> acceptPathTesters;
 
     public OwnerPathRuleMatcher(String configName, List<OwnerPathRule> pathRules) {
-        acceptPaths = new ArrayList<>();
-        acceptPathRules = new ConcurrentHashMap<>();
+        acceptPathTesters = new ArrayList<>();
 
         if (ObjectUtils.isEmpty(pathRules)) {
             throw new RuntimeException("Configuration: [" + configName + "] Empty");
@@ -30,7 +27,7 @@ public class OwnerPathRuleMatcher {
                 continue;
             }
 
-            Map<String, String> acceptKeys = new ConcurrentHashMap<String, String>();
+            Map<String, String> acceptKeys = new HashMap<String, String>();
             for (OwnerPathRule.KeyOwner target : pathRule.getOwners()) {
                 String key = target.getKey();
                 if (ObjectUtils.isEmpty(key.isEmpty())) {
@@ -45,42 +42,28 @@ public class OwnerPathRuleMatcher {
                 acceptKeys.put(key, owner);
             }
 
-            acceptPaths.add(new PathTester(path));
-            acceptPathRules.put(path, acceptKeys);
+            acceptPathTesters
+                    .add(new ExtraPathTester<>(path, Collections.unmodifiableMap(acceptKeys)));
         }
     }
 
-    public String findMatchPath(String path) {
-        String matchPath = null;
-        for (PathTester s : acceptPaths) {
-            if (s.test(path)) {
-                matchPath = s.getTarget();
-                break;
+    public ExtraPathTester<Map<String, String>> findMatchTester(String path) {
+        for (ExtraPathTester<Map<String, String>> tester : acceptPathTesters) {
+            if (tester.test(path)) {
+                return tester;
             }
         }
 
-        return matchPath;
-    }
-
-    public String findKeyOwner(String matchPath, String key) {
-        String keyOwner = null;
-        if (key != null && !key.isEmpty()) {
-            Map<String, String> acceptKeys = acceptPathRules.get(matchPath);
-            if (acceptKeys != null) {
-                keyOwner = acceptKeys.get(key);
-            }
-        }
-
-        return keyOwner;
+        return null;
     }
 
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append(acceptPaths.size() + " paths");
-        for (Map.Entry<String, Map<String, String>> pair : acceptPathRules.entrySet()) {
-            sb.append("\n path: " + pair.getKey() + ", owners: "
-                    + String.join(",", pair.getValue().values()));
+        sb.append(acceptPathTesters.size() + " paths");
+        for (ExtraPathTester<Map<String, String>> tester : acceptPathTesters) {
+            sb.append("\n path: " + tester.getPath() + ", owners: "
+                    + String.join(",", tester.getExtra().values()));
         }
 
         return sb.toString();

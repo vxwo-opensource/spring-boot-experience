@@ -1,11 +1,12 @@
 package org.vxwo.springboot.experience.web.matcher;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import org.springframework.util.ObjectUtils;
 import org.vxwo.springboot.experience.web.config.GroupPathRule;
 import org.vxwo.springboot.experience.web.util.SplitUtil;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * @author vxwo-team
@@ -15,15 +16,38 @@ import org.vxwo.springboot.experience.web.util.SplitUtil;
  */
 
 public class GroupPathRuleMatcher {
-    private final List<PathTester> acceptPaths;
-    private final Map<String, List<PathTester>> excludePathTesterMap;
-    private final Map<String, List<PathTester>> optionalPathTesterMap;
+    @Getter
+    @AllArgsConstructor
+    public static class ExcludesAndOptionals {
+        private List<PathTester> excludes;
+        private List<PathTester> optionals;
+
+        public boolean isExclude(String path) {
+            for (PathTester s : excludes) {
+                if (s.test(path)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public boolean isOptional(String path) {
+            for (PathTester s : optionals) {
+                if (s.test(path)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
+
+    private final List<ExtraPathTester<ExcludesAndOptionals>> acceptPathTesters;
 
     @SuppressWarnings("PMD.AvoidComplexConditionRule")
     public GroupPathRuleMatcher(String configName, List<GroupPathRule> pathRules) {
-        acceptPaths = new ArrayList<>();
-        excludePathTesterMap = new ConcurrentHashMap<>();
-        optionalPathTesterMap = new ConcurrentHashMap<>();
+        acceptPathTesters = new ArrayList<>();
 
         if (ObjectUtils.isEmpty(pathRules)) {
             throw new RuntimeException("Configuration: [" + configName + "] Empty");
@@ -78,60 +102,43 @@ public class GroupPathRuleMatcher {
                 }
             }
 
-            acceptPaths.add(new PathTester(path));
-            excludePathTesterMap.put(path, excludePathTesters);
-            optionalPathTesterMap.put(path, optionalPathTesters);
+            acceptPathTesters.add(new ExtraPathTester<>(path,
+                    new ExcludesAndOptionals(Collections.unmodifiableList(excludePathTesters),
+                            Collections.unmodifiableList(optionalPathTesters))));
         }
     }
 
-    public String findMatchPath(String path) {
-        String matchPath = null;
-        for (PathTester s : acceptPaths) {
+    public ExtraPathTester<ExcludesAndOptionals> findMatchTester(String path) {
+        ExtraPathTester<ExcludesAndOptionals> tester = null;
+        for (ExtraPathTester<ExcludesAndOptionals> s : acceptPathTesters) {
             if (s.test(path)) {
-                matchPath = s.getTarget();
+                tester = s;
                 break;
             }
         }
 
-        if (matchPath != null) {
-            for (PathTester s : excludePathTesterMap.get(matchPath)) {
-                if (s.test(path)) {
-                    matchPath = null;
-                    break;
-                }
-            }
+        if (tester != null && tester.getExtra().isExclude(path)) {
+            tester = null;
         }
 
-        return matchPath;
-    }
-
-    public boolean isOptionalPath(String matchPath, String path) {
-        for (PathTester s : optionalPathTesterMap.get(matchPath)) {
-            if (s.test(path)) {
-                return true;
-            }
-        }
-
-        return false;
+        return tester;
     }
 
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append(acceptPaths.size() + " paths");
-        for (PathTester s : acceptPaths) {
-            sb.append("\n path: " + s.getTarget());
+        sb.append(acceptPathTesters.size() + " paths");
+        for (ExtraPathTester<ExcludesAndOptionals> tester : acceptPathTesters) {
+            sb.append("\n path: " + tester.getPath());
 
-            List<PathTester> pathMatchers = excludePathTesterMap.get(s.getTarget());
-            if (!pathMatchers.isEmpty()) {
-                sb.append(", excludes: " + String.join(",", pathMatchers.stream()
-                        .map(o -> o.getTarget()).collect(Collectors.toList())));
+            if (!ObjectUtils.isEmpty(tester.getExtra().getExcludes())) {
+                sb.append(", excludes: " + String.join(",", tester.getExtra().getExcludes().stream()
+                        .map(o -> o.getPath()).collect(Collectors.toList())));
             }
 
-            pathMatchers = optionalPathTesterMap.get(s.getTarget());
-            if (!pathMatchers.isEmpty()) {
-                sb.append(", optionals: " + String.join(",", pathMatchers.stream()
-                        .map(o -> o.getTarget()).collect(Collectors.toList())));
+            if (!ObjectUtils.isEmpty(tester.getExtra().getOptionals())) {
+                sb.append(", optionals: " + String.join(",", tester.getExtra().getOptionals()
+                        .stream().map(o -> o.getPath()).collect(Collectors.toList())));
             }
         }
 

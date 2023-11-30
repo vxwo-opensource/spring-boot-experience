@@ -55,7 +55,7 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
             StringBuffer sb = new StringBuffer();
             sb.append("Request loggging actived, " + includePaths.size() + " paths");
             for (PathTester s : includePaths) {
-                sb.append("\n " + s.getTarget());
+                sb.append("\n " + s.getPath());
             }
 
             log.info(sb.toString());
