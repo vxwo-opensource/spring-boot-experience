@@ -10,6 +10,7 @@ import lombok.Data;
 @Data
 public class GroupPathRule {
     private String path;
+    private String tag;
     private List<String> excludes;
     private List<String> optionals;
 }

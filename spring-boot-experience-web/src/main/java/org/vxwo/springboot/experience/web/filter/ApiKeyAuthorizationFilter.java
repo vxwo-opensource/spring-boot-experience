@@ -14,7 +14,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.vxwo.springboot.experience.web.ConfigPrefix;
 import org.vxwo.springboot.experience.web.config.ApiKeyAuthorizationConfig;
 import org.vxwo.springboot.experience.web.handler.AuthorizationFailureHandler;
-import org.vxwo.springboot.experience.web.matcher.ExtraPathTester;
+import org.vxwo.springboot.experience.web.matcher.TagPathTester;
 import org.vxwo.springboot.experience.web.matcher.OwnerPathRuleMatcher;
 import org.vxwo.springboot.experience.web.processor.PathProcessor;
 import org.vxwo.springboot.experience.web.util.SplitUtil;
@@ -82,7 +82,7 @@ public class ApiKeyAuthorizationFilter extends OncePerRequestFilter {
             return;
         }
 
-        ExtraPathTester<Map<String, String>> tester =
+        TagPathTester<Map<String, String>> tester =
                 pathRuleMatcher.findMatchTester(pathProcessor.getRelativeURI(request));
         if (tester == null) {
             filterChain.doFilter(request, response);

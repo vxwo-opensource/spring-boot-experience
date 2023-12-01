@@ -17,5 +17,6 @@ public class OwnerPathRule {
     }
 
     private String path;
+    private String tag;
     private List<KeyOwner> owners;
 }

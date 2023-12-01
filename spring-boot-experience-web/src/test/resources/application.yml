@@ -13,6 +13,7 @@ sbexp:
         enabled: true
         path-rules:
           - path: /test-api-key
+            tag: test
             owners:
               - key: test-key
                 owner: tester
@@ -21,6 +22,7 @@ sbexp:
         enabled: true
         path-rules:
           - path: /test-bearer
+            tag: test
             excludes:
               - exclude-path
             optionals:
@@ -34,4 +36,5 @@ sbexp:
 
       fixed-intervals:
         - duration-ms: 30000
+          tag: test
           include-paths: /test-frequency/fixed-interval

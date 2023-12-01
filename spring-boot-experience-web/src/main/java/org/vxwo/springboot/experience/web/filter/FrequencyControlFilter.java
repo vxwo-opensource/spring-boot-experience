@@ -10,11 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.vxwo.springboot.experience.web.ConfigPrefix;
 import org.vxwo.springboot.experience.web.config.FrequencyControlConfig;
 import org.vxwo.springboot.experience.web.handler.FrequencyControlFailureHandler;
 import org.vxwo.springboot.experience.web.handler.FrequencyControlHandler;
-import org.vxwo.springboot.experience.web.matcher.ExtraPathTester;
+import org.vxwo.springboot.experience.web.matcher.TagPathTester;
 import org.vxwo.springboot.experience.web.matcher.PathTester;
 import org.vxwo.springboot.experience.web.processor.PathProcessor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +30,7 @@ public class FrequencyControlFilter extends OncePerRequestFilter {
 
     private final Duration concurrencyDuration;
     private final List<PathTester> concurrencyIncludePaths;
-    private final List<ExtraPathTester<Duration>> fixedIntervals;
+    private final List<TagPathTester<Duration>> fixedIntervals;
 
     @Autowired
     private PathProcessor pathProcessor;
@@ -40,25 +42,38 @@ public class FrequencyControlFilter extends OncePerRequestFilter {
     private FrequencyControlFailureHandler failureHandler;
 
     public FrequencyControlFilter(FrequencyControlConfig value) {
+        if (value.getConcurrency().getDurationMs() < 1) {
+            throw new RuntimeException(
+                    String.format("Configuration: {%s.concurrency.duration-ms} less then 1",
+                            ConfigPrefix.FREQUENCY_CONTROL));
+        }
+
         concurrencyDuration = Duration.ofMillis(value.getConcurrency().getDurationMs());
         concurrencyIncludePaths = new ArrayList<>();
-        for (String line : value.getConcurrency().getIncludePaths()) {
-            String target = line.trim();
-            if (target.isEmpty()) {
+        for (String path : value.getConcurrency().getIncludePaths()) {
+            if (ObjectUtils.isEmpty(path)) {
                 continue;
             }
-            concurrencyIncludePaths.add(new PathTester(target));
+            concurrencyIncludePaths.add(new PathTester(path));
         }
 
         fixedIntervals = new ArrayList<>();
-        for (FrequencyControlConfig.FixedInterval s : value.getFixedIntervals()) {
+        for (int i = 0; i < value.getFixedIntervals().size(); ++i) {
+            FrequencyControlConfig.FixedInterval s = value.getFixedIntervals().get(i);
+            String configPathName =
+                    String.format("%s.fixed-intervals.[%d]", ConfigPrefix.FREQUENCY_CONTROL, i);
+
+            if (s.getDurationMs() < 1) {
+                throw new RuntimeException(String
+                        .format("Configuration: {%s.duration-ms} less then 1", configPathName));
+            }
+
             Duration duration = Duration.ofMillis(s.getDurationMs());
-            for (String line : s.getIncludePaths()) {
-                String target = line.trim();
-                if (target.isEmpty()) {
+            for (String path : s.getIncludePaths()) {
+                if (ObjectUtils.isEmpty(path)) {
                     continue;
                 }
-                fixedIntervals.add(new ExtraPathTester<>(target, duration));
+                fixedIntervals.add(new TagPathTester<>(s.getTag(), path, duration));
             }
         }
 
@@ -70,9 +85,9 @@ public class FrequencyControlFilter extends OncePerRequestFilter {
             if (fixedIntervals.isEmpty()) {
                 sb.append(" disabled");
             } else {
-                for (ExtraPathTester<Duration> s : fixedIntervals) {
-                    sb.append("\n  duration: " + s.getExtra().toMillis() + "ms, path: "
-                            + s.getPath());
+                for (TagPathTester<Duration> s : fixedIntervals) {
+                    sb.append("\n  tag: " + s.getTag() + ", duration: " + s.getExtra().toMillis()
+                            + "ms, path: " + s.getPath());
                 }
             }
 
@@ -103,8 +118,8 @@ public class FrequencyControlFilter extends OncePerRequestFilter {
         String method = request.getMethod();
         String relativePath = pathProcessor.getRelativeURI(request);
 
-        ExtraPathTester<Duration> fixedInterval = null;
-        for (ExtraPathTester<Duration> s : fixedIntervals) {
+        TagPathTester<Duration> fixedInterval = null;
+        for (TagPathTester<Duration> s : fixedIntervals) {
             if (s.test(relativePath)) {
                 fixedInterval = s;
                 break;

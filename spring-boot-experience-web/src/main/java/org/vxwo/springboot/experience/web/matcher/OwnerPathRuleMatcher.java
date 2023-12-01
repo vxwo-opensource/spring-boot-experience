@@ -6,49 +6,50 @@ import org.vxwo.springboot.experience.web.config.OwnerPathRule;
 
 /**
  * @author vxwo-team
- *
- * The path rule example:
- * path;key-1:owner-1;key-2:owner-2;etc.
  */
 
 public class OwnerPathRuleMatcher {
-    private final List<ExtraPathTester<Map<String, String>>> acceptPathTesters;
+    private final List<TagPathTester<Map<String, String>>> acceptPathTesters;
 
     public OwnerPathRuleMatcher(String configName, List<OwnerPathRule> pathRules) {
         acceptPathTesters = new ArrayList<>();
 
         if (ObjectUtils.isEmpty(pathRules)) {
-            throw new RuntimeException("Configuration: [" + configName + "] Empty");
+            throw new RuntimeException(String.format("Configuration: {%s} empty", configName));
         }
 
-        for (OwnerPathRule pathRule : pathRules) {
+        for (int i = 0; i < pathRules.size(); ++i) {
+            OwnerPathRule pathRule = pathRules.get(i);
+            String configPathName = String.format("%s.[%d]", configName, i);
+
             String path = pathRule.getPath();
-            if (ObjectUtils.isEmpty(path.isEmpty())) {
-                continue;
+            if (ObjectUtils.isEmpty(path)) {
+                throw new RuntimeException(
+                        String.format("Configuration: {%s.path} empty", configPathName));
             }
 
             Map<String, String> acceptKeys = new HashMap<String, String>();
             for (OwnerPathRule.KeyOwner target : pathRule.getOwners()) {
                 String key = target.getKey();
-                if (ObjectUtils.isEmpty(key.isEmpty())) {
+                if (ObjectUtils.isEmpty(key)) {
                     continue;
                 }
 
                 String owner = target.getOwner();
-                if (ObjectUtils.isEmpty(key.isEmpty())) {
-                    owner = "UNKNOW";
+                if (ObjectUtils.isEmpty(owner)) {
+                    owner = "none";
                 }
 
                 acceptKeys.put(key, owner);
             }
 
-            acceptPathTesters
-                    .add(new ExtraPathTester<>(path, Collections.unmodifiableMap(acceptKeys)));
+            acceptPathTesters.add(new TagPathTester<>(pathRule.getTag(), path,
+                    Collections.unmodifiableMap(acceptKeys)));
         }
     }
 
-    public ExtraPathTester<Map<String, String>> findMatchTester(String path) {
-        for (ExtraPathTester<Map<String, String>> tester : acceptPathTesters) {
+    public TagPathTester<Map<String, String>> findMatchTester(String path) {
+        for (TagPathTester<Map<String, String>> tester : acceptPathTesters) {
             if (tester.test(path)) {
                 return tester;
             }
@@ -61,8 +62,8 @@ public class OwnerPathRuleMatcher {
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append(acceptPathTesters.size() + " paths");
-        for (ExtraPathTester<Map<String, String>> tester : acceptPathTesters) {
-            sb.append("\n path: " + tester.getPath() + ", owners: "
+        for (TagPathTester<Map<String, String>> tester : acceptPathTesters) {
+            sb.append("\ntag: " + tester.getTag() + ", path: " + tester.getPath() + ", owners: "
                     + String.join(",", tester.getExtra().values()));
         }
 

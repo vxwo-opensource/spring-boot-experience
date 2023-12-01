@@ -23,6 +23,7 @@ public class FrequencyControlConfig {
 
     @Data
     public static class FixedInterval {
+        private String tag;
         private int durationMs;
         private List<String> includePaths;
     }

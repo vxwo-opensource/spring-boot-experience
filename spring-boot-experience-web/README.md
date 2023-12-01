@@ -63,7 +63,7 @@ prefix: sbexp.web.logging
 
 ### Configuration
 
-prefix: sbexp.web.api-key
+prefix: sbexp.web.authorization.api-key
 
 | *Key*        | *Type*               | *Required* | *Default*            | *Description*                               |
 |--------------|----------------------|------------|----------------------|---------------------------------------------|
@@ -77,6 +77,7 @@ prefix: sbexp.web.api-key
 
 | *Key*  | *Type*          | *Required* | *Default* | *Description*         |
 |--------|-----------------|------------|-----------|-----------------------|
+| tag    | String          |            | default   | Tag                   |
 | path   | String          | Y          |           | Path prefix           |
 | owners | Array[KeyOwner] | Y          |           | Pair of key and owner |
 
@@ -85,7 +86,7 @@ prefix: sbexp.web.api-key
 | *Key* | *Type*  | *Required* | *Default* | *Description* |
 |-------|---------|------------|-----------|---------------|
 | key   | String  | Y          |           | The *key*     |
-| owner | String] |            | unknow    | Onwer of key  |
+| owner | String] |            | none      | Onwer of key  |
 
 ### Implementations
 
@@ -97,7 +98,7 @@ prefix: sbexp.web.api-key
 
 ### Configuration
 
-prefix: sbexp.web.bearer
+prefix: sbexp.web.authorization.bearer
 
 | *Key*       | *Type*               | *Required* | *Default*      | *Description*                        |
 |-------------|----------------------|------------|----------------|--------------------------------------|
@@ -109,6 +110,7 @@ prefix: sbexp.web.bearer
 
 | *Key*     | *Type*        | *Required* | *Default* | *Description*                      |
 |-----------|---------------|------------|-----------|------------------------------------|
+| tag       | String        |            | default   | Tag                                |
 | path      | String        | Y          |           | Path prefix                        |
 | excludes  | Array[String] |            |           | Child paths for exclude processing |
 | optionals | Array[String] |            |           | Child paths for processing or not  |
@@ -147,6 +149,7 @@ prefix: sbexp.web.frequency-control
 
 | *Key*         | *Type*        | *Required* | *Default* | *Description*                    |
 |---------------|---------------|------------|-----------|----------------------------------|
+| tag           | String        |            | default   | Tag                              |
 | duration-ms   | int           | Y          |           | Milliseconds for fixed duration  |
 | include-paths | Array[String] | Y          |           | Paths for fixed interval control |
 

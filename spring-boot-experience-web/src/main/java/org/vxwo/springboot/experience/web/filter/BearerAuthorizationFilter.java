@@ -14,7 +14,7 @@ import org.vxwo.springboot.experience.web.ConfigPrefix;
 import org.vxwo.springboot.experience.web.config.BearerAuthorizationConfig;
 import org.vxwo.springboot.experience.web.handler.AuthorizationFailureHandler;
 import org.vxwo.springboot.experience.web.handler.BearerAuthorizationHandler;
-import org.vxwo.springboot.experience.web.matcher.ExtraPathTester;
+import org.vxwo.springboot.experience.web.matcher.TagPathTester;
 import org.vxwo.springboot.experience.web.matcher.GroupPathRuleMatcher;
 import org.vxwo.springboot.experience.web.processor.PathProcessor;
 import org.vxwo.springboot.experience.web.util.SplitUtil;
@@ -59,7 +59,7 @@ public class BearerAuthorizationFilter extends OncePerRequestFilter {
 
         String relativePath = pathProcessor.getRelativeURI(request);
 
-        ExtraPathTester<GroupPathRuleMatcher.ExcludesAndOptionals> tester =
+        TagPathTester<GroupPathRuleMatcher.ExcludesAndOptionals> tester =
                 pathRuleMatcher.findMatchTester(relativePath);
         if (tester == null || tester.getExtra().isExclude(relativePath)) {
             filterChain.doFilter(request, response);

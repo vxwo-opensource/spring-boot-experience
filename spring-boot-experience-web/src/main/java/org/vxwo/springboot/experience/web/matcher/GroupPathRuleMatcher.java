@@ -10,9 +10,6 @@ import lombok.Getter;
 
 /**
  * @author vxwo-team
- *
- * The path rule line example:
- * path;exclude-sub-1,exclude-sub-2;optinal-sub-1,optional-sub-1
  */
 
 public class GroupPathRuleMatcher {
@@ -43,21 +40,25 @@ public class GroupPathRuleMatcher {
         }
     }
 
-    private final List<ExtraPathTester<ExcludesAndOptionals>> acceptPathTesters;
+    private final List<TagPathTester<ExcludesAndOptionals>> acceptPathTesters;
 
     @SuppressWarnings("PMD.AvoidComplexConditionRule")
     public GroupPathRuleMatcher(String configName, List<GroupPathRule> pathRules) {
         acceptPathTesters = new ArrayList<>();
 
         if (ObjectUtils.isEmpty(pathRules)) {
-            throw new RuntimeException("Configuration: [" + configName + "] Empty");
+            throw new RuntimeException(String.format("Configuration: {%s} empty", configName));
         }
 
         Set<String> excludeOrOptionalPathSet = new HashSet<>();
-        for (GroupPathRule pathRule : pathRules) {
+        for (int i = 0; i < pathRules.size(); ++i) {
+            GroupPathRule pathRule = pathRules.get(i);
+            String configPathName = String.format("%s.[%d]", configName, i);
+
             String path = pathRule.getPath();
-            if (path.isEmpty()) {
-                continue;
+            if (ObjectUtils.isEmpty(path)) {
+                throw new RuntimeException(
+                        String.format("Configuration: {%s.path} empty", configPathName));
             }
 
             boolean existExcludes = !ObjectUtils.isEmpty(pathRule.getExcludes());
@@ -70,9 +71,9 @@ public class GroupPathRuleMatcher {
             if (existExcludes) {
                 for (String exclude : SplitUtil.shrinkList(pathRule.getExcludes())) {
                     if (exclude.startsWith("/")) {
-                        throw new RuntimeException(
-                                "Configuration: [" + configName + "] Failed on path: " + path
-                                        + " exlude starts with '/': " + exclude);
+                        throw new RuntimeException(String.format(
+                                "Configuration: {%s.excludes} found starts with '/': %s",
+                                configPathName, exclude));
                     }
 
                     String excludePath = path + exclude;
@@ -88,9 +89,9 @@ public class GroupPathRuleMatcher {
             if (existOptionals) {
                 for (String optional : SplitUtil.shrinkList(pathRule.getOptionals())) {
                     if (optional.startsWith("/")) {
-                        throw new RuntimeException(
-                                "Configuration: [" + configName + "] failed on path: " + path
-                                        + " optional starts with '/': " + optional);
+                        throw new RuntimeException(String.format(
+                                "Configuration: {%s.optionals} found starts with '/': %s",
+                                configPathName, optional));
                     }
 
                     String optionalPath = path + optional;
@@ -102,14 +103,14 @@ public class GroupPathRuleMatcher {
                 }
             }
 
-            acceptPathTesters.add(new ExtraPathTester<>(path,
+            acceptPathTesters.add(new TagPathTester<>(pathRule.getTag(), path,
                     new ExcludesAndOptionals(Collections.unmodifiableList(excludePathTesters),
                             Collections.unmodifiableList(optionalPathTesters))));
         }
     }
 
-    public ExtraPathTester<ExcludesAndOptionals> findMatchTester(String path) {
-        for (ExtraPathTester<ExcludesAndOptionals> tester : acceptPathTesters) {
+    public TagPathTester<ExcludesAndOptionals> findMatchTester(String path) {
+        for (TagPathTester<ExcludesAndOptionals> tester : acceptPathTesters) {
             if (tester.test(path)) {
                 return tester;
             }
@@ -122,8 +123,8 @@ public class GroupPathRuleMatcher {
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append(acceptPathTesters.size() + " paths");
-        for (ExtraPathTester<ExcludesAndOptionals> tester : acceptPathTesters) {
-            sb.append("\n path: " + tester.getPath());
+        for (TagPathTester<ExcludesAndOptionals> tester : acceptPathTesters) {
+            sb.append("\ntag: " + tester.getTag() + ", path: " + tester.getPath());
 
             if (!ObjectUtils.isEmpty(tester.getExtra().getExcludes())) {
                 sb.append(", excludes: " + String.join(",", tester.getExtra().getExcludes().stream()

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 import org.vxwo.springboot.experience.web.config.RequestLoggingConfig;
@@ -42,13 +43,13 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
         ignoreRequestHeaders = value.isIgnoreRequestHeaders();
         ignoreResponseHeaders = value.isIgnoreResponseHeaders();
         responseBodyLimit = value.getResponseBodyLimitKb() * 1024;
+
         includePaths = new ArrayList<>();
-        for (String line : value.getIncludePaths()) {
-            String target = line.trim();
-            if (target.isEmpty()) {
+        for (String path : value.getIncludePaths()) {
+            if (ObjectUtils.isEmpty(path)) {
                 continue;
             }
-            includePaths.add(new PathTester(target));
+            includePaths.add(new PathTester(path));
         }
 
         if (log.isInfoEnabled()) {
