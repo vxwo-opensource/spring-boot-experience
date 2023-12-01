@@ -1,4 +1,4 @@
-package org.vxwo.springboot.experience.redis.testor;
+package org.vxwo.springboot.experience.redis.tester;
 
 import java.time.Duration;
 import java.util.UUID;

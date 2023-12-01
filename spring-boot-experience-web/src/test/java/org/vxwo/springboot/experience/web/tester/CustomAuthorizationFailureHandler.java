@@ -1,4 +1,4 @@
-package org.vxwo.springboot.experience.web.testor;
+package org.vxwo.springboot.experience.web.tester;
 
 import java.io.IOException;
 import javax.servlet.ServletException;

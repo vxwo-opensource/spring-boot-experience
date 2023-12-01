@@ -1,4 +1,4 @@
-package org.vxwo.springboot.experience.web.testor;
+package org.vxwo.springboot.experience.web.tester;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer;
@@ -12,7 +12,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import static org.vxwo.springboot.experience.web.testor.CustomRequestBody.*;
+import static org.vxwo.springboot.experience.web.tester.CustomRequestBody.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -67,7 +67,7 @@ public class ApplicationTest {
     public void testBearerLoginedOptionalShouldReturnLogined() {
         RequestEntity<?> request = RequestEntity
                 .get(String.format("http://localhost:%s/test-bearer/optional-path", localPort))
-                .header(HttpHeaders.AUTHORIZATION, "Bearer    testor").build();
+                .header(HttpHeaders.AUTHORIZATION, "Bearer    tester").build();
         ResponseEntity<String> response = this.restTemplate.exchange(request, String.class);
         Assertions.assertEquals(ReturnCode.LOGINED, response.getBody());
     }

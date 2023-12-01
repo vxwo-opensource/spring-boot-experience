@@ -1,4 +1,4 @@
-package org.vxwo.springboot.experience.web.testor;
+package org.vxwo.springboot.experience.web.tester;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

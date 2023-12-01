@@ -1,4 +1,4 @@
-package org.vxwo.springboot.experience.web.testor;
+package org.vxwo.springboot.experience.web.tester;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -14,7 +14,7 @@ public class CustomBearerAuthorizationHandler implements BearerAuthorizationHand
     public boolean processBearerToken(HttpServletRequest request, HttpServletResponse response,
             String matchPath, String bearerToken) throws ServletException, IOException {
         request.setAttribute(ReturnCode.LOGINED, "ok");
-        return bearerToken.equals("testor");
+        return bearerToken.equals("tester");
     }
 
 }

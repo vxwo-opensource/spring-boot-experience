@@ -15,7 +15,7 @@ sbexp:
           - path: /test-api-key
             owners:
               - key: test-key
-                owner: testor
+                owner: tester
 
       bearer:
         enabled: true
