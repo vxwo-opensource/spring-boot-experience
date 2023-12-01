@@ -61,7 +61,7 @@ public class BearerAuthorizationFilter extends OncePerRequestFilter {
 
         ExtraPathTester<GroupPathRuleMatcher.ExcludesAndOptionals> tester =
                 pathRuleMatcher.findMatchTester(relativePath);
-        if (tester == null) {
+        if (tester == null || tester.getExtra().isExclude(relativePath)) {
             filterChain.doFilter(request, response);
             return;
         }

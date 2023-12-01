@@ -109,19 +109,13 @@ public class GroupPathRuleMatcher {
     }
 
     public ExtraPathTester<ExcludesAndOptionals> findMatchTester(String path) {
-        ExtraPathTester<ExcludesAndOptionals> tester = null;
-        for (ExtraPathTester<ExcludesAndOptionals> s : acceptPathTesters) {
-            if (s.test(path)) {
-                tester = s;
-                break;
+        for (ExtraPathTester<ExcludesAndOptionals> tester : acceptPathTesters) {
+            if (tester.test(path)) {
+                return tester;
             }
         }
 
-        if (tester != null && tester.getExtra().isExclude(path)) {
-            tester = null;
-        }
-
-        return tester;
+        return null;
     }
 
     @Override
