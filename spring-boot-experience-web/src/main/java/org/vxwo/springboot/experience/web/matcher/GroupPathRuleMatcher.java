@@ -64,7 +64,8 @@ public class GroupPathRuleMatcher {
             boolean existExcludes = !ObjectUtils.isEmpty(pathRule.getExcludes());
             boolean existOptionals = !ObjectUtils.isEmpty(pathRule.getOptionals());
             if ((existExcludes || existOptionals) && !path.endsWith("/")) {
-                path += "/";
+                throw new RuntimeException(String
+                        .format("Configuration: {%s.path} not starts with '/'", configPathName));
             }
 
             List<PathTester> excludePathTesters = new ArrayList<>();
@@ -124,16 +125,16 @@ public class GroupPathRuleMatcher {
         StringBuffer sb = new StringBuffer();
         sb.append(acceptPathTesters.size() + " paths");
         for (TagPathTester<ExcludesAndOptionals> tester : acceptPathTesters) {
-            sb.append("\ntag: " + tester.getTag() + ", path: " + tester.getPath());
+            sb.append("\ntag: " + tester.getTag() + ", path: " + tester.toPathMatch());
 
             if (!ObjectUtils.isEmpty(tester.getExtra().getExcludes())) {
                 sb.append(", excludes: " + String.join(",", tester.getExtra().getExcludes().stream()
-                        .map(o -> o.getPath()).collect(Collectors.toList())));
+                        .map(o -> o.toPathMatch()).collect(Collectors.toList())));
             }
 
             if (!ObjectUtils.isEmpty(tester.getExtra().getOptionals())) {
                 sb.append(", optionals: " + String.join(",", tester.getExtra().getOptionals()
-                        .stream().map(o -> o.getPath()).collect(Collectors.toList())));
+                        .stream().map(o -> o.toPathMatch()).collect(Collectors.toList())));
             }
         }
 

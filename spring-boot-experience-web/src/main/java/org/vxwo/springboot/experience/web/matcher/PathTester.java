@@ -1,6 +1,6 @@
 package org.vxwo.springboot.experience.web.matcher;
 
-import java.util.function.Predicate;
+import lombok.Getter;
 
 /**
  * Simple path tester
@@ -8,25 +8,23 @@ import java.util.function.Predicate;
  * @author vxwo-team
  */
 
-public class PathTester implements Predicate<String> {
-    private final static String END_FLAG = "$";
+public class PathTester {
+    private final static String PREFIX_FLAG = "/";
 
+    @Getter
     private final String path;
-    private final boolean matchFull;
-    private final String matchValue;
+    private final boolean fullMatch;
 
     public PathTester(String input) {
         path = input;
-        matchFull = path.endsWith(END_FLAG);
-        matchValue = !matchFull ? path : path.substring(0, path.length() - 1);
+        fullMatch = !path.endsWith(PREFIX_FLAG);
     }
 
-    public String getPath() {
-        return path;
-    }
-
-    @Override
     public boolean test(String input) {
-        return matchFull ? input.equals(matchValue) : input.startsWith(matchValue);
+        return fullMatch ? path.equals(input) : input.startsWith(path);
+    }
+
+    public String toPathMatch() {
+        return fullMatch ? path : (path + "**");
     }
 }

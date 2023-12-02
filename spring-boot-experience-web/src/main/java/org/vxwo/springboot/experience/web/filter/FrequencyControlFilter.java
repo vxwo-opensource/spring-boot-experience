@@ -87,7 +87,7 @@ public class FrequencyControlFilter extends OncePerRequestFilter {
             } else {
                 for (TagPathTester<Duration> s : fixedIntervals) {
                     sb.append("\n  tag: " + s.getTag() + ", duration: " + s.getExtra().toMillis()
-                            + "ms, path: " + s.getPath());
+                            + "ms, path: " + s.toPathMatch());
                 }
             }
 
@@ -97,7 +97,7 @@ public class FrequencyControlFilter extends OncePerRequestFilter {
             } else {
                 sb.append("\n  duration: " + concurrencyDuration.toMillis() + "ms");
                 sb.append("\n  include-paths:" + String.join("", concurrencyIncludePaths.stream()
-                        .map((o) -> "\n   " + o.getPath()).collect(Collectors.toList())));
+                        .map((o) -> "\n   " + o.toPathMatch()).collect(Collectors.toList())));
             }
             log.info(sb.toString());
         }

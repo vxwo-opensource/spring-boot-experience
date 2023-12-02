@@ -63,7 +63,7 @@ public class OwnerPathRuleMatcher {
         StringBuffer sb = new StringBuffer();
         sb.append(acceptPathTesters.size() + " paths");
         for (TagPathTester<Map<String, String>> tester : acceptPathTesters) {
-            sb.append("\ntag: " + tester.getTag() + ", path: " + tester.getPath() + ", owners: "
+            sb.append("\ntag: " + tester.getTag() + ", path: " + tester.toPathMatch() + ", owners: "
                     + String.join(",", tester.getExtra().values()));
         }
 

@@ -21,7 +21,7 @@ sbexp:
       bearer:
         enabled: true
         path-rules:
-          - path: /test-bearer
+          - path: /test-bearer/
             tag: test
             excludes:
               - exclude-path
