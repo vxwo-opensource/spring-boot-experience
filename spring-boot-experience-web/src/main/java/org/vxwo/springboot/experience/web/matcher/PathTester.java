@@ -27,4 +27,8 @@ public class PathTester {
     public String toPathMatch() {
         return fullMatch ? path : (path + "**");
     }
+
+    public static boolean hasPatternCharacter(String input) {
+        return input.matches("(\\*|\\?)+");
+    }
 }

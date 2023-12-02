@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.vxwo.springboot.experience.web.ConfigPrefix;
 import org.vxwo.springboot.experience.web.config.FrequencyControlConfig;
@@ -19,6 +18,7 @@ import org.vxwo.springboot.experience.web.handler.FrequencyControlHandler;
 import org.vxwo.springboot.experience.web.matcher.TagPathTester;
 import org.vxwo.springboot.experience.web.matcher.PathTester;
 import org.vxwo.springboot.experience.web.processor.PathProcessor;
+import org.vxwo.springboot.experience.web.util.SplitUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -50,9 +50,11 @@ public class FrequencyControlFilter extends OncePerRequestFilter {
 
         concurrencyDuration = Duration.ofMillis(value.getConcurrency().getDurationMs());
         concurrencyIncludePaths = new ArrayList<>();
-        for (String path : value.getConcurrency().getIncludePaths()) {
-            if (ObjectUtils.isEmpty(path)) {
-                continue;
+        for (String path : SplitUtil.shrinkList(value.getConcurrency().getIncludePaths())) {
+            if (PathTester.hasPatternCharacter(path)) {
+                throw new RuntimeException(String.format(
+                        "Configuration: {%s.concurrency.include-paths} has pattern character",
+                        ConfigPrefix.FREQUENCY_CONTROL));
             }
             concurrencyIncludePaths.add(new PathTester(path));
         }
@@ -69,9 +71,11 @@ public class FrequencyControlFilter extends OncePerRequestFilter {
             }
 
             Duration duration = Duration.ofMillis(s.getDurationMs());
-            for (String path : s.getIncludePaths()) {
-                if (ObjectUtils.isEmpty(path)) {
-                    continue;
+            for (String path : SplitUtil.shrinkList(s.getIncludePaths())) {
+                if (PathTester.hasPatternCharacter(path)) {
+                    throw new RuntimeException(
+                            String.format("Configuration: {%s.include-paths} has pattern character",
+                                    configPathName));
                 }
                 fixedIntervals.add(new TagPathTester<>(s.getTag(), path, duration));
             }

@@ -60,12 +60,16 @@ public class GroupPathRuleMatcher {
                 throw new RuntimeException(
                         String.format("Configuration: {%s.path} empty", configPathName));
             }
+            if (PathTester.hasPatternCharacter(path)) {
+                throw new RuntimeException(String
+                        .format("Configuration: {%s.path} has pattern character", configPathName));
+            }
 
             boolean existExcludes = !ObjectUtils.isEmpty(pathRule.getExcludes());
             boolean existOptionals = !ObjectUtils.isEmpty(pathRule.getOptionals());
             if ((existExcludes || existOptionals) && !path.endsWith("/")) {
                 throw new RuntimeException(String
-                        .format("Configuration: {%s.path} not starts with '/'", configPathName));
+                        .format("Configuration: {%s.path} not ends with '/'", configPathName));
             }
 
             List<PathTester> excludePathTesters = new ArrayList<>();
@@ -73,8 +77,12 @@ public class GroupPathRuleMatcher {
                 for (String exclude : SplitUtil.shrinkList(pathRule.getExcludes())) {
                     if (exclude.startsWith("/")) {
                         throw new RuntimeException(String.format(
-                                "Configuration: {%s.excludes} found starts with '/': %s",
-                                configPathName, exclude));
+                                "Configuration: {%s.excludes} starts with '/'", configPathName));
+                    }
+                    if (PathTester.hasPatternCharacter(exclude)) {
+                        throw new RuntimeException(
+                                String.format("Configuration: {%s.excludes} has pattern character",
+                                        configPathName));
                     }
 
                     String excludePath = path + exclude;
@@ -91,8 +99,12 @@ public class GroupPathRuleMatcher {
                 for (String optional : SplitUtil.shrinkList(pathRule.getOptionals())) {
                     if (optional.startsWith("/")) {
                         throw new RuntimeException(String.format(
-                                "Configuration: {%s.optionals} found starts with '/': %s",
-                                configPathName, optional));
+                                "Configuration: {%s.optionals} starts with '/'", configPathName));
+                    }
+                    if (PathTester.hasPatternCharacter(optional)) {
+                        throw new RuntimeException(
+                                String.format("Configuration: {%s.optionals} has pattern character",
+                                        configPathName));
                     }
 
                     String optionalPath = path + optional;
