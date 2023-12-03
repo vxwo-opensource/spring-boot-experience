@@ -1,6 +1,7 @@
 package org.vxwo.springboot.experience.web.processor;
 
 import java.net.URI;
+import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +18,9 @@ import lombok.extern.slf4j.Slf4j;
 public class PathProcessor {
     private final static String FAKE_HOST = "http://localhost";
     private final static int FAKE_LENGTH = FAKE_HOST.length();
-    private final static String ATTRIBUTE_NAME = "SBEXP-RelativeURI";
+
+    private final static String ATTRIBUTE_NAME =
+            "SBEXP:" + UUID.randomUUID().toString() + ":RelativeURI";
 
     private String servletContextPath;
     private int servletContextPathLength = 0;
