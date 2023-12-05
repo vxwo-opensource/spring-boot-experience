@@ -27,7 +27,7 @@ public class OwnerPathRuleMatcher {
                 throw new RuntimeException(
                         String.format("Configuration: {%s.path} empty", configPathName));
             }
-            if (PathTester.hasPatternCharacter(path)) {
+            if (PathTester.hasPattern(path)) {
                 throw new RuntimeException(String
                         .format("Configuration: {%s.path} has pattern character", configPathName));
             }

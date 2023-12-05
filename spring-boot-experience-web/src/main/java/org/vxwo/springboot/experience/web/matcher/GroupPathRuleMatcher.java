@@ -60,7 +60,7 @@ public class GroupPathRuleMatcher {
                 throw new RuntimeException(
                         String.format("Configuration: {%s.path} empty", configPathName));
             }
-            if (PathTester.hasPatternCharacter(path)) {
+            if (PathTester.hasPattern(path)) {
                 throw new RuntimeException(String
                         .format("Configuration: {%s.path} has pattern character", configPathName));
             }
@@ -79,7 +79,7 @@ public class GroupPathRuleMatcher {
                         throw new RuntimeException(String.format(
                                 "Configuration: {%s.excludes} starts with '/'", configPathName));
                     }
-                    if (PathTester.hasPatternCharacter(exclude)) {
+                    if (PathTester.hasPattern(exclude)) {
                         throw new RuntimeException(
                                 String.format("Configuration: {%s.excludes} has pattern character",
                                         configPathName));
@@ -101,7 +101,7 @@ public class GroupPathRuleMatcher {
                         throw new RuntimeException(String.format(
                                 "Configuration: {%s.optionals} starts with '/'", configPathName));
                     }
-                    if (PathTester.hasPatternCharacter(optional)) {
+                    if (PathTester.hasPattern(optional)) {
                         throw new RuntimeException(
                                 String.format("Configuration: {%s.optionals} has pattern character",
                                         configPathName));

@@ -51,7 +51,7 @@ public class FrequencyControlFilter extends OncePerRequestFilter {
         concurrencyDuration = Duration.ofMillis(value.getConcurrency().getDurationMs());
         concurrencyIncludePaths = new ArrayList<>();
         for (String path : SplitUtil.shrinkList(value.getConcurrency().getIncludePaths())) {
-            if (PathTester.hasPatternCharacter(path)) {
+            if (PathTester.hasPattern(path)) {
                 throw new RuntimeException(String.format(
                         "Configuration: {%s.concurrency.include-paths} has pattern character",
                         ConfigPrefix.FREQUENCY_CONTROL));
@@ -72,7 +72,7 @@ public class FrequencyControlFilter extends OncePerRequestFilter {
 
             Duration duration = Duration.ofMillis(s.getDurationMs());
             for (String path : SplitUtil.shrinkList(s.getIncludePaths())) {
-                if (PathTester.hasPatternCharacter(path)) {
+                if (PathTester.hasPattern(path)) {
                     throw new RuntimeException(
                             String.format("Configuration: {%s.include-paths} has pattern character",
                                     configPathName));
