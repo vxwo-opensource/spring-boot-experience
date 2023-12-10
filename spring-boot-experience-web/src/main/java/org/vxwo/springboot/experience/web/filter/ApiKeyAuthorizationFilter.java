@@ -16,6 +16,7 @@ import org.vxwo.springboot.experience.web.config.ApiKeyAuthorizationConfig;
 import org.vxwo.springboot.experience.web.handler.AuthorizationFailureHandler;
 import org.vxwo.springboot.experience.web.matcher.TagPathTester;
 import org.vxwo.springboot.experience.web.matcher.OwnerPathRuleMatcher;
+import org.vxwo.springboot.experience.web.matcher.PathRuleMatcher;
 import org.vxwo.springboot.experience.web.processor.PathProcessor;
 import org.vxwo.springboot.experience.web.util.SplitUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -48,6 +49,10 @@ public class ApiKeyAuthorizationFilter extends OncePerRequestFilter {
         if (log.isInfoEnabled()) {
             log.info("ApiKey authorization actived, " + pathRuleMatcher.toString());
         }
+    }
+
+    public PathRuleMatcher getPathRuleMatcher() {
+        return pathRuleMatcher;
     }
 
     @SuppressWarnings("PMD")

@@ -12,7 +12,7 @@ import lombok.Getter;
  * @author vxwo-team
  */
 
-public class GroupPathRuleMatcher {
+public class GroupPathRuleMatcher implements PathRuleMatcher {
     @Getter
     @AllArgsConstructor
     public static class ExcludesAndOptionals {
@@ -151,5 +151,21 @@ public class GroupPathRuleMatcher {
         }
 
         return sb.toString();
+    }
+
+    @Override
+    public List<String> getPathMatchs(String tag) {
+        return acceptPathTesters.stream().filter(o -> o.getTag().equals(tag))
+                .map(o -> o.toPathMatch()).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> getExcludePathMatchs(String tag) {
+        List<String> pathMatches = new ArrayList<>();
+        acceptPathTesters.stream().filter(o -> o.getTag().equals(tag)).forEach(o -> {
+            o.getExtra().getExcludes().stream().forEach(x -> pathMatches.add(x.toPathMatch()));
+            o.getExtra().getOptionals().stream().forEach(x -> pathMatches.add(x.toPathMatch()));
+        });
+        return pathMatches;
     }
 }

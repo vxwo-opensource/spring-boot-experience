@@ -16,6 +16,7 @@ import org.vxwo.springboot.experience.web.handler.AuthorizationFailureHandler;
 import org.vxwo.springboot.experience.web.handler.BearerAuthorizationHandler;
 import org.vxwo.springboot.experience.web.matcher.TagPathTester;
 import org.vxwo.springboot.experience.web.matcher.GroupPathRuleMatcher;
+import org.vxwo.springboot.experience.web.matcher.PathRuleMatcher;
 import org.vxwo.springboot.experience.web.processor.PathProcessor;
 import org.vxwo.springboot.experience.web.util.SplitUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -47,6 +48,10 @@ public class BearerAuthorizationFilter extends OncePerRequestFilter {
         if (log.isInfoEnabled()) {
             log.info("Bearer authorization actived, " + pathRuleMatcher.toString());
         }
+    }
+
+    public PathRuleMatcher getPathRuleMatcher() {
+        return pathRuleMatcher;
     }
 
     @Override

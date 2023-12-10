@@ -1,6 +1,7 @@
 package org.vxwo.springboot.experience.web.matcher;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import org.springframework.util.ObjectUtils;
 import org.vxwo.springboot.experience.web.config.OwnerPathRule;
 
@@ -8,7 +9,7 @@ import org.vxwo.springboot.experience.web.config.OwnerPathRule;
  * @author vxwo-team
  */
 
-public class OwnerPathRuleMatcher {
+public class OwnerPathRuleMatcher implements PathRuleMatcher {
     private final List<TagPathTester<Map<String, String>>> acceptPathTesters;
 
     public OwnerPathRuleMatcher(String configName, List<OwnerPathRule> pathRules) {
@@ -72,5 +73,16 @@ public class OwnerPathRuleMatcher {
         }
 
         return sb.toString();
+    }
+
+    @Override
+    public List<String> getPathMatchs(String tag) {
+        return acceptPathTesters.stream().filter(o -> o.getTag().equals(tag))
+                .map(o -> o.toPathMatch()).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> getExcludePathMatchs(String tag) {
+        throw new UnsupportedOperationException("Unimplemented method 'getExcludePathMatchs'");
     }
 }
