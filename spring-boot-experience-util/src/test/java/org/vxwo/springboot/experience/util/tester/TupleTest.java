@@ -11,27 +11,38 @@ import org.vxwo.springboot.experience.util.lang.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ExtendWith(SpringExtension.class)
-public class ApplicationTest {
-
-
+public class TupleTest {
     @Test
     @Order(101)
-    public void testTuple() {
+    public void testTuple2() {
         Tuple2<Integer, Long> tuple2 = Tuple2.of(1, 2L);
         Assertions.assertEquals(1, tuple2.getT1());
         Assertions.assertEquals(2L, tuple2.getT2());
+    }
 
+    @Test
+    @Order(102)
+    public void testTuple3() {
         Tuple3<Integer, Long, String> tuple3 = Tuple3.of(1, 2L, "3");
         Assertions.assertEquals(1, tuple3.getT1());
         Assertions.assertEquals(2L, tuple3.getT2());
         Assertions.assertEquals("3", tuple3.getT3());
 
+    }
+
+    @Test
+    @Order(103)
+    public void testTuple4() {
         Tuple4<Integer, Long, String, Double> tuple4 = Tuple4.of(1, 2L, "3", 4.0);
         Assertions.assertEquals(1, tuple4.getT1());
         Assertions.assertEquals(2L, tuple4.getT2());
         Assertions.assertEquals("3", tuple4.getT3());
         Assertions.assertEquals(4.0, tuple4.getT4());
+    }
 
+    @Test
+    @Order(104)
+    public void testTuple5() {
         Tuple5<Integer, Long, String, Double, Float> tuple5 = Tuple5.of(1, 2L, "3", 4.0, 5.0f);
         Assertions.assertEquals(1, tuple5.getT1());
         Assertions.assertEquals(2L, tuple5.getT2());
