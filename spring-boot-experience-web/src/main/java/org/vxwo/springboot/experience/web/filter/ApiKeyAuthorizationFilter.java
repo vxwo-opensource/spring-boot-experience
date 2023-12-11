@@ -94,17 +94,18 @@ public class ApiKeyAuthorizationFilter extends OncePerRequestFilter {
             return;
         }
 
-        String keyOwner = null;
         String apiKey = parseApiKeyFromHeader(request);
-        if (apiKey != null) {
-            keyOwner = tester.getExtra().get(apiKey);
-        }
-
-        if (keyOwner != null) {
-            filterChain.doFilter(request, response);
+        if (apiKey == null) {
+            failureHandler.handleAuthorizationFailure(request, response, tester.getTag(),
+                    tester.getPath(), "no-api-key");
         } else {
-            failureHandler.handleAuthorizationFailure(request, response, tester.getPath(),
-                    "invalid-api-key");
+            String keyOwner = tester.getExtra().get(apiKey);
+            if (keyOwner != null) {
+                filterChain.doFilter(request, response);
+            } else {
+                failureHandler.handleAuthorizationFailure(request, response, tester.getTag(),
+                        tester.getPath(), "invalid-api-key");
+            }
         }
     }
 }

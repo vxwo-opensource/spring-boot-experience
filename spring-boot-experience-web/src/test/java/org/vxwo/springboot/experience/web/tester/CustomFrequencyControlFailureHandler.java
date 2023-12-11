@@ -11,8 +11,15 @@ import org.vxwo.springboot.experience.web.handler.FrequencyControlFailureHandler
 public class CustomFrequencyControlFailureHandler implements FrequencyControlFailureHandler {
 
     @Override
-    public void handleFrequencyControlFailure(HttpServletRequest request,
-            HttpServletResponse response, String method, String matchPath, String message)
+    public void handleFrequencyControlConcurrencyFailure(HttpServletRequest request,
+            HttpServletResponse response, String method, String matchPath)
+            throws ServletException, IOException {
+        response.getWriter().write(ReturnCode.FAILED);
+    }
+
+    @Override
+    public void handleFrequencyControlFixedIntervalFailure(HttpServletRequest request,
+            HttpServletResponse response, String method, String tag, String matchPath)
             throws ServletException, IOException {
         response.getWriter().write(ReturnCode.FAILED);
     }

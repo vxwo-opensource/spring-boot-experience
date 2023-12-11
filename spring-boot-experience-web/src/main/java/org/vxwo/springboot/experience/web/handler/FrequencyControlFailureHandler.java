@@ -14,16 +14,31 @@ import javax.servlet.http.HttpServletResponse;
 public interface FrequencyControlFailureHandler {
 
     /**
-     * Handle the frequency control failure
+     * Handle the frequency control concurrency failure
      *
      * @param request  the request wrap
      * @param response  the response wrap
      * @param method  the http method
      * @param matchPath  the matched path rule
-     * @param message  the failure message
      * @throws ServletException  if the request cannot be handled
      * @throws IOException  if IO error occurs
      */
-    void handleFrequencyControlFailure(HttpServletRequest request, HttpServletResponse response,
-            String method, String matchPath, String message) throws ServletException, IOException;
+    void handleFrequencyControlConcurrencyFailure(HttpServletRequest request,
+            HttpServletResponse response, String method, String matchPath)
+            throws ServletException, IOException;
+
+    /**
+     * Handle the frequency control fixed interval failure
+     *
+     * @param request  the request wrap
+     * @param response  the response wrap
+     * @param method  the http method
+     * @param tag  the matched path tag
+     * @param matchPath  the matched path rule
+     * @throws ServletException  if the request cannot be handled
+     * @throws IOException  if IO error occurs
+     */
+    void handleFrequencyControlFixedIntervalFailure(HttpServletRequest request,
+            HttpServletResponse response, String method, String tag, String matchPath)
+            throws ServletException, IOException;
 };

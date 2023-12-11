@@ -18,11 +18,12 @@ public interface AuthorizationFailureHandler {
      *
      * @param request  the request wrap
      * @param response  the response wrap
+     * @param tag  the matched path tag
      * @param matchPath  the matched path rule
-     * @param message  the failure message
+     * @param failureCode  the failure code
      * @throws ServletException  if the request cannot be handled
      * @throws IOException  if IO error occurs
      */
     void handleAuthorizationFailure(HttpServletRequest request, HttpServletResponse response,
-            String matchPath, String message) throws ServletException, IOException;
+            String tag, String matchPath, String failureCode) throws ServletException, IOException;
 };

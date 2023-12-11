@@ -140,8 +140,8 @@ public class FrequencyControlFilter extends OncePerRequestFilter {
                     fixedInterval.getExtra())) {
                 filterChain.doFilter(request, response);
             } else {
-                failureHandler.handleFrequencyControlFailure(request, response, method,
-                        fixedInterval.getPath(), "reject-fixed-interval");
+                failureHandler.handleFrequencyControlFixedIntervalFailure(request, response, method,
+                        fixedInterval.getTag(), fixedInterval.getPath());
             }
 
             return;
@@ -172,8 +172,8 @@ public class FrequencyControlFilter extends OncePerRequestFilter {
                 processHandler.leaveConcurrency(request, response, localContext);
             }
         } else {
-            failureHandler.handleFrequencyControlFailure(request, response, method,
-                    concurrency.getPath(), "reject-concurrency");
+            failureHandler.handleFrequencyControlConcurrencyFailure(request, response, method,
+                    concurrency.getPath());
         }
     }
 }

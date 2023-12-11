@@ -87,15 +87,15 @@ public class BearerAuthorizationFilter extends OncePerRequestFilter {
         }
 
         if (bearerToken == null) {
-            failureHandler.handleAuthorizationFailure(request, response, tester.getPath(),
-                    "empty-bearer-token");
+            failureHandler.handleAuthorizationFailure(request, response, tester.getTag(),
+                    tester.getPath(), "no-bearer-token");
         } else {
-            if (processHandler.processBearerToken(request, response, tester.getPath(),
-                    bearerToken)) {
+            if (processHandler.processBearerToken(request, response, tester.getTag(),
+                    tester.getPath(), bearerToken)) {
                 filterChain.doFilter(request, response);
             } else {
-                failureHandler.handleAuthorizationFailure(request, response, tester.getPath(),
-                        "invalid-bearer-handle");
+                failureHandler.handleAuthorizationFailure(request, response, tester.getTag(),
+                        tester.getPath(), "invalid-bearer-handle");
             }
         }
     }

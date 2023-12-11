@@ -12,7 +12,7 @@ public class CustomBearerAuthorizationHandler implements BearerAuthorizationHand
 
     @Override
     public boolean processBearerToken(HttpServletRequest request, HttpServletResponse response,
-            String matchPath, String bearerToken) throws ServletException, IOException {
+            String tag, String matchPath, String bearerToken) throws ServletException, IOException {
         request.setAttribute(ReturnCode.LOGINED, "ok");
         return bearerToken.equals("tester");
     }

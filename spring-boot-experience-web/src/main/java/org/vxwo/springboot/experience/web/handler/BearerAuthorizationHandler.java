@@ -18,12 +18,13 @@ public interface BearerAuthorizationHandler {
      *
      * @param request  the request wrap
      * @param response  the response wrap
+     * @param tag  the matched path tag
      * @param matchPath  the matched path rule
      * @param bearerToken  the bearer token
      * @return  process status
      * @throws ServletException  if the request cannot be handled
      * @throws IOException  if IO error occurs
      */
-    boolean processBearerToken(HttpServletRequest request, HttpServletResponse response,
+    boolean processBearerToken(HttpServletRequest request, HttpServletResponse response, String tag,
             String matchPath, String bearerToken) throws ServletException, IOException;
 };
