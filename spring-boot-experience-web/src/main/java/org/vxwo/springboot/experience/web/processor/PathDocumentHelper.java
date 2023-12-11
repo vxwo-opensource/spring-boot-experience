@@ -2,6 +2,7 @@ package org.vxwo.springboot.experience.web.processor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vxwo.springboot.experience.web.filter.ApiKeyAuthorizationFilter;
 import org.vxwo.springboot.experience.web.filter.BearerAuthorizationFilter;
@@ -14,11 +15,19 @@ import org.vxwo.springboot.experience.web.filter.BearerAuthorizationFilter;
 
 public class PathDocumentHelper {
 
+    @Autowired
+    private PathProcessor pathProcessor;
+
     @Autowired(required = false)
     private ApiKeyAuthorizationFilter apikeyAuthorization;
 
     @Autowired(required = false)
     private BearerAuthorizationFilter bearerAuthorization;
+
+    private List<String> proceePathMatches(List<String> input) {
+        return input.stream().map(o -> pathProcessor.createAbsoluteURI(o))
+                .collect(Collectors.toList());
+    }
 
     /**
      * Get Ant style path matchs for ApiKey Authorization
@@ -29,7 +38,8 @@ public class PathDocumentHelper {
     public List<String> getApiKeyPathMatchs(String tag) {
         List<String> pathMatches = new ArrayList<>();
         if (apikeyAuthorization != null) {
-            pathMatches.addAll(apikeyAuthorization.getPathRuleMatcher().getPathMatchs(tag));
+            pathMatches.addAll(
+                    proceePathMatches(apikeyAuthorization.getPathRuleMatcher().getPathMatchs(tag)));
         }
         return pathMatches;
     }
@@ -43,7 +53,8 @@ public class PathDocumentHelper {
     public List<String> getBearerPathMatchs(String tag) {
         List<String> pathMatches = new ArrayList<>();
         if (apikeyAuthorization != null) {
-            pathMatches.addAll(bearerAuthorization.getPathRuleMatcher().getPathMatchs(tag));
+            pathMatches.addAll(
+                    proceePathMatches(bearerAuthorization.getPathRuleMatcher().getPathMatchs(tag)));
         }
         return pathMatches;
     }
@@ -57,7 +68,8 @@ public class PathDocumentHelper {
     public List<String> getBearerExcludePathMatchs(String tag) {
         List<String> pathMatches = new ArrayList<>();
         if (apikeyAuthorization != null) {
-            pathMatches.addAll(bearerAuthorization.getPathRuleMatcher().getExcludePathMatchs(tag));
+            pathMatches.addAll(proceePathMatches(
+                    bearerAuthorization.getPathRuleMatcher().getExcludePathMatchs(tag)));
         }
         return pathMatches;
     }

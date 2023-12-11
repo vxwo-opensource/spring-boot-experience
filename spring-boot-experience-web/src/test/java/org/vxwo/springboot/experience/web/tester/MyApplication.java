@@ -25,53 +25,53 @@ public class MyApplication {
 
     private AntPathMatcher pathMatcher = new AntPathMatcher();
 
-    @GetMapping("/test-api-key")
+    @GetMapping("/api-key")
     public String doTestApiKey() {
         return ReturnCode.SUCCESS;
     }
 
-    @GetMapping("/test-bearer/include-path")
+    @GetMapping("/bearer/include-path")
     public String doTestBearerInclude() {
         return ReturnCode.SUCCESS;
     }
 
-    @GetMapping("/test-bearer/exclude-path")
+    @GetMapping("/bearer/exclude-path")
     public String doTestBearerExclude() {
         return ReturnCode.SUCCESS;
     }
 
-    @GetMapping("/test-bearer/optional-path")
+    @GetMapping("/bearer/optional-path")
     public String doTestBearerOptional(
             @RequestAttribute(value = ReturnCode.LOGINED, required = false) String logined) {
         return StringUtils.hasText(logined) ? ReturnCode.LOGINED : ReturnCode.SUCCESS;
     }
 
-    @GetMapping("/test-frequency/concurrency")
+    @GetMapping("/frequency/concurrency")
     public String doTestFrequencyConcurrency() {
         return ReturnCode.SUCCESS;
     }
 
-    @GetMapping("/test-frequency/fixed-interval")
+    @GetMapping("/frequency/fixed-interval")
     public String doTestFrequencyFixedInterval() {
         return ReturnCode.SUCCESS;
     }
 
-    @PostMapping("/test-validation/choices")
+    @PostMapping("/validation/choices")
     public String doTestValidationChoices(@Validated @RequestBody ChoicesBody body) {
         return ReturnCode.SUCCESS;
     }
 
-    @PostMapping("/test-validation/multi-choices")
+    @PostMapping("/validation/multi-choices")
     public String doTestValidationMultiChoices(@Validated @RequestBody MultiChoicesBody body) {
         return ReturnCode.SUCCESS;
     }
 
-    @PostMapping("/test-validation/multi-pattern")
+    @PostMapping("/validation/multi-pattern")
     public String doTestValidationMultiPattern(@Validated @RequestBody MultiPatternBody body) {
         return ReturnCode.SUCCESS;
     }
 
-    @GetMapping("/test-document-helper/apikey")
+    @GetMapping("/document-helper/apikey")
     public String doTestDocumentHelperForApiKey(@Validated @NotBlank String url) {
         List<String> pathMatches = documentHelper.getApiKeyPathMatchs("test");
         System.out.println(
@@ -82,7 +82,7 @@ public class MyApplication {
         return matchCount < 1 ? ReturnCode.FAILED : ReturnCode.SUCCESS;
     }
 
-    @GetMapping("/test-document-helper/bearer")
+    @GetMapping("/document-helper/bearer")
     public String doTestDocumentHelperForBearer(@Validated @NotBlank String url) {
         List<String> pathMatches = documentHelper.getBearerPathMatchs("test");
         List<String> excludePathMatches = documentHelper.getBearerExcludePathMatchs("test");

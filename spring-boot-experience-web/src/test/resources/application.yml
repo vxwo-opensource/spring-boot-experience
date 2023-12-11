@@ -1,3 +1,7 @@
+server:
+  servlet:
+    context-path: /tester
+
 sbexp:
   web:
     cors:
@@ -12,7 +16,7 @@ sbexp:
       api-key:
         enabled: true
         path-rules:
-          - path: /test-api-key/
+          - path: /api-key/
             tag: test
             owners:
               - key: test-key
@@ -21,7 +25,7 @@ sbexp:
       bearer:
         enabled: true
         path-rules:
-          - path: /test-bearer/
+          - path: /bearer/
             tag: test
             excludes:
               - exclude-path
@@ -32,9 +36,9 @@ sbexp:
       enabled: true
       concurrency:
         include-paths:
-          - /test-frequency/concurrency
+          - /frequency/concurrency
 
       fixed-intervals:
         - duration-ms: 30000
           tag: test
-          include-paths: /test-frequency/fixed-interval
+          include-paths: /frequency/fixed-interval

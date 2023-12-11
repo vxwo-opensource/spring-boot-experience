@@ -29,7 +29,7 @@ public class ApplicationTest {
     @Order(101)
     public void testApiKeyShouldReturnSuccess() {
         RequestEntity<?> request =
-                RequestEntity.get(String.format("http://localhost:%s/test-api-key", localPort))
+                RequestEntity.get(String.format("http://localhost:%s/tester/api-key", localPort))
                         .header("api-key", "test-key").build();
         ResponseEntity<String> response = this.restTemplate.exchange(request, String.class);
         Assertions.assertEquals(ReturnCode.SUCCESS, response.getBody());
@@ -39,7 +39,7 @@ public class ApplicationTest {
     @Order(102)
     public void testApiKeyShouldReturnFailed() {
         RequestEntity<?> request = RequestEntity
-                .get(String.format("http://localhost:%s/test-api-key", localPort)).build();
+                .get(String.format("http://localhost:%s/tester/api-key", localPort)).build();
         ResponseEntity<String> response = this.restTemplate.exchange(request, String.class);
         Assertions.assertEquals(ReturnCode.FAILED, response.getBody());
     }
@@ -48,7 +48,7 @@ public class ApplicationTest {
     @Order(103)
     public void testBearerIncludeShouldReturnFailed() {
         RequestEntity<?> request = RequestEntity
-                .get(String.format("http://localhost:%s/test-bearer/include-path", localPort))
+                .get(String.format("http://localhost:%s/tester/bearer/include-path", localPort))
                 .build();
         ResponseEntity<String> response = this.restTemplate.exchange(request, String.class);
         Assertions.assertEquals(ReturnCode.FAILED, response.getBody());
@@ -58,7 +58,7 @@ public class ApplicationTest {
     @Order(104)
     public void testBearerExcludeShouldReturnSuccess() {
         RequestEntity<?> request = RequestEntity
-                .get(String.format("http://localhost:%s/test-bearer/exclude-path", localPort))
+                .get(String.format("http://localhost:%s/tester/bearer/exclude-path", localPort))
                 .build();
         ResponseEntity<String> response = this.restTemplate.exchange(request, String.class);
         Assertions.assertEquals(ReturnCode.SUCCESS, response.getBody());
@@ -68,7 +68,7 @@ public class ApplicationTest {
     @Order(105)
     public void testBearerLoginedOptionalShouldReturnLogined() {
         RequestEntity<?> request = RequestEntity
-                .get(String.format("http://localhost:%s/test-bearer/optional-path", localPort))
+                .get(String.format("http://localhost:%s/tester/bearer/optional-path", localPort))
                 .header(HttpHeaders.AUTHORIZATION, "Bearer    tester").build();
         ResponseEntity<String> response = this.restTemplate.exchange(request, String.class);
         Assertions.assertEquals(ReturnCode.LOGINED, response.getBody());
@@ -78,7 +78,7 @@ public class ApplicationTest {
     @Order(105)
     public void testBearerUnloginedOptionalShouldReturnSuccess() {
         RequestEntity<?> request = RequestEntity
-                .get(String.format("http://localhost:%s/test-bearer/optional-path", localPort))
+                .get(String.format("http://localhost:%s/tester/bearer/optional-path", localPort))
                 .build();
         ResponseEntity<String> response = this.restTemplate.exchange(request, String.class);
         Assertions.assertEquals(ReturnCode.SUCCESS, response.getBody());
@@ -88,7 +88,7 @@ public class ApplicationTest {
     @Order(1010)
     public void testFrequencyConcurrencyShouldReturnSuccess() {
         RequestEntity<?> request = RequestEntity
-                .get(String.format("http://localhost:%s/test-frequency/concurrency", localPort))
+                .get(String.format("http://localhost:%s/tester/frequency/concurrency", localPort))
                 .build();
         ResponseEntity<String> response = this.restTemplate.exchange(request, String.class);
         Assertions.assertEquals(ReturnCode.SUCCESS, response.getBody());
@@ -98,7 +98,7 @@ public class ApplicationTest {
     @Order(1011)
     public void testFrequencyConcurrencyTiiceShouldReturnSuccess() {
         RequestEntity<?> request = RequestEntity
-                .get(String.format("http://localhost:%s/test-frequency/concurrency", localPort))
+                .get(String.format("http://localhost:%s/tester/frequency/concurrency", localPort))
                 .build();
         ResponseEntity<String> response = this.restTemplate.exchange(request, String.class);
         Assertions.assertEquals(ReturnCode.SUCCESS, response.getBody());
@@ -107,8 +107,8 @@ public class ApplicationTest {
     @Test
     @Order(1020)
     public void testFrequencyFixedIntervalShouldReturnSuccess() {
-        RequestEntity<?> request = RequestEntity
-                .get(String.format("http://localhost:%s/test-frequency/fixed-interval", localPort))
+        RequestEntity<?> request = RequestEntity.get(
+                String.format("http://localhost:%s/tester/frequency/fixed-interval", localPort))
                 .build();
         ResponseEntity<String> response = this.restTemplate.exchange(request, String.class);
         Assertions.assertEquals(ReturnCode.SUCCESS, response.getBody());
@@ -117,8 +117,8 @@ public class ApplicationTest {
     @Test
     @Order(1021)
     public void testFrequencyFixedIntervalTwiceShouldReturnFailed() {
-        RequestEntity<?> request = RequestEntity
-                .get(String.format("http://localhost:%s/test-frequency/fixed-interval", localPort))
+        RequestEntity<?> request = RequestEntity.get(
+                String.format("http://localhost:%s/tester/frequency/fixed-interval", localPort))
                 .build();
         ResponseEntity<String> response = this.restTemplate.exchange(request, String.class);
         Assertions.assertEquals(ReturnCode.FAILED, response.getBody());
@@ -130,7 +130,7 @@ public class ApplicationTest {
         ChoicesBody body = new ChoicesBody();
         body.setV("c");
         String response = this.restTemplate.postForObject(
-                String.format("http://localhost:%s/test-validation/choices", localPort), body,
+                String.format("http://localhost:%s/tester/validation/choices", localPort), body,
                 String.class);
         Assertions.assertEquals(ReturnCode.NO_VALID, response);
     }
@@ -141,8 +141,8 @@ public class ApplicationTest {
         MultiChoicesBody body = new MultiChoicesBody();
         body.setV("c,a");
         String response = this.restTemplate.postForObject(
-                String.format("http://localhost:%s/test-validation/multi-choices", localPort), body,
-                String.class);
+                String.format("http://localhost:%s/tester/validation/multi-choices", localPort),
+                body, String.class);
         Assertions.assertEquals(ReturnCode.SUCCESS, response);
     }
 
@@ -152,8 +152,8 @@ public class ApplicationTest {
         MultiPatternBody body = new MultiPatternBody();
         body.setV("9");
         String response = this.restTemplate.postForObject(
-                String.format("http://localhost:%s/test-validation/multi-pattern", localPort), body,
-                String.class);
+                String.format("http://localhost:%s/tester/validation/multi-pattern", localPort),
+                body, String.class);
         Assertions.assertEquals(ReturnCode.SUCCESS, response);
     }
 
@@ -163,8 +163,8 @@ public class ApplicationTest {
         MultiPatternBody body = new MultiPatternBody();
         body.setV("b");
         String response = this.restTemplate.postForObject(
-                String.format("http://localhost:%s/test-validation/multi-pattern", localPort), body,
-                String.class);
+                String.format("http://localhost:%s/tester/validation/multi-pattern", localPort),
+                body, String.class);
         Assertions.assertEquals(ReturnCode.NO_VALID, response);
     }
 
@@ -174,17 +174,16 @@ public class ApplicationTest {
         MultiPatternBody body = new MultiPatternBody();
         body.setV("B");
         String response = this.restTemplate.postForObject(
-                String.format("http://localhost:%s/test-validation/multi-pattern", localPort), body,
-                String.class);
+                String.format("http://localhost:%s/tester/validation/multi-pattern", localPort),
+                body, String.class);
         Assertions.assertEquals(ReturnCode.SUCCESS, response);
     }
 
     @Test
     @Order(1101)
     public void testDocumentHelperForApiKey1ReturnSuccess() {
-        String response = this.restTemplate.getForObject(
-                String.format("http://localhost:%s/test-document-helper/apikey?url=/test-api-key",
-                        localPort),
+        String response = this.restTemplate.getForObject(String.format(
+                "http://localhost:%s/tester/document-helper/apikey?url=/tester/api-key", localPort),
                 String.class);
         Assertions.assertEquals(ReturnCode.SUCCESS, response);
     }
@@ -193,7 +192,7 @@ public class ApplicationTest {
     @Order(1102)
     public void testDocumentHelperForApiKey2ReturnSuccess() {
         String response = this.restTemplate.getForObject(String.format(
-                "http://localhost:%s/test-document-helper/apikey?url=/test-api-key/aaaaa",
+                "http://localhost:%s/tester/document-helper/apikey?url=/tester/api-key/aaaaa",
                 localPort), String.class);
         Assertions.assertEquals(ReturnCode.SUCCESS, response);
     }
@@ -202,18 +201,17 @@ public class ApplicationTest {
     @Order(1103)
     public void testDocumentHelperForApiKeyReturnFailed() {
         String response = this.restTemplate.getForObject(String.format(
-                "http://localhost:%s/test-document-helper/apikey?url=/test-api-key-bb", localPort),
-                String.class);
+                "http://localhost:%s/tester/document-helper/apikey?url=/tester/api-key-bb",
+                localPort), String.class);
         Assertions.assertEquals(ReturnCode.FAILED, response);
     }
 
     @Test
     @Order(1111)
     public void testDocumentHelperForBearerReturnSuccess() {
-        String response = this.restTemplate.getForObject(
-                String.format("http://localhost:%s/test-document-helper/bearer?url=/test-bearer/a",
-                        localPort),
-                String.class);
+        String response = this.restTemplate.getForObject(String.format(
+                "http://localhost:%s/tester/document-helper/bearer?url=/tester/bearer/a",
+                localPort), String.class);
         Assertions.assertEquals(ReturnCode.SUCCESS, response);
     }
 
@@ -221,7 +219,7 @@ public class ApplicationTest {
     @Order(1112)
     public void testDocumentHelperForBearerExcludeReturnFailed() {
         String response = this.restTemplate.getForObject(String.format(
-                "http://localhost:%s/test-document-helper/bearer?url=/test-bearer/exclude-path",
+                "http://localhost:%s/tester/document-helper/bearer?url=/tester/bearer/exclude-path",
                 localPort), String.class);
         Assertions.assertEquals(ReturnCode.FAILED, response);
     }
@@ -230,7 +228,7 @@ public class ApplicationTest {
     @Order(1113)
     public void testDocumentHelperForBearerOptionalReturnFailed() {
         String response = this.restTemplate.getForObject(String.format(
-                "http://localhost:%s/test-document-helper/bearer?url=/test-bearer/optional-path",
+                "http://localhost:%s/tester/document-helper/bearer?url=/tester/bearer/optional-path",
                 localPort), String.class);
         Assertions.assertEquals(ReturnCode.FAILED, response);
     }
