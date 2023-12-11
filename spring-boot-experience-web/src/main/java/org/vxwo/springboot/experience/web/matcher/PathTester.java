@@ -17,6 +17,7 @@ public class PathTester {
     private final String matchString;
     private final int matchLength;
 
+    @SuppressWarnings("PMD")
     public PathTester(String input) {
         path = input;
         fullMatch = !path.endsWith(STUFFIX_FLAG);
