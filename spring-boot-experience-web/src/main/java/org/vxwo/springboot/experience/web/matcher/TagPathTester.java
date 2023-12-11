@@ -14,8 +14,8 @@ public class TagPathTester<T> extends PathTester {
 
     public TagPathTester(String tag, String path, T extra) {
         super(path);
+        this.tag = fixTag(tag);
         this.extra = extra;
-        this.tag = StringUtils.hasText(tag) ? tag : "default";
     }
 
     public String getTag() {
@@ -24,5 +24,9 @@ public class TagPathTester<T> extends PathTester {
 
     public T getExtra() {
         return extra;
+    }
+
+    public static String fixTag(String tag) {
+        return StringUtils.hasText(tag) ? tag : "default";
     }
 }
