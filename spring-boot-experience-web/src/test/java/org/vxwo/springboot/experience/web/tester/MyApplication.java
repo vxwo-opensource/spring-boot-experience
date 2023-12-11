@@ -74,11 +74,7 @@ public class MyApplication {
     @GetMapping("/document-helper/apikey")
     public String doTestDocumentHelperForApiKey(@Validated @NotBlank String url) {
         List<String> pathMatches = documentHelper.getApiKeyPathMatchs("test");
-        System.out.println(
-                String.format("count=%d, first=%s", pathMatches.size(), pathMatches.get(0)));
-        System.out.println(url);
         long matchCount = pathMatches.stream().filter(o -> pathMatcher.match(o, url)).count();
-        System.out.println(matchCount);
         return matchCount < 1 ? ReturnCode.FAILED : ReturnCode.SUCCESS;
     }
 
