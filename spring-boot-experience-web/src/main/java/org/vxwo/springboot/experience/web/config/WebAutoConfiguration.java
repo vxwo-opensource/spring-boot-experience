@@ -12,6 +12,7 @@ import org.vxwo.springboot.experience.web.filter.CorsFilter;
 import org.vxwo.springboot.experience.web.filter.FrequencyControlFilter;
 import org.vxwo.springboot.experience.web.filter.RequestLoggingAspect;
 import org.vxwo.springboot.experience.web.filter.RequestLoggingFilter;
+import org.vxwo.springboot.experience.web.processor.PathDocumentHelper;
 import org.vxwo.springboot.experience.web.processor.PathProcessor;
 
 /**
@@ -24,6 +25,11 @@ public class WebAutoConfiguration {
     @Bean
     public PathProcessor pathProcessor() {
         return new PathProcessor();
+    }
+
+    @Bean
+    public PathDocumentHelper pathDocumentHelper() {
+        return new PathDocumentHelper();
     }
 
     @Bean

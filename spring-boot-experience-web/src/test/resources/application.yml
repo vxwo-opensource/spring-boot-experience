@@ -12,7 +12,7 @@ sbexp:
       api-key:
         enabled: true
         path-rules:
-          - path: /test-api-key
+          - path: /test-api-key/
             tag: test
             owners:
               - key: test-key

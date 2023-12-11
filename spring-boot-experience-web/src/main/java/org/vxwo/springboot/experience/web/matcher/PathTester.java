@@ -3,32 +3,42 @@ package org.vxwo.springboot.experience.web.matcher;
 import lombok.Getter;
 
 /**
- * Simple path tester
+ * Simple Ant style path tester
  *
  * @author vxwo-team
  */
 
 public class PathTester {
-    private final static String PREFIX_FLAG = "/";
+    private final static String STUFFIX_FLAG = "/";
 
     @Getter
     private final String path;
     private final boolean fullMatch;
+    private final String matchString;
+    private final int matchLength;
 
     public PathTester(String input) {
         path = input;
-        fullMatch = !path.endsWith(PREFIX_FLAG);
+        fullMatch = !path.endsWith(STUFFIX_FLAG);
+
+        if (fullMatch || path.length() < 2) {
+            matchString = path;
+        } else {
+            matchString = path.substring(0, path.length() - 1);
+        }
+        matchLength = matchString.length();
     }
 
     public boolean test(String input) {
-        return fullMatch ? path.equals(input) : input.startsWith(path);
+        return fullMatch || input.length() == matchLength ? matchString.equals(input)
+                : input.startsWith(matchString);
     }
 
     public String toPathMatch() {
         return fullMatch ? path : (path + "**");
     }
 
-    public static boolean hasPattern(String input) {
-        return input.matches("(\\*|\\?)+");
+    public static boolean isPattern(String input) {
+        return input.indexOf('*') != -1 && input.indexOf("?") != -1;
     }
 }

@@ -1,6 +1,8 @@
 package org.vxwo.springboot.experience.web.tester;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,12 +10,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.vxwo.springboot.experience.web.processor.PathDocumentHelper;
 import static org.vxwo.springboot.experience.web.tester.CustomRequestBody.*;
+import java.util.List;
+import javax.validation.constraints.NotBlank;
 
 @RestController
 @SpringBootApplication
 @Validated
 public class MyApplication {
+
+    @Autowired
+    private PathDocumentHelper documentHelper;
+
+    private AntPathMatcher pathMatcher = new AntPathMatcher();
 
     @GetMapping("/test-api-key")
     public String doTestApiKey() {
@@ -59,6 +69,30 @@ public class MyApplication {
     @PostMapping("/test-validation/multi-pattern")
     public String doTestValidationMultiPattern(@Validated @RequestBody MultiPatternBody body) {
         return ReturnCode.SUCCESS;
+    }
+
+    @GetMapping("/test-document-helper/apikey")
+    public String doTestDocumentHelperForApiKey(@Validated @NotBlank String url) {
+        List<String> pathMatches = documentHelper.getApiKeyPathMatchs("test");
+        System.out.println(
+                String.format("count=%d, first=%s", pathMatches.size(), pathMatches.get(0)));
+        System.out.println(url);
+        long matchCount = pathMatches.stream().filter(o -> pathMatcher.match(o, url)).count();
+        System.out.println(matchCount);
+        return matchCount < 1 ? ReturnCode.FAILED : ReturnCode.SUCCESS;
+    }
+
+    @GetMapping("/test-document-helper/bearer")
+    public String doTestDocumentHelperForBearer(@Validated @NotBlank String url) {
+        List<String> pathMatches = documentHelper.getBearerPathMatchs("test");
+        List<String> excludePathMatches = documentHelper.getBearerExcludePathMatchs("test");
+        long matchCount = pathMatches.stream().filter(o -> pathMatcher.match(o, url)).count();
+        if (matchCount > 0) {
+            if (excludePathMatches.stream().filter(o -> pathMatcher.match(o, url)).count() > 0) {
+                matchCount = 0;
+            }
+        }
+        return matchCount < 1 ? ReturnCode.FAILED : ReturnCode.SUCCESS;
     }
 
 }
