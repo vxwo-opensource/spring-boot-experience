@@ -2,6 +2,10 @@ server:
   servlet:
     context-path: /tester
 
+spring:
+  application:
+    name: tester
+
 sbexp:
   web:
     cors:

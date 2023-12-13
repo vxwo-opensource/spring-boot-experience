@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -32,6 +33,9 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
     private final boolean ignoreResponseHeaders;
     private final int responseBodyLimit;
     private final List<PathTester> includePaths;
+
+    @Value("${spring.application.name:unknow}")
+    private String applicationName;
 
     @Autowired
     private PathProcessor pathProcessor;
@@ -131,6 +135,7 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
         }
 
         RequestLoggingEntity entity = new RequestLoggingEntity();
+        entity.setApplication(applicationName);
         entity.setTimeStart(System.currentTimeMillis());
         entity.setRequestUri(request.getRequestURI());
         entity.setRequestMethod(request.getMethod());

@@ -14,6 +14,8 @@ public class RequestLoggingEntity {
     public final static String ATTRIBUTE_NAME =
             "SBEXP:" + UUID.randomUUID().toString() + ":RequestLogging";
 
+    private String application;
+
     private String requestUri;
     private String requestMethod;
     private String requestQuery;
