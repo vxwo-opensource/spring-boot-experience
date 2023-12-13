@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +32,11 @@ import lombok.extern.slf4j.Slf4j;
 public class RequestLoggingFilter extends OncePerRequestFilter {
 
     private final boolean ignoreRequestHeaders;
+    private final boolean includeRequestHeaderAllKey;
+    private final Set<String> includeRequestHeaderKeys;
     private final boolean ignoreResponseHeaders;
+    private final boolean includeResponseHeaderAllKey;
+    private final Set<String> includeResponseHeaderKeys;
     private final int responseBodyLimit;
     private final List<PathTester> includePaths;
 
@@ -45,7 +51,31 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
 
     public RequestLoggingFilter(RequestLoggingConfig value) {
         ignoreRequestHeaders = value.isIgnoreRequestHeaders();
+        includeRequestHeaderKeys = new HashSet<>();
+        if (ObjectUtils.isEmpty(value.getRequestHeaderKeys())
+                || value.getRequestHeaderKeys().contains("*")) {
+            includeRequestHeaderAllKey = true;
+        } else {
+            includeRequestHeaderAllKey = false;
+            value.getRequestHeaderKeys().forEach(o -> {
+                includeRequestHeaderKeys.add(o.toUpperCase());
+            });
+        }
+
         ignoreResponseHeaders = value.isIgnoreResponseHeaders();
+        includeResponseHeaderKeys = new HashSet<>();
+        if (ObjectUtils.isEmpty(value.getResponseHeaderKeys())
+                || value.getResponseHeaderKeys().contains("*")) {
+            includeResponseHeaderAllKey = true;
+        } else {
+            includeResponseHeaderAllKey = false;
+            value.getResponseHeaderKeys().forEach(o -> {
+                includeResponseHeaderKeys.add(o.toUpperCase());
+            });
+        }
+
+
+
         responseBodyLimit = value.getResponseBodyLimitKb() * 1024;
 
         includePaths = new ArrayList<>();
@@ -148,7 +178,10 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
             Enumeration<String> headers = request.getHeaderNames();
             while (headers.hasMoreElements()) {
                 String key = headers.nextElement();
-                entity.getRequestHeaders().put(key, request.getHeader(key));
+                if (includeRequestHeaderAllKey
+                        || includeRequestHeaderKeys.contains(key.toUpperCase())) {
+                    entity.getRequestHeaders().put(key, request.getHeader(key));
+                }
             }
         }
 
@@ -165,7 +198,10 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
 
             if (!ignoreResponseHeaders) {
                 for (String key : cachedResponse.getHeaderNames()) {
-                    entity.getResponseHeaders().put(key, cachedResponse.getHeader(key));
+                    if (includeResponseHeaderAllKey
+                            || includeResponseHeaderKeys.contains(key.toUpperCase())) {
+                        entity.getResponseHeaders().put(key, cachedResponse.getHeader(key));
+                    }
                 }
             }
 

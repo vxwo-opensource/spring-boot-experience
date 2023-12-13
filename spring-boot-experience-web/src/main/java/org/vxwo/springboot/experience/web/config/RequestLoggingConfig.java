@@ -15,7 +15,10 @@ import lombok.Data;
 @ConfigurationProperties(prefix = ConfigPrefix.REQUEST_LOGGING)
 public class RequestLoggingConfig {
     private boolean ignoreRequestHeaders;
+    private List<String> requestHeaderKeys;
     private boolean ignoreResponseHeaders;
+    private List<String> responseHeaderKeys;
+
     private int responseBodyLimitKb;
     private int stacktraceLimitLines;
     private List<String> includePaths;

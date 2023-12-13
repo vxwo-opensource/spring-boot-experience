@@ -11,6 +11,10 @@ sbexp:
       enabled: false
       ignore-request-headers: false
       ignore-response-headers: true
+      request-header-keys:
+        - "*"
+      response-header-keys:
+        - "*"
       respnse-body-limit-kb: 500
       stacktrace-limit-lines: 10
       include-paths:

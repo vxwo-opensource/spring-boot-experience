@@ -13,6 +13,11 @@ sbexp:
 
     logging:
       enabled: true
+      ignore-response-headers: false
+      request-header-keys:
+        - User-Agent
+      response-header-keys:
+        - Access-Control-Allow-Origin
       include-paths:
         - /
 
