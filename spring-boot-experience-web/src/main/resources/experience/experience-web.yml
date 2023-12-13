@@ -10,7 +10,7 @@ sbexp:
     logging:
       enabled: false
       ignore-request-headers: false
-      ignore-response-headers: true
+      ignore-response-headers: false
       request-header-keys:
         - "*"
       response-header-keys:

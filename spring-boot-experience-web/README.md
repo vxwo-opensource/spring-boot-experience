@@ -49,7 +49,7 @@ prefix: sbexp.web.logging
 | enabled                 | boolean       |            | false     | Switch                                 |
 | ignore-request-headers  | boolean       |            | false     | Ignore request headers                 |
 | request-header-keys     | Array{String} |            | [*]       | Include request header keys            |
-| ignore-response-headers | boolean       |            | true      | Ignore response headers                |
+| ignore-response-headers | boolean       |            | false     | Ignore response headers                |
 | response-header-keys    | Array{String} |            | [*]       | Include response header keys           |
 | respnse-body-limit-kb   | int           |            | 500       | KB size limit for ignore response body |
 | stacktrace-limit-lines  | int           |            | 5         | Lines limit for Exception stack trace  |
