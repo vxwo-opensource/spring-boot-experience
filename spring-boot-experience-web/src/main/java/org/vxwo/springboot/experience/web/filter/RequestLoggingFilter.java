@@ -3,6 +3,7 @@ package org.vxwo.springboot.experience.web.filter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
@@ -33,10 +34,12 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
 
     private final boolean ignoreRequestHeaders;
     private final boolean includeRequestHeaderAllKey;
-    private final Set<String> includeRequestHeaderKeys;
+    private final List<String> includeRequestHeaderKeys;
+
     private final boolean ignoreResponseHeaders;
     private final boolean includeResponseHeaderAllKey;
-    private final Set<String> includeResponseHeaderKeys;
+    private final List<String> includeResponseHeaderKeys;
+
     private final int responseBodyLimit;
     private final List<PathTester> includePaths;
 
@@ -50,31 +53,32 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
     private RequestLoggingHandler processHandler;
 
     public RequestLoggingFilter(RequestLoggingConfig value) {
-        ignoreRequestHeaders = value.isIgnoreRequestHeaders();
-        includeRequestHeaderKeys = new HashSet<>();
+        Set<String> requestHeaderKeys = new HashSet<>();
         if (ObjectUtils.isEmpty(value.getRequestHeaderKeys())
                 || value.getRequestHeaderKeys().contains("*")) {
             includeRequestHeaderAllKey = true;
         } else {
             includeRequestHeaderAllKey = false;
             value.getRequestHeaderKeys().forEach(o -> {
-                includeRequestHeaderKeys.add(o.toUpperCase());
+                requestHeaderKeys.add(o.toUpperCase());
             });
         }
+        ignoreRequestHeaders = value.isIgnoreRequestHeaders();
+        includeRequestHeaderKeys = Collections.unmodifiableList(new ArrayList<>(requestHeaderKeys));
 
-        ignoreResponseHeaders = value.isIgnoreResponseHeaders();
-        includeResponseHeaderKeys = new HashSet<>();
+        Set<String> responseHeaderKeys = new HashSet<>();
         if (ObjectUtils.isEmpty(value.getResponseHeaderKeys())
                 || value.getResponseHeaderKeys().contains("*")) {
             includeResponseHeaderAllKey = true;
         } else {
             includeResponseHeaderAllKey = false;
             value.getResponseHeaderKeys().forEach(o -> {
-                includeResponseHeaderKeys.add(o.toUpperCase());
+                responseHeaderKeys.add(o.toUpperCase());
             });
         }
-
-
+        ignoreResponseHeaders = value.isIgnoreResponseHeaders();
+        includeResponseHeaderKeys =
+                Collections.unmodifiableList(new ArrayList<>(responseHeaderKeys));
 
         responseBodyLimit = value.getResponseBodyLimitKb() * 1024;
 
