@@ -10,9 +10,7 @@ import org.springframework.core.Ordered;
  */
 
 public final class CoreOrdered {
-    public static final int LAYER_NEAR = 100;
-
-    public static final int LAYER_BORDER = 1000;
+    public static final int LAYER_BORDER = 10000;
 
     public static final int PRELOAD_LAYER = Ordered.HIGHEST_PRECEDENCE;
 

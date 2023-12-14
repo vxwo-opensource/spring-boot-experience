@@ -62,6 +62,11 @@ public class BearerAuthorizationFilter extends OncePerRequestFilter {
             return;
         }
 
+        if (AuthorizationHelper.isProcessed(request)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String relativePath = pathProcessor.getRelativeURI(request);
 
         TagPathTester<GroupPathRuleMatcher.ExcludesAndOptionals> tester =
@@ -92,7 +97,7 @@ public class BearerAuthorizationFilter extends OncePerRequestFilter {
         } else {
             if (processHandler.processBearerAuthorization(request, response, tester.getTag(),
                     tester.getPath(), bearerToken)) {
-                SecondaryAuthorizationFilter.markActived(request, tester);
+                AuthorizationHelper.markProcessed(request, tester);
                 filterChain.doFilter(request, response);
             } else {
                 failureHandler.handleAuthorizationFailure(request, response, tester.getTag(),

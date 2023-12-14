@@ -20,18 +20,12 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class SecondaryAuthorizationFilter extends OncePerRequestFilter {
-    private final static String ATTRIBUTE_NAME =
-            "SBEXP:" + UUID.randomUUID().toString() + ":AuthorizationTester";
 
     @Autowired
     private AuthorizationFailureHandler failureHandler;
 
     @Autowired
     private SecondaryAuthorizationHandler processHandler;
-
-    public static void markActived(HttpServletRequest request, TagPathTester<?> tester) {
-        request.setAttribute(ATTRIBUTE_NAME, tester);
-    }
 
     public SecondaryAuthorizationFilter() {
         if (log.isInfoEnabled()) {
@@ -47,7 +41,7 @@ public class SecondaryAuthorizationFilter extends OncePerRequestFilter {
             return;
         }
 
-        TagPathTester<?> tester = (TagPathTester<?>) request.getAttribute(ATTRIBUTE_NAME);
+        TagPathTester<?> tester = AuthorizationHelper.getProcessTester(request);
         if (tester == null) {
             filterChain.doFilter(request, response);
             return;
@@ -59,8 +53,6 @@ public class SecondaryAuthorizationFilter extends OncePerRequestFilter {
             failureHandler.handleAuthorizationFailure(request, response, tester.getTag(),
                     tester.getPath(), "invalid-secondary-handle");
         }
-
     }
-
 }
 

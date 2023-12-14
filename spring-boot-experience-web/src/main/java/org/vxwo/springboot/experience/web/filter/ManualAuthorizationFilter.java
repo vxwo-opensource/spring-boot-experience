@@ -57,6 +57,11 @@ public class ManualAuthorizationFilter extends OncePerRequestFilter {
             return;
         }
 
+        if (AuthorizationHelper.isProcessed(request)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String relativePath = pathProcessor.getRelativeURI(request);
 
         TagPathTester<GroupPathRuleMatcher.ExcludesAndOptionals> tester =
@@ -68,7 +73,7 @@ public class ManualAuthorizationFilter extends OncePerRequestFilter {
 
         if (processHandler.processManualAuthorization(request, response, tester.getTag(),
                 tester.getPath())) {
-            SecondaryAuthorizationFilter.markActived(request, tester);
+            AuthorizationHelper.markProcessed(request, tester);
             filterChain.doFilter(request, response);
         } else if (tester.getExtra().isOptional(relativePath)) {
             filterChain.doFilter(request, response);

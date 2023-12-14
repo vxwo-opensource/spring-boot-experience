@@ -87,6 +87,11 @@ public class ApiKeyAuthorizationFilter extends OncePerRequestFilter {
             return;
         }
 
+        if (AuthorizationHelper.isProcessed(request)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         TagPathTester<Map<String, String>> tester =
                 pathRuleMatcher.findMatchTester(pathProcessor.getRelativeURI(request));
         if (tester == null) {
@@ -101,7 +106,7 @@ public class ApiKeyAuthorizationFilter extends OncePerRequestFilter {
         } else {
             String keyOwner = tester.getExtra().get(apiKey);
             if (keyOwner != null) {
-                SecondaryAuthorizationFilter.markActived(request, tester);
+                AuthorizationHelper.markProcessed(request, tester);
                 filterChain.doFilter(request, response);
             } else {
                 failureHandler.handleAuthorizationFailure(request, response, tester.getTag(),

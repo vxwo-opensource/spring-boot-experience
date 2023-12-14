@@ -43,7 +43,7 @@ public class WebAutoConfiguration {
 
     @Bean
     @ConditionalOnProperty(value = ConfigPrefix.REQUEST_LOGGING + ".enabled", havingValue = "true")
-    @Order(CoreOrdered.PRELOAD_LAYER + CoreOrdered.LAYER_NEAR)
+    @Order(CoreOrdered.PRELOAD_LAYER + 1)
     public RequestLoggingFilter requestLoggingFilter(RequestLoggingConfig value) {
         return new RequestLoggingFilter(value);
     }
@@ -57,7 +57,7 @@ public class WebAutoConfiguration {
     @Bean
     @ConditionalOnProperty(value = ConfigPrefix.AUTHORIZATION_API_KEY + ".enabled",
             havingValue = "true")
-    @Order(CoreOrdered.FIRST_AUTHORIZATION_LAYER)
+    @Order(CoreOrdered.FIRST_AUTHORIZATION_LAYER + 1)
     public ApiKeyAuthorizationFilter apiKeyAuthorizationFilter(ApiKeyAuthorizationConfig value) {
         return new ApiKeyAuthorizationFilter(value);
     }
@@ -65,7 +65,7 @@ public class WebAutoConfiguration {
     @Bean
     @ConditionalOnProperty(value = ConfigPrefix.AUTHORIZATION_BEARER + ".enabled",
             havingValue = "true")
-    @Order(CoreOrdered.FIRST_AUTHORIZATION_LAYER)
+    @Order(CoreOrdered.FIRST_AUTHORIZATION_LAYER + 2)
     public BearerAuthorizationFilter bearerAuthorizationFilter(BearerAuthorizationConfig value) {
         return new BearerAuthorizationFilter(value);
     }
@@ -73,7 +73,7 @@ public class WebAutoConfiguration {
     @Bean
     @ConditionalOnProperty(value = ConfigPrefix.AUTHORIZATION_MANUAL + ".enabled",
             havingValue = "true")
-    @Order(CoreOrdered.FIRST_AUTHORIZATION_LAYER)
+    @Order(CoreOrdered.FIRST_AUTHORIZATION_LAYER + 3)
     public ManualAuthorizationFilter manualAuthorizationFilter(ManualAuthorizationConfig value) {
         return new ManualAuthorizationFilter(value);
     }
