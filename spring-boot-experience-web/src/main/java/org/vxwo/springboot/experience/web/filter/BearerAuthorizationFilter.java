@@ -90,7 +90,7 @@ public class BearerAuthorizationFilter extends OncePerRequestFilter {
             failureHandler.handleAuthorizationFailure(request, response, tester.getTag(),
                     tester.getPath(), "no-bearer-token");
         } else {
-            if (processHandler.processBearerToken(request, response, tester.getTag(),
+            if (processHandler.processBearerAuthorization(request, response, tester.getTag(),
                     tester.getPath(), bearerToken)) {
                 filterChain.doFilter(request, response);
             } else {

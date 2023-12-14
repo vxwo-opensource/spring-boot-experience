@@ -25,6 +25,6 @@ public interface BearerAuthorizationHandler {
      * @throws ServletException  if the request cannot be handled
      * @throws IOException  if IO error occurs
      */
-    boolean processBearerToken(HttpServletRequest request, HttpServletResponse response, String tag,
-            String matchPath, String bearerToken) throws ServletException, IOException;
+    boolean processBearerAuthorization(HttpServletRequest request, HttpServletResponse response,
+            String tag, String matchPath, String bearerToken) throws ServletException, IOException;
 };

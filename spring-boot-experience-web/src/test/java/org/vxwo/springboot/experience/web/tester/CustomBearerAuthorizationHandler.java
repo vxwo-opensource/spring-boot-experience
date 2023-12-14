@@ -11,8 +11,9 @@ import org.vxwo.springboot.experience.web.handler.BearerAuthorizationHandler;
 public class CustomBearerAuthorizationHandler implements BearerAuthorizationHandler {
 
     @Override
-    public boolean processBearerToken(HttpServletRequest request, HttpServletResponse response,
-            String tag, String matchPath, String bearerToken) throws ServletException, IOException {
+    public boolean processBearerAuthorization(HttpServletRequest request,
+            HttpServletResponse response, String tag, String matchPath, String bearerToken)
+            throws ServletException, IOException {
         boolean successed = "tester".equals(bearerToken);
         if (successed) {
             request.setAttribute(ReturnCode.LOGINED, "ok");
