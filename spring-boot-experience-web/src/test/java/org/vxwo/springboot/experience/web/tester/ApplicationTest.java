@@ -85,6 +85,46 @@ public class ApplicationTest {
     }
 
     @Test
+    @Order(121)
+    public void testManualIncludeShouldReturnFailed() {
+        RequestEntity<?> request = RequestEntity
+                .get(String.format("http://localhost:%s/tester/manual/include-path", localPort))
+                .build();
+        ResponseEntity<String> response = this.restTemplate.exchange(request, String.class);
+        Assertions.assertEquals(ReturnCode.FAILED, response.getBody());
+    }
+
+    @Test
+    @Order(122)
+    public void testManualExcludeShouldReturnSuccess() {
+        RequestEntity<?> request = RequestEntity
+                .get(String.format("http://localhost:%s/tester/manual/exclude-path", localPort))
+                .build();
+        ResponseEntity<String> response = this.restTemplate.exchange(request, String.class);
+        Assertions.assertEquals(ReturnCode.SUCCESS, response.getBody());
+    }
+
+    @Test
+    @Order(123)
+    public void testManualLoginedOptionalShouldReturnLogined() {
+        RequestEntity<?> request = RequestEntity
+                .get(String.format("http://localhost:%s/tester/manual/optional-path", localPort))
+                .header(Constants.MANUAL_KEY, "tester").build();
+        ResponseEntity<String> response = this.restTemplate.exchange(request, String.class);
+        Assertions.assertEquals(ReturnCode.LOGINED, response.getBody());
+    }
+
+    @Test
+    @Order(124)
+    public void testManualUnloginedOptionalShouldReturnSuccess() {
+        RequestEntity<?> request = RequestEntity
+                .get(String.format("http://localhost:%s/tester/manual/optional-path", localPort))
+                .build();
+        ResponseEntity<String> response = this.restTemplate.exchange(request, String.class);
+        Assertions.assertEquals(ReturnCode.SUCCESS, response.getBody());
+    }
+
+    @Test
     @Order(1010)
     public void testFrequencyConcurrencyShouldReturnSuccess() {
         RequestEntity<?> request = RequestEntity

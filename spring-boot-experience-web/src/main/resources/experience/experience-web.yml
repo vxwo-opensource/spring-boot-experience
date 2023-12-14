@@ -41,6 +41,11 @@ sbexp:
           - Bear
         path-rules:
 
+      # Manual Authorization Filter
+      manual:
+        enabled: false
+        path-rules:
+
     # Frequency Control Filter
     frequency-control:
       enabled: false

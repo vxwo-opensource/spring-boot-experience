@@ -40,6 +40,16 @@ sbexp:
             optionals:
               - optional-path
 
+      manual:
+        enabled: true
+        path-rules:
+          - path: /manual/
+            tag: test
+            excludes:
+              - exclude-path
+            optionals:
+              - optional-path
+
     frequency-control:
       enabled: true
       concurrency:

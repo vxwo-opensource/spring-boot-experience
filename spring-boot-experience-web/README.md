@@ -128,6 +128,27 @@ prefix: sbexp.web.authorization.bearer
 
   Handle the bearer authorization
 
+## Manual Authorization
+
+### Configuration
+
+prefix: sbexp.web.authorization.manual
+
+| *Key*       | *Type*               | *Required* | *Default*      | *Description*                        |
+|-------------|----------------------|------------|----------------|--------------------------------------|
+| enabled     | boolean              |            | false          | Switch                               |
+| path-rules  | Array[GroupPathRule] | Y          |                | Path Rules                           |
+
+### Implementations
+
+- org.vxwo.springboot.experience.web.handler.AuthorizationFailureHandler
+
+  Handle the authorization failure
+
+- org.vxwo.springboot.experience.web.handler.ManualAuthorizationHandler
+
+  Handle the manual authorization
+
 ## Frequency Control
 
 ### Configuration

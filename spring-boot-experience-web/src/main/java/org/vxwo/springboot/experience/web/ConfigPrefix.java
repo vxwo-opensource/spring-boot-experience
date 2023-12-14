@@ -15,5 +15,7 @@ public final class ConfigPrefix {
 
     public final static String AUTHORIZATION_BEARER = ATTRIBUTE_PREFIX + ".authorization.bearer";
 
+    public final static String AUTHORIZATION_MANUAL = ATTRIBUTE_PREFIX + ".authorization.manual";
+
     public final static String FREQUENCY_CONTROL = ATTRIBUTE_PREFIX + ".frequency-control";
 }

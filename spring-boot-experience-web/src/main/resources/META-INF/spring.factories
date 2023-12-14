@@ -6,5 +6,6 @@ org.vxwo.springboot.experience.web.config.CorsConfig,\
 org.vxwo.springboot.experience.web.config.RequestLoggingConfig,\
 org.vxwo.springboot.experience.web.config.ApiKeyAuthorizationConfig,\
 org.vxwo.springboot.experience.web.config.BearerAuthorizationConfig,\
+org.vxwo.springboot.experience.web.config.ManualAuthorizationConfig,\
 org.vxwo.springboot.experience.web.config.FrequencyControlConfig,\
 org.vxwo.springboot.experience.web.config.WebAutoConfiguration

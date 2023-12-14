@@ -6,25 +6,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * The interface for bearer authorization handle
+ * The interface for manual authorization handle
  *
  * @author vxwo-team
  */
 
-public interface BearerAuthorizationHandler {
+public interface ManualAuthorizationHandler {
 
     /**
-     * Process the bearer authorization
+     * Process the manual authorization
      *
      * @param request  the request wrap
      * @param response  the response wrap
      * @param tag  the matched path tag
      * @param matchPath  the matched path rule
-     * @param bearerToken  the bearer token
      * @return  process status
      * @throws ServletException  if the request cannot be handled
      * @throws IOException  if IO error occurs
      */
-    boolean processBearerToken(HttpServletRequest request, HttpServletResponse response, String tag,
-            String matchPath, String bearerToken) throws ServletException, IOException;
+    boolean processManualAuthorization(HttpServletRequest request, HttpServletResponse response,
+            String tag, String matchPath) throws ServletException, IOException;
 };

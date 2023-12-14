@@ -10,6 +10,7 @@ import org.vxwo.springboot.experience.web.filter.ApiKeyAuthorizationFilter;
 import org.vxwo.springboot.experience.web.filter.BearerAuthorizationFilter;
 import org.vxwo.springboot.experience.web.filter.CorsFilter;
 import org.vxwo.springboot.experience.web.filter.FrequencyControlFilter;
+import org.vxwo.springboot.experience.web.filter.ManualAuthorizationFilter;
 import org.vxwo.springboot.experience.web.filter.RequestLoggingAspect;
 import org.vxwo.springboot.experience.web.filter.RequestLoggingFilter;
 import org.vxwo.springboot.experience.web.processor.PathDocumentHelper;
@@ -66,6 +67,14 @@ public class WebAutoConfiguration {
     @Order(CoreOrdered.AUTHORIZATION_LAYER)
     public BearerAuthorizationFilter bearerAuthorizationFilter(BearerAuthorizationConfig value) {
         return new BearerAuthorizationFilter(value);
+    }
+
+    @Bean
+    @ConditionalOnProperty(value = ConfigPrefix.AUTHORIZATION_MANUAL + ".enabled",
+            havingValue = "true")
+    @Order(CoreOrdered.AUTHORIZATION_LAYER)
+    public ManualAuthorizationFilter manualAuthorizationFilter(ManualAuthorizationConfig value) {
+        return new ManualAuthorizationFilter(value);
     }
 
     @Bean

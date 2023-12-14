@@ -46,6 +46,22 @@ public class MyApplication {
         return StringUtils.hasText(logined) ? ReturnCode.LOGINED : ReturnCode.SUCCESS;
     }
 
+    @GetMapping("/manual/include-path")
+    public String doTestManualInclude() {
+        return ReturnCode.SUCCESS;
+    }
+
+    @GetMapping("/manual/exclude-path")
+    public String doTestManualExclude() {
+        return ReturnCode.SUCCESS;
+    }
+
+    @GetMapping("/manual/optional-path")
+    public String doTestManualOptional(
+            @RequestAttribute(value = ReturnCode.LOGINED, required = false) String logined) {
+        return StringUtils.hasText(logined) ? ReturnCode.LOGINED : ReturnCode.SUCCESS;
+    }
+
     @GetMapping("/frequency/concurrency")
     public String doTestFrequencyConcurrency() {
         return ReturnCode.SUCCESS;
