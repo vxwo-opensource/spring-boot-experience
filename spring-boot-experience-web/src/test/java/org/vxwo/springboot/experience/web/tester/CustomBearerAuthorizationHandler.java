@@ -14,11 +14,7 @@ public class CustomBearerAuthorizationHandler implements BearerAuthorizationHand
     public boolean processBearerAuthorization(HttpServletRequest request,
             HttpServletResponse response, String tag, String matchPath, String bearerToken)
             throws ServletException, IOException {
-        boolean successed = "tester".equals(bearerToken);
-        if (successed) {
-            request.setAttribute(ReturnCode.LOGINED, "ok");
-        }
-        return successed;
+        return "tester".equals(bearerToken);
     }
 
 }

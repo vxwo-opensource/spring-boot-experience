@@ -14,11 +14,7 @@ public class CustomManualAuthorizationHandler implements ManualAuthorizationHand
     public boolean processManualAuthorization(HttpServletRequest request,
             HttpServletResponse response, String tag, String matchPath)
             throws ServletException, IOException {
-        boolean successed = "tester".equals(request.getHeader(Constants.MANUAL_KEY));
-        if (successed) {
-            request.setAttribute(ReturnCode.LOGINED, "ok");
-        }
-        return successed;
+        return "tester".equals(request.getHeader(Constants.MANUAL_KEY));
     }
 
 }

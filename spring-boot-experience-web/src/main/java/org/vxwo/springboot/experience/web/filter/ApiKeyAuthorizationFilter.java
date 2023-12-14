@@ -101,6 +101,7 @@ public class ApiKeyAuthorizationFilter extends OncePerRequestFilter {
         } else {
             String keyOwner = tester.getExtra().get(apiKey);
             if (keyOwner != null) {
+                SecondaryAuthorizationFilter.markActived(request, tester);
                 filterChain.doFilter(request, response);
             } else {
                 failureHandler.handleAuthorizationFailure(request, response, tester.getTag(),

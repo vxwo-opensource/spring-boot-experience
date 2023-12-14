@@ -13,6 +13,7 @@ import org.vxwo.springboot.experience.web.filter.FrequencyControlFilter;
 import org.vxwo.springboot.experience.web.filter.ManualAuthorizationFilter;
 import org.vxwo.springboot.experience.web.filter.RequestLoggingAspect;
 import org.vxwo.springboot.experience.web.filter.RequestLoggingFilter;
+import org.vxwo.springboot.experience.web.filter.SecondaryAuthorizationFilter;
 import org.vxwo.springboot.experience.web.processor.PathDocumentHelper;
 import org.vxwo.springboot.experience.web.processor.PathProcessor;
 
@@ -56,7 +57,7 @@ public class WebAutoConfiguration {
     @Bean
     @ConditionalOnProperty(value = ConfigPrefix.AUTHORIZATION_API_KEY + ".enabled",
             havingValue = "true")
-    @Order(CoreOrdered.AUTHORIZATION_LAYER)
+    @Order(CoreOrdered.FIRST_AUTHORIZATION_LAYER)
     public ApiKeyAuthorizationFilter apiKeyAuthorizationFilter(ApiKeyAuthorizationConfig value) {
         return new ApiKeyAuthorizationFilter(value);
     }
@@ -64,7 +65,7 @@ public class WebAutoConfiguration {
     @Bean
     @ConditionalOnProperty(value = ConfigPrefix.AUTHORIZATION_BEARER + ".enabled",
             havingValue = "true")
-    @Order(CoreOrdered.AUTHORIZATION_LAYER)
+    @Order(CoreOrdered.FIRST_AUTHORIZATION_LAYER)
     public BearerAuthorizationFilter bearerAuthorizationFilter(BearerAuthorizationConfig value) {
         return new BearerAuthorizationFilter(value);
     }
@@ -72,7 +73,7 @@ public class WebAutoConfiguration {
     @Bean
     @ConditionalOnProperty(value = ConfigPrefix.AUTHORIZATION_MANUAL + ".enabled",
             havingValue = "true")
-    @Order(CoreOrdered.AUTHORIZATION_LAYER)
+    @Order(CoreOrdered.FIRST_AUTHORIZATION_LAYER)
     public ManualAuthorizationFilter manualAuthorizationFilter(ManualAuthorizationConfig value) {
         return new ManualAuthorizationFilter(value);
     }
@@ -83,5 +84,13 @@ public class WebAutoConfiguration {
     @Order(CoreOrdered.FREQUENCY_CONTROL_LAYER)
     public FrequencyControlFilter frequencyControlFilter(FrequencyControlConfig value) {
         return new FrequencyControlFilter(value);
+    }
+
+    @Bean
+    @ConditionalOnProperty(value = ConfigPrefix.AUTHORIZATION_SECONDARY + ".enabled",
+            havingValue = "true")
+    @Order(CoreOrdered.SECONDARY_AUTHORIZATION_LAYER)
+    public SecondaryAuthorizationFilter secondaryAuthorizationFilter() {
+        return new SecondaryAuthorizationFilter();
     }
 }

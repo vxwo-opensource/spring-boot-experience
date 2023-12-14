@@ -24,7 +24,7 @@ spring-boot-experience-web
 
 ## Chain
 
-CORS -> Request Logging -> Authorization -> Frequency Control -> Request Logging (Aspect)
+CORS -> Request Logging -> First Authorizations -> Frequency Control -> Secondary Authorization -> Request Logging (Aspect)
 
 ## CORS
 
@@ -185,3 +185,23 @@ prefix: sbexp.web.frequency-control
 - org.vxwo.springboot.experience.web.handler.FrequencyControlHandler
 
   Handle the frequency control
+
+## Secondary Authorization
+
+### Configuration
+
+prefix: sbexp.web.authorization.secondary
+
+| *Key*   | *Type*  | *Required* | *Default* | *Description* |
+|---------|---------|------------|-----------|---------------|
+| enabled | boolean |            | false     | Switch        |
+
+### Implementations
+
+- org.vxwo.springboot.experience.web.handler.AuthorizationFailureHandler
+
+  Handle the authorization failure
+
+- org.vxwo.springboot.experience.web.handler.SecondaryAuthorizationHandler
+
+  Handle the secondary authorization

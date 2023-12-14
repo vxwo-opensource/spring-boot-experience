@@ -21,6 +21,10 @@ sbexp:
         - /
 
     authorization:
+      # Secondary Authorization Filter
+      secondary:
+        enabled: false
+
       # ApiKey Authorization Filter
       api-key:
         enabled: false

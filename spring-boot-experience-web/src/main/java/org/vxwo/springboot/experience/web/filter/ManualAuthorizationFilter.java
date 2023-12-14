@@ -67,7 +67,10 @@ public class ManualAuthorizationFilter extends OncePerRequestFilter {
         }
 
         if (processHandler.processManualAuthorization(request, response, tester.getTag(),
-                tester.getPath()) || tester.getExtra().isOptional(relativePath)) {
+                tester.getPath())) {
+            SecondaryAuthorizationFilter.markActived(request, tester);
+            filterChain.doFilter(request, response);
+        } else if (tester.getExtra().isOptional(relativePath)) {
             filterChain.doFilter(request, response);
         } else {
             failureHandler.handleAuthorizationFailure(request, response, tester.getTag(),

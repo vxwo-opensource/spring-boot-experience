@@ -17,5 +17,8 @@ public final class ConfigPrefix {
 
     public final static String AUTHORIZATION_MANUAL = ATTRIBUTE_PREFIX + ".authorization.manual";
 
+    public final static String AUTHORIZATION_SECONDARY =
+            ATTRIBUTE_PREFIX + ".authorization.secondary";
+
     public final static String FREQUENCY_CONTROL = ATTRIBUTE_PREFIX + ".frequency-control";
 }

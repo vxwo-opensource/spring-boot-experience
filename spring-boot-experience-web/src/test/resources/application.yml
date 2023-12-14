@@ -21,6 +21,9 @@ sbexp:
         - /
 
     authorization:
+      secondary:
+        enabled: true
+
       api-key:
         enabled: true
         path-rules:
