@@ -38,7 +38,7 @@ public class RequestLoggingAspect {
 
     private final int stacktraceLimitLines;
 
-    @Autowired
+    @Autowired(required = false)
     private HttpServletRequest request;
 
     @Autowired
@@ -70,7 +70,7 @@ public class RequestLoggingAspect {
         return ClassUtils.isPrimitiveOrWrapper(cls) || cls.equals(String.class);
     }
 
-    private Map<String, Object> serializeAsMap(String parameterName, Object parameterValue) {
+    private Map<String, Object> safeSerializeAsMap(String parameterName, Object parameterValue) {
         try {
             return processHandler.convertToMap(parameterValue);
         } catch (Exception ex) {
@@ -82,7 +82,7 @@ public class RequestLoggingAspect {
         }
     }
 
-    private String serializeAsString(Object parameterValue) {
+    private String safeSerializeAsString(Object parameterValue) {
         try {
             return processHandler.convertToString(parameterValue);
         } catch (Exception ex) {
@@ -147,7 +147,7 @@ public class RequestLoggingAspect {
             if (!serializeAsMap) {
                 targetParams.put(parameterName, parameterValue);
             } else {
-                targetParams.putAll(serializeAsMap(parameterName, parameterValue));
+                targetParams.putAll(safeSerializeAsMap(parameterName, parameterValue));
             }
         }
 
@@ -160,14 +160,23 @@ public class RequestLoggingAspect {
             } else if (result instanceof String) {
                 entity.setResponseBody((String) result);
             } else {
-                entity.setResponseBody(serializeAsString(result));
+                entity.setResponseBody(safeSerializeAsString(result));
             }
         }
 
         return result;
     }
 
+    /**
+     * Put field `owner` to current logging
+     *
+     * @param owner  The owner
+     */
     public void putOwner(String owner) {
+        if (request == null) {
+            return;
+        }
+
         RequestLoggingEntity entity =
                 (RequestLoggingEntity) request.getAttribute(RequestLoggingEntity.ATTRIBUTE_NAME);
         if (entity == null) {
@@ -177,7 +186,17 @@ public class RequestLoggingAspect {
         entity.setOwner(owner);
     }
 
+    /**
+     * Put simple object to field `customDetail` in current logging
+     *
+     * @param key  the key in custom detail
+     * @param detail  the object to custom detail
+     */
     public void putCustomDetail(String key, Object detail) {
+        if (request == null) {
+            return;
+        }
+
         RequestLoggingEntity entity =
                 (RequestLoggingEntity) request.getAttribute(RequestLoggingEntity.ATTRIBUTE_NAME);
         if (entity == null) {
@@ -187,7 +206,17 @@ public class RequestLoggingAspect {
         entity.getCustomDetails().put(key, detail);
     }
 
+    /**
+     * Put exception to field `customDetail` in current logging
+     *
+     * @param key  the key in custom detail
+     * @param detail  the exception to custom detail
+     */
     public void putCustomDetail(String key, Exception exception) {
+        if (request == null) {
+            return;
+        }
+
         RequestLoggingEntity entity =
                 (RequestLoggingEntity) request.getAttribute(RequestLoggingEntity.ATTRIBUTE_NAME);
         if (entity == null) {
