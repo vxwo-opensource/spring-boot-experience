@@ -137,16 +137,16 @@ public class GroupPathRuleMatcher implements PathRuleMatcher {
         StringBuffer sb = new StringBuffer();
         sb.append(acceptPathTesters.size() + " paths");
         for (TagPathTester<ExcludesAndOptionals> tester : acceptPathTesters) {
-            sb.append("\ntag: " + tester.getTag() + ", path: " + tester.toPathMatch());
+            sb.append("\n tag: " + tester.getTag() + ", path: " + tester.toPathMatch());
 
             if (!ObjectUtils.isEmpty(tester.getExtra().getExcludes())) {
-                sb.append(", excludes: " + String.join(",", tester.getExtra().getExcludes().stream()
-                        .map(o -> o.toPathMatch()).collect(Collectors.toList())));
+                sb.append("\n  excludes:\n" + String.join("\n", tester.getExtra().getExcludes()
+                        .stream().map(o -> "   " + o.toPathMatch()).collect(Collectors.toList())));
             }
 
             if (!ObjectUtils.isEmpty(tester.getExtra().getOptionals())) {
-                sb.append(", optionals: " + String.join(",", tester.getExtra().getOptionals()
-                        .stream().map(o -> o.toPathMatch()).collect(Collectors.toList())));
+                sb.append("\n  optionals:\n" + String.join("\n", tester.getExtra().getOptionals()
+                        .stream().map(o -> "   " + o.toPathMatch()).collect(Collectors.toList())));
             }
         }
 
