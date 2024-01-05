@@ -117,7 +117,6 @@ prefix: sbexp.web.authorization.bearer
 | excludes  | Array[String] |            |           | Child paths for exclude processing |
 | optionals | Array[String] |            |           | Child paths for processing or not  |
 
-
 ### Implementations
 
 - org.vxwo.springboot.experience.web.handler.AuthorizationFailureHandler

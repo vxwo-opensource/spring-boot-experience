@@ -27,8 +27,8 @@ sbexp:
       api-key:
         enabled: true
         path-rules:
-          - path: /api-key/
-            tag: test
+          - tag: test
+            path: /api-key/
             owners:
               - key: test-key
                 owner: tester
@@ -36,8 +36,8 @@ sbexp:
       bearer:
         enabled: true
         path-rules:
-          - path: /bearer/
-            tag: test
+          - tag: test
+            path: /bearer/
             excludes:
               - exclude-path
             optionals:
@@ -46,8 +46,8 @@ sbexp:
       manual:
         enabled: true
         path-rules:
-          - path: /manual/
-            tag: test
+          - tag: test
+            path: /manual/
             excludes:
               - exclude-path
             optionals:
@@ -60,6 +60,6 @@ sbexp:
           - /frequency/concurrency
 
       fixed-intervals:
-        - duration-ms: 30000
-          tag: test
+        - tag: test
+          duration-ms: 30000
           include-paths: /frequency/fixed-interval
