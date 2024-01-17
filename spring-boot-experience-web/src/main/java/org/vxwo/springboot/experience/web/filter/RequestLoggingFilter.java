@@ -14,8 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 import org.vxwo.springboot.experience.web.config.RequestLoggingConfig;
@@ -102,7 +104,7 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
     }
 
     private static boolean isIp(String ip) {
-        return ip != null && ip.length() > 0 && !"unknown".equalsIgnoreCase(ip);
+        return StringUtils.hasText(ip) && !"unknown".equalsIgnoreCase(ip);
     }
 
     private static String getClientIp(HttpServletRequest request) {
@@ -120,6 +122,17 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
             ip = request.getRemoteAddr();
         }
         return isIp(ip) ? ip : "";
+    }
+
+    private static String getRequestHost(HttpServletRequest request) {
+        String host = request.getHeader("X-Forwarded-Host");
+        if (host == null) {
+            host = request.getHeader(HttpHeaders.HOST);
+        }
+        if (host == null) {
+            host = request.getServerName();
+        }
+        return StringUtils.hasText(host) ? host : "";
     }
 
     private String parseResponseBody(ContentCachingResponseWrapper response) {
@@ -171,6 +184,7 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
         RequestLoggingEntity entity = new RequestLoggingEntity();
         entity.setApplication(applicationName);
         entity.setTimeStart(System.currentTimeMillis());
+        entity.setRequestHost(getRequestHost(request));
         entity.setRequestUri(request.getRequestURI());
         entity.setRequestMethod(request.getMethod());
         entity.setRequestQuery(request.getQueryString());

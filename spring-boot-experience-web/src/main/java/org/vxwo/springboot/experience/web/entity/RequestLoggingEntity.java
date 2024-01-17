@@ -16,6 +16,7 @@ public class RequestLoggingEntity {
 
     private String application;
 
+    private String requestHost;
     private String requestUri;
     private String requestMethod;
     private String requestQuery;
