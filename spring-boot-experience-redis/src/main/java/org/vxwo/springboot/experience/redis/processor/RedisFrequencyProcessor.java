@@ -56,6 +56,10 @@ public class RedisFrequencyProcessor {
      * @return false if not owned
      */
     public boolean leaveFrequencyDuration(FrequencyDurationSession session) {
+        if (session == null) {
+            return false;
+        }
+
         return redisTemplate.execute(UNSAFE_UNLOCK_SCRIPT,
                 Collections.singletonList(session.getFrequencyKey()), session.getFrequencyValue());
     }

@@ -15,6 +15,22 @@ prefix: sbexp.redis
 
 # Processors
 
+## org.vxwo.springboot.experience.redis.processor.RedisLockProcessor
+
+### Methods
+
+- LockDurationSession lock(String lockKey, Duration duration)
+
+  Enter lock session and own it
+
+- LockDurationSession lock(String lockKey, Duration duration, Duration waitting)
+
+  Enter lock session and own it, supports waitting
+
+- boolean boolean unlock(LockDurationSession session)
+
+  Leave lock session
+
 ## org.vxwo.springboot.experience.redis.processor.RedisFrequencyProcessor
 
 ### Methods

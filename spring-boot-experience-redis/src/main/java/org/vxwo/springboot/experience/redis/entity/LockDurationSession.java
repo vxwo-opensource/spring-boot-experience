@@ -9,7 +9,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class FrequencyDurationSession {
-    private String frequencyKey;
-    private String frequencyValue;
+public class LockDurationSession {
+    private String lockKey;
+    private String lockValue;
 }
