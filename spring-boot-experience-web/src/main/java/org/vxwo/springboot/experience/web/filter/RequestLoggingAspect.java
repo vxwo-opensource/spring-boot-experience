@@ -210,7 +210,7 @@ public class RequestLoggingAspect {
      * Put exception to field `customDetail` in current logging
      *
      * @param key  the key in custom detail
-     * @param detail  the exception to custom detail
+     * @param exception  the exception to custom detail
      */
     public void putCustomDetail(String key, Exception exception) {
         if (request == null) {
