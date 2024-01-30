@@ -1,5 +1,9 @@
 package org.vxwo.springboot.experience.util;
 
+/**
+ * @author vxwo-team
+ */
+
 public class ExceptionUtils {
     public static String getStackTrace(Throwable throwable) {
         return getStackTrace(throwable, -1);
