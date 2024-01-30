@@ -1,5 +1,5 @@
 org.springframework.boot.env.EnvironmentPostProcessor=\
-org.vxwo.springboot.experience.web.processor.PackageEnvironmentLoader
+org.vxwo.springboot.experience.web.internal.PackageEnvironmentLoader
 
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 org.vxwo.springboot.experience.web.config.CorsConfig,\

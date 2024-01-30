@@ -1,4 +1,4 @@
-package org.vxwo.springboot.experience.redis.processor;
+package org.vxwo.springboot.experience.web.internal;
 
 import java.io.IOException;
 import org.springframework.boot.SpringApplication;
@@ -21,7 +21,7 @@ public class PackageEnvironmentLoader implements EnvironmentPostProcessor {
             SpringApplication application) {
         try {
             PropertySource<?> propertySource = loader
-                    .load("experience-redis", new ClassPathResource("experience/experience-redis.yml"))
+                    .load("experience-web", new ClassPathResource("experience/experience-web.yml"))
                     .get(0);
             environment.getPropertySources().addLast(propertySource);
         } catch (IOException ex) {
