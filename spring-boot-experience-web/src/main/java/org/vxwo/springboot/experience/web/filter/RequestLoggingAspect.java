@@ -28,6 +28,7 @@ import org.springframework.util.StringUtils;
 import org.vxwo.springboot.experience.web.config.RequestLoggingConfig;
 import org.vxwo.springboot.experience.web.entity.RequestLoggingEntity;
 import org.vxwo.springboot.experience.web.handler.RequestLoggingHandler;
+import org.vxwo.springboot.experience.util.ExceptionUtils;
 
 /**
  * @author vxwo-team
@@ -223,23 +224,7 @@ public class RequestLoggingAspect {
             return;
         }
 
-        String title = exception.getMessage();
-        if (title == null) {
-            title = "java.lang.NullPointerException: null";
-        }
-
-        int lines = 0;
-        StringBuilder sb = new StringBuilder();
-        sb.append(title);
-        for (StackTraceElement element : exception.getStackTrace()) {
-            if (++lines > stacktraceLimitLines) {
-                break;
-            }
-
-            sb.append("\n  ");
-            sb.append(element.toString());
-        }
-
-        entity.getCustomDetails().put(key, sb.toString());
+        entity.getCustomDetails().put(key,
+                ExceptionUtils.getStackTrace(exception, stacktraceLimitLines));
     }
 }
