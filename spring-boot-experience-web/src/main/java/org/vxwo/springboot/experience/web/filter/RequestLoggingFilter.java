@@ -136,7 +136,11 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
     }
 
     private String parseResponseBody(ContentCachingResponseWrapper response) {
-        if (response.getContentSize() <= responseBodyLimit) {
+        int contentSize = response.getContentSize();
+        if (contentSize < 1) {
+            return "@ignore: empty";
+        }
+        if (contentSize >= responseBodyLimit) {
             return "@ignore: size gt " + responseBodyLimit;
         }
 
@@ -154,7 +158,7 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
                     new String(response.getContentAsByteArray(), StandardCharsets.UTF_8);
             return responseText;
         } else {
-            return "@byte[" + response.getContentSize() + "]";
+            return "@byte[" + contentSize + "]";
         }
 
     }

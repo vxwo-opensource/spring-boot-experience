@@ -51,7 +51,7 @@ prefix: sbexp.web.logging
 | request-header-keys     | Array{String} |            | [*]       | Include request header keys            |
 | ignore-response-headers | boolean       |            | false     | Ignore response headers                |
 | response-header-keys    | Array{String} |            | [*]       | Include response header keys           |
-| respnse-body-limit-kb   | int           |            | 500       | KB size limit for ignore response body |
+| response-body-limit-kb  | int           |            | 500       | KB size limit for ignore response body |
 | stacktrace-limit-lines  | int           |            | 5         | Lines limit for Exception stack trace  |
 | include-paths           | Array[String] |            | [/]       | Paths for logging                      |
 

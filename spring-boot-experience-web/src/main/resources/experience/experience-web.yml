@@ -15,7 +15,7 @@ sbexp:
         - "*"
       response-header-keys:
         - "*"
-      respnse-body-limit-kb: 500
+      response-body-limit-kb: 500
       stacktrace-limit-lines: 10
       include-paths:
         - /
