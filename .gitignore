@@ -39,5 +39,7 @@ replay_pid*
 # Development scripts
 test.sh
 test.bat
+build.sh
+build.bat
 deploy.sh
 deploy.bat
