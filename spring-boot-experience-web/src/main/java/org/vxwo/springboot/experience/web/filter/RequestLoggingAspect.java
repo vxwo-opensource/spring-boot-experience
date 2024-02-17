@@ -71,6 +71,11 @@ public class RequestLoggingAspect {
         return ClassUtils.isPrimitiveOrWrapper(cls) || cls.equals(String.class);
     }
 
+    private RequestLoggingEntity getLoggingEntity() {
+        return request == null ? null
+                : (RequestLoggingEntity) request.getAttribute(RequestLoggingEntity.ATTRIBUTE_NAME);
+    }
+
     private Map<String, Object> safeSerializeAsMap(String parameterName, Object parameterValue) {
         try {
             return processHandler.convertToMap(parameterValue);
@@ -93,8 +98,7 @@ public class RequestLoggingAspect {
 
     @Around("@within(org.springframework.stereotype.Controller)||@within(org.springframework.web.bind.annotation.RestController)")
     public Object aroundRequestMethodProcess(ProceedingJoinPoint joinPoint) throws Throwable {
-        RequestLoggingEntity entity =
-                (RequestLoggingEntity) request.getAttribute(RequestLoggingEntity.ATTRIBUTE_NAME);
+        RequestLoggingEntity entity = getLoggingEntity();
         if (entity == null) {
             return joinPoint.proceed();
         }
@@ -174,12 +178,7 @@ public class RequestLoggingAspect {
      * @param owner  The owner
      */
     public void putOwner(String owner) {
-        if (request == null) {
-            return;
-        }
-
-        RequestLoggingEntity entity =
-                (RequestLoggingEntity) request.getAttribute(RequestLoggingEntity.ATTRIBUTE_NAME);
+        RequestLoggingEntity entity = getLoggingEntity();
         if (entity == null) {
             return;
         }
@@ -194,12 +193,7 @@ public class RequestLoggingAspect {
      * @param detail  the object to custom detail
      */
     public void putCustomDetail(String key, Object detail) {
-        if (request == null) {
-            return;
-        }
-
-        RequestLoggingEntity entity =
-                (RequestLoggingEntity) request.getAttribute(RequestLoggingEntity.ATTRIBUTE_NAME);
+        RequestLoggingEntity entity = getLoggingEntity();
         if (entity == null) {
             return;
         }
@@ -214,12 +208,7 @@ public class RequestLoggingAspect {
      * @param exception  the exception to custom detail
      */
     public void putCustomDetail(String key, Exception exception) {
-        if (request == null) {
-            return;
-        }
-
-        RequestLoggingEntity entity =
-                (RequestLoggingEntity) request.getAttribute(RequestLoggingEntity.ATTRIBUTE_NAME);
+        RequestLoggingEntity entity = getLoggingEntity();
         if (entity == null) {
             return;
         }
