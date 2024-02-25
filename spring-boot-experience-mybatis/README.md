@@ -88,7 +88,7 @@ userMapper.udpateUserById(user);
 
 ## Method: selectByColumn
 
-Return the SELECT statement against the target object with not `null` fields.
+Return the SELECT statement conditional on the target object with not `null` fields.
 
 ### Examples
 
@@ -107,14 +107,14 @@ userMapper.selectUserByColumn(user);
 
 ## Method: deleteByColumn
 
-Return the DELETE statement against the target object with not `null` fields.
+Return the DELETE statement conditional on the target object with not `null` fields.
 
 ### Examples
 
 ```java
 public interface UserMapper {
     @DeleteProvider(value=GeneralSqlProvider.class method="deleteByColumn");
-    int deleteByColumn(UserEntity value);
+    int deleteUserByColumn(UserEntity value);
 }
 
 ...
