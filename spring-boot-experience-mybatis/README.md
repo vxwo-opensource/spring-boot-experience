@@ -53,7 +53,8 @@ Return the INSERT statement against the target object ignore `null` fields.
 
 ```java
 public interface UserMapper {
-    @InsertProvider(value=GeneralSqlProvider.class method="insertOne");
+    @InsertProvider(value = GeneralSqlProvider.class, method = "insertOne")
+    @Options(useGeneratedKeys = true, keyProperty = "uid")
     int insertUser(UserEntity value);
 }
 
@@ -74,7 +75,7 @@ Return the UPDATE statement against the target object ignore `null` fields, It r
 
 ```java
 public interface UserMapper {
-    @UpdateProvider(value=GeneralSqlProvider.class method="updateOneById");
+    @UpdateProvider(value = GeneralSqlProvider.class, method = "updateOneById")
     int udpateUserById(UserEntity value);
 }
 
@@ -94,8 +95,8 @@ Return the SELECT statement conditional on the target object with not `null` fie
 
 ```java
 public interface UserMapper {
-    @SelectProvider(value=GeneralSqlProvider.class method="selectByColumn");
-    int selectUserByColumn(UserEntity value);
+    @SelectProvider(value = GeneralSqlProvider.class, method = "selectByColumn")
+    UserEntity selectUserByColumn(UserEntity value);
 }
 
 ...
@@ -113,7 +114,7 @@ Return the DELETE statement conditional on the target object with not `null` fie
 
 ```java
 public interface UserMapper {
-    @DeleteProvider(value=GeneralSqlProvider.class method="deleteByColumn");
+    @DeleteProvider(value = GeneralSqlProvider.class, method = "deleteByColumn")
     int deleteUserByColumn(UserEntity value);
 }
 

@@ -30,16 +30,16 @@ public final class GeneralSqlHelper {
     }
 
     private static boolean camelCaseToUnderscore = false;
-    private static SqlRender sqlRender = new ReservedRender("", "");
+    private static SqlRender mybatisSqlRender = new ReservedRender("", "");
 
     public static void initialize(MybatisConfig config, Configuration sessionConfig) {
         camelCaseToUnderscore = sessionConfig.isMapUnderscoreToCamelCase();
-        sqlRender = new ReservedRender(config.getGeneralSql().getReservedPrefix(),
+        mybatisSqlRender = new ReservedRender(config.getGeneralSql().getReservedPrefix(),
                 config.getGeneralSql().getReservedStuffix());
     }
 
     public static SqlRender getRender() {
-        return sqlRender;
+        return mybatisSqlRender;
     }
 
     public static boolean isCamelCaseToUnderscore() {

@@ -1,27 +1,41 @@
 package org.vxwo.springboot.experience.mybatis.tester;
 
+import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Date;
+import org.apache.ibatis.jdbc.ScriptRunner;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.jupiter.api.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.vxwo.springboot.experience.mybatis.GeneralSqlProvider;
-import org.vxwo.springboot.experience.mybatis.annotations.GeneralId;
-import org.vxwo.springboot.experience.mybatis.annotations.GeneralTable;
-import lombok.Data;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ApplicationTest {
-    @Data
-    @GeneralTable(value = "user")
-    public static class UserEntity {
-        @GeneralId
-        private Long uid;
-        private String user;
-        private String pwd;
-        private Date createdAt;
-    }
+    private final static String CREATE_TABLE_SCRIPT = String.join("", new ArrayList<String>() {
+        {
+            add("CREATE TABLE IF NOT EXISTS `user` (");
+            add(" uid BIGINT GENERATED ALWAYS AS IDENTITY,");
+            add(" `user` VARCHAR(50) NOT NULL,");
+            add(" pwd VARCHAR(50),");
+            add(" created_at TIMESTAMP,");
+            add(" PRIMARY KEY (uid)");
+            add(");");
+        }
+    });
 
-    private GeneralSqlProvider provider = new GeneralSqlProvider();
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private void setupTable(SqlSessionFactory sqlSessionFactory) {
+        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+            ScriptRunner sr = new ScriptRunner(sqlSession.getConnection());
+            sr.setLogWriter(null);
+            sr.runScript(new StringReader(CREATE_TABLE_SCRIPT));
+        }
+    }
 
     @Test
     @Order(101)
@@ -30,20 +44,19 @@ public class ApplicationTest {
         user.setUser("user");
         user.setCreatedAt(new Date());
 
-        String expected =
-                "INSERT INTO [user] ([user], [created_at]) VALUES (#{user}, #{createdAt})";
-        Assertions.assertEquals(expected, provider.insertOne(user));
+        userMapper.insertUser(user);
+        Assertions.assertEquals(1L, user.getUid());
     }
 
     @Test
     @Order(102)
     public void testSqlUpdateOneByIdShouldSuccess() {
         UserEntity user = new UserEntity();
-        user.setUid(0L);
+        user.setUid(1L);
         user.setPwd("pwd");
 
-        String expected = "UPDATE [user] SET [pwd]=#{pwd} WHERE [uid]=#{uid}";
-        Assertions.assertEquals(expected, provider.updateOneById(user));
+        int value = userMapper.udpateUserById(user);
+        Assertions.assertEquals(1, value);
     }
 
     @Test
@@ -51,10 +64,9 @@ public class ApplicationTest {
     public void testSqlSelectByColumnShouldSuccess() {
         UserEntity user = new UserEntity();
         user.setUser("user");
-        user.setPwd("pwd");
 
-        String expected = "SELECT * FROM [user] WHERE [user]=#{user} AND [pwd]=#{pwd}";
-        Assertions.assertEquals(expected, provider.selectByColumn(user));
+        UserEntity value = userMapper.selectUserByColumn(user);
+        Assertions.assertEquals(1L, value.getUid());
     }
 
     @Test
@@ -62,9 +74,18 @@ public class ApplicationTest {
     public void testSqlDeleteByColumnShouldSuccess() {
         UserEntity user = new UserEntity();
         user.setUser("user");
-        user.setPwd("pwd");
 
-        String expected = "DELETE FROM [user] WHERE [user]=#{user} AND [pwd]=#{pwd}";
-        Assertions.assertEquals(expected, provider.deleteByColumn(user));
+        int value = userMapper.deleteUserByColumn(user);
+        Assertions.assertEquals(1, value);
+    }
+
+    @Test
+    @Order(105)
+    public void testSqlDeleteByColumnAgainShouldFailed() {
+        UserEntity user = new UserEntity();
+        user.setUser("user");
+
+        int value = userMapper.deleteUserByColumn(user);
+        Assertions.assertEquals(0, value);
     }
 }
