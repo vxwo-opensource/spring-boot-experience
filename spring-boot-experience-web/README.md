@@ -1,6 +1,8 @@
 spring-boot-experience-web
 ==============================================
 
+Web support
+
 # Configuration
 
 - [Default Settings](src/main/resources/experience/experience-web.yml)

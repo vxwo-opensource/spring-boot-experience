@@ -45,10 +45,10 @@
   </developers>
 
   <modules>
+    <module>spring-boot-experience-util</module>
     <module>spring-boot-experience-web</module>
     <module>spring-boot-experience-redis</module>
     <module>spring-boot-experience-mybatis</module>
-    <module>spring-boot-experience-util</module>
   </modules>
 
   <dependencies>

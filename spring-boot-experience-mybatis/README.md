@@ -1,6 +1,8 @@
 spring-boot-experience-mybatis
 ==============================================
 
+Mybatis support
+
 # Configuration
 
 - [Default Settings](src/main/resources/experience/experience-mybatis.yml)
@@ -72,7 +74,7 @@ Return the UPDATE statement against the target object ignore `null` fields, It r
 
 ```java
 public interface UserMapper {
-    @InsertProvider(value=GeneralSqlProvider.class method="updateOneById");
+    @UpdateProvider(value=GeneralSqlProvider.class method="updateOneById");
     int udpateUserById(UserEntity value);
 }
 
@@ -92,7 +94,7 @@ Return the SELECT statement against the target object with not `null` fields.
 
 ```java
 public interface UserMapper {
-    @InsertProvider(value=GeneralSqlProvider.class method="selectByColumn");
+    @SelectProvider(value=GeneralSqlProvider.class method="selectByColumn");
     int selectUserByColumn(UserEntity value);
 }
 
@@ -111,7 +113,7 @@ Return the DELETE statement against the target object with not `null` fields.
 
 ```java
 public interface UserMapper {
-    @InsertProvider(value=GeneralSqlProvider.class method="deleteByColumn");
+    @DeleteProvider(value=GeneralSqlProvider.class method="deleteByColumn");
     int deleteByColumn(UserEntity value);
 }
 

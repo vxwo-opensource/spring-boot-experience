@@ -1,6 +1,8 @@
 spring-boot-experience-redis
 ==============================================
 
+Redis support
+
 # Configuration
 
 - [Default Settings](src/main/resources/experience/experience-redis.yml)
