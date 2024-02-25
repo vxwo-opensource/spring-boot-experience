@@ -1,0 +1,6 @@
+org.springframework.boot.env.EnvironmentPostProcessor=\
+org.vxwo.springboot.experience.mybatis.internal.PackageEnvironmentLoader
+
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+org.vxwo.springboot.experience.mybatis.config.MybatisConfig,\
+org.vxwo.springboot.experience.mybatis.config.MybatisAutoConfiguration

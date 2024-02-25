@@ -1,0 +1,9 @@
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+
+sbexp:
+  mybatis:
+    general-sql:
+      reserved-prefix: "["
+      reserved-stuffix: "]"

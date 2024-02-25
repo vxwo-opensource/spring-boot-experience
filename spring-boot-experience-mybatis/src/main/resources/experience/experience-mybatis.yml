@@ -1,0 +1,5 @@
+sbexp:
+  mybatis:
+    general-sql:
+      reserved-prefix:
+      reserved-stuffix:
