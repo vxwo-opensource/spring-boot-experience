@@ -1,8 +1,8 @@
 package org.vxwo.springboot.experience.mybatis.tester;
 
-import java.util.Date;
-import org.vxwo.springboot.experience.mybatis.annotations.GeneralId;
-import org.vxwo.springboot.experience.mybatis.annotations.GeneralTable;
+import java.util.*;
+import org.vxwo.springboot.experience.mybatis.annotations.*;
+import org.vxwo.springboot.experience.mybatis.handlers.*;
 import lombok.Data;
 
 @Data
@@ -13,4 +13,13 @@ public class UserEntity {
     private String user;
     private String pwd;
     private Date createdAt;
+
+    @GeneralField(typeHandler = ListJsonTypeHandler.class)
+    private List<Integer> groupIds;
+
+    @GeneralField(typeHandler = ListJsonTypeHandler.class)
+    private List<String> groupKeys;
+
+    @GeneralField(typeHandler = MapJsonTypeHandler.class)
+    private Map<String, Object> metadata;
 }

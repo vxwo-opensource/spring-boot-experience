@@ -1,8 +1,7 @@
 package org.vxwo.springboot.experience.mybatis.tester;
 
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -20,6 +19,9 @@ public class ApplicationTest {
             add(" `user` VARCHAR(50) NOT NULL,");
             add(" pwd VARCHAR(50),");
             add(" created_at TIMESTAMP,");
+            add(" group_ids TEXT,");
+            add(" group_keys TEXT,");
+            add(" metadata TEXT,");
             add(" PRIMARY KEY (uid)");
             add(");");
         }
@@ -43,6 +45,25 @@ public class ApplicationTest {
         UserEntity user = new UserEntity();
         user.setUser("user");
         user.setCreatedAt(new Date());
+        user.setGroupIds(new ArrayList<Integer>() {
+            {
+                add(1);
+                add(2);
+                add(3);
+            }
+        });
+        user.setGroupKeys(new ArrayList<String>() {
+            {
+                add("1");
+                add("2");
+                add("3");
+            }
+        });
+        user.setMetadata(new HashMap<String, Object>() {
+            {
+                put("name", "test");
+            }
+        });
 
         userMapper.insertUser(user);
         Assertions.assertEquals(1L, user.getUid());
@@ -67,6 +88,9 @@ public class ApplicationTest {
 
         UserEntity value = userMapper.selectUserByColumn(user);
         Assertions.assertEquals(1L, value.getUid());
+        Assertions.assertEquals(1, value.getGroupIds().get(0));
+        Assertions.assertEquals("1", value.getGroupKeys().get(0));
+        Assertions.assertEquals("test", value.getMetadata().get("name"));
     }
 
     @Test

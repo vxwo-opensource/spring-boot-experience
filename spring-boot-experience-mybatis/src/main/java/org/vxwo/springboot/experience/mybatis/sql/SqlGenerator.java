@@ -12,35 +12,38 @@ public final class SqlGenerator {
         return column.getFieldValue(value) != null;
     }
 
-    private static String renderColumnSet(SqlRender render, ColumnEntity column) {
-        return render.reserved(column.getName()) + "=" + render.property(column.getFieldName());
+    private static String renderColumnSet(BaseSqlRender render, ColumnEntity column) {
+        return render.renderReserved(column.getName()) + "="
+                + render.renderProperty(column.getFieldName(), column.getFieldTypeHandler());
     }
 
-    public static String insertOne(SqlRender render, TableEntity table, Object value) {
+    public static String insertOne(BaseSqlRender render, TableEntity table, Object value) {
         List<String> columns = new ArrayList<>();
         List<String> properties = new ArrayList<>();
 
         ColumnEntity idColumn = table.getIdColumn();
         if (existsValue(idColumn, value)) {
-            columns.add(render.reserved(idColumn.getName()));
-            properties.add(render.property(idColumn.getFieldName()));
+            columns.add(render.renderReserved(idColumn.getName()));
+            properties.add(
+                    render.renderProperty(idColumn.getFieldName(), idColumn.getFieldTypeHandler()));
         }
 
         table.getOtherColumns().forEach(column -> {
             if (existsValue(column, value)) {
-                columns.add(render.reserved(column.getName()));
-                properties.add(render.property(column.getFieldName()));
+                columns.add(render.renderReserved(column.getName()));
+                properties.add(
+                        render.renderProperty(column.getFieldName(), column.getFieldTypeHandler()));
             }
         });
         if (columns.isEmpty()) {
             throw new BuilderException("Insert statements must have at least one column");
         }
 
-        return "INSERT INTO " + render.reserved(table.getName()) + " (" + String.join(", ", columns)
-                + ") VALUES (" + String.join(", ", properties) + ")";
+        return "INSERT INTO " + render.renderReserved(table.getName()) + " ("
+                + String.join(", ", columns) + ") VALUES (" + String.join(", ", properties) + ")";
     }
 
-    public static String updateOneById(SqlRender render, TableEntity table, Object value) {
+    public static String updateOneById(BaseSqlRender render, TableEntity table, Object value) {
         ColumnEntity idColumn = table.getIdColumn();
         if (!existsValue(idColumn, value)) {
             throw new BuilderException("Update statements must have value for column 'id'");
@@ -56,11 +59,11 @@ public final class SqlGenerator {
             throw new BuilderException("Update statements must have at least one set phrase");
         }
 
-        return "UPDATE " + render.reserved(table.getName()) + " SET "
+        return "UPDATE " + render.renderReserved(table.getName()) + " SET "
                 + String.join(", ", columnSets) + " WHERE " + renderColumnSet(render, idColumn);
     }
 
-    public static String selectByColumn(SqlRender render, TableEntity table, Object value) {
+    public static String selectByColumn(BaseSqlRender render, TableEntity table, Object value) {
         List<String> columnSets = new ArrayList<>();
         ColumnEntity idColumn = table.getIdColumn();
         if (existsValue(idColumn, value)) {
@@ -75,11 +78,11 @@ public final class SqlGenerator {
             throw new BuilderException("Select statements must have at least one query expression");
         }
 
-        return "SELECT * FROM " + render.reserved(table.getName()) + " WHERE "
+        return "SELECT * FROM " + render.renderReserved(table.getName()) + " WHERE "
                 + String.join(" AND ", columnSets);
     }
 
-    public static String deleteByColumn(SqlRender render, TableEntity table, Object value) {
+    public static String deleteByColumn(BaseSqlRender render, TableEntity table, Object value) {
         List<String> columnSets = new ArrayList<>();
         ColumnEntity idColumn = table.getIdColumn();
         if (existsValue(idColumn, value)) {
@@ -94,7 +97,7 @@ public final class SqlGenerator {
             throw new BuilderException("Delete statements must have at least one query expression");
         }
 
-        return "DELETE FROM " + render.reserved(table.getName()) + " WHERE "
+        return "DELETE FROM " + render.renderReserved(table.getName()) + " WHERE "
                 + String.join(" AND ", columnSets);
     }
 }

@@ -10,11 +10,13 @@ public final class ColumnEntity {
     private final String name;
     private final String fieldName;
     private final Method fieldGetter;
+    private final String typeHandler;
 
-    private ColumnEntity(String name, String fieldName, Method fieldGetter) {
+    private ColumnEntity(String name, String fieldName, Method fieldGetter, String typeHandler) {
         this.name = name;
         this.fieldName = fieldName;
         this.fieldGetter = fieldGetter;
+        this.typeHandler = typeHandler;
     }
 
     public String getName() {
@@ -25,6 +27,10 @@ public final class ColumnEntity {
         return fieldName;
     }
 
+    public String getFieldTypeHandler() {
+        return typeHandler;
+    }
+
     public Object getFieldValue(Object object) {
         try {
             return fieldGetter.invoke(object);
@@ -33,7 +39,8 @@ public final class ColumnEntity {
         }
     }
 
-    public static ColumnEntity of(String columnName, String fieldName, Method fieldGetter) {
-        return new ColumnEntity(columnName, fieldName, fieldGetter);
+    public static ColumnEntity of(String columnName, String fieldName, Method fieldGetter,
+            String typeHandler) {
+        return new ColumnEntity(columnName, fieldName, fieldGetter, typeHandler);
     }
 }

@@ -4,9 +4,9 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.apache.ibatis.reflection.ReflectionException;
+import org.apache.ibatis.type.UnknownTypeHandler;
 import org.springframework.util.StringUtils;
-import org.vxwo.springboot.experience.mybatis.annotations.GeneralId;
-import org.vxwo.springboot.experience.mybatis.annotations.GeneralTable;
+import org.vxwo.springboot.experience.mybatis.annotations.*;
 import org.vxwo.springboot.experience.util.lang.Tuple2;
 
 /**
@@ -87,18 +87,18 @@ public final class TableParser {
         ColumnEntity idByName = null, idByAnnotation = null;
         List<ColumnEntity> columns = new ArrayList<>();
         for (Field field : fieldAndMehtods.getT1()) {
-            boolean foundAnnotation = false;
-            GeneralId annotation = field.getAnnotation(GeneralId.class);
-            if (annotation != null) {
+            boolean foundIdAnnotation = false;
+            GeneralId idAnnotation = field.getAnnotation(GeneralId.class);
+            if (idAnnotation != null) {
                 ++idAnnotationCount;
-                foundAnnotation = true;
+                foundIdAnnotation = true;
             }
 
             String fieldName = field.getName();
             Method getterMethod =
                     fieldAndMehtods.getT2().get(parseGetterName(fieldName, field.getType()));
             if (getterMethod == null) {
-                if (foundAnnotation) {
+                if (foundIdAnnotation) {
                     throw new ReflectionException("Not found 'Getter' with field {" + fieldName
                             + "} in annotation '@GeneralId' on class: " + typeName);
                 }
@@ -106,11 +106,19 @@ public final class TableParser {
                 continue;
             }
 
+            String typeHandler = null;
+            GeneralField fieldAnnotation = field.getAnnotation(GeneralField.class);
+            if (fieldAnnotation != null) {
+                if (!fieldAnnotation.typeHandler().equals(UnknownTypeHandler.class)) {
+                    typeHandler = fieldAnnotation.typeHandler().getName();
+                }
+            }
+
             ColumnEntity column =
                     ColumnEntity.of(camelCaseToUnderscore ? camelToUnderline(fieldName) : fieldName,
-                            fieldName, getterMethod);
+                            fieldName, getterMethod, typeHandler);
 
-            if (foundAnnotation) {
+            if (foundIdAnnotation) {
                 idByAnnotation = column;
             } else if ("id".equals(fieldName)) {
                 idByName = column;

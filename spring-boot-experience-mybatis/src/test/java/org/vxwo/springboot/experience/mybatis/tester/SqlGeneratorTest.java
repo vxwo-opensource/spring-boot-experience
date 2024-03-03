@@ -1,6 +1,7 @@
 package org.vxwo.springboot.experience.mybatis.tester;
 
 import java.util.Date;
+import java.util.HashMap;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -10,15 +11,10 @@ import org.vxwo.springboot.experience.mybatis.sql.*;
 @ExtendWith(SpringExtension.class)
 public class SqlGeneratorTest {
     private static TableEntity sqlTable = TableParser.parseTable(UserEntity.class, true);
-    private static SqlRender sqlRender = new SqlRender() {
+    private static BaseSqlRender sqlRender = new BaseSqlRender() {
         @Override
-        public String reserved(String reserved) {
+        public String renderReserved(String reserved) {
             return "[" + reserved + "]";
-        }
-
-        @Override
-        public String property(String property) {
-            return "#{" + property + "}";
         }
     };
 
@@ -28,9 +24,14 @@ public class SqlGeneratorTest {
         UserEntity user = new UserEntity();
         user.setUser("user");
         user.setCreatedAt(new Date());
+        user.setMetadata(new HashMap<String, Object>() {
+            {
+                put("test", "test");
+            }
+        });
 
-        String expected =
-                "INSERT INTO [user] ([user], [created_at]) VALUES (#{user}, #{createdAt})";
+        String expected = "INSERT INTO [user] ([user], [created_at], [metadata])"
+                + " VALUES (#{user}, #{createdAt}, #{metadata,typeHandler=org.vxwo.springboot.experience.mybatis.handlers.MapJsonTypeHandler})";
         Assertions.assertEquals(expected, SqlGenerator.insertOne(sqlRender, sqlTable, user));
     }
 

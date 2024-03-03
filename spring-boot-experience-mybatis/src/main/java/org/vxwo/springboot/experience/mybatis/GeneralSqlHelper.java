@@ -9,36 +9,31 @@ import org.vxwo.springboot.experience.mybatis.sql.*;
  */
 
 public final class GeneralSqlHelper {
-    public static class ReservedRender implements SqlRender {
+    public static class ReservedSqlRender extends BaseSqlRender {
         private final String reservedPrefix;
         private final String reservedStuffix;
 
-        private ReservedRender(String prefix, String stuffix) {
+        private ReservedSqlRender(String prefix, String stuffix) {
             this.reservedPrefix = prefix;
             this.reservedStuffix = stuffix;
         }
 
         @Override
-        public String reserved(String reserved) {
+        public String renderReserved(String reserved) {
             return reservedPrefix + reserved + reservedStuffix;
-        }
-
-        @Override
-        public String property(String property) {
-            return "#{" + property + "}";
         }
     }
 
     private static boolean camelCaseToUnderscore = false;
-    private static SqlRender mybatisSqlRender = new ReservedRender("", "");
+    private static BaseSqlRender mybatisSqlRender = new ReservedSqlRender("", "");
 
     public static void initialize(MybatisConfig config, Configuration sessionConfig) {
         camelCaseToUnderscore = sessionConfig.isMapUnderscoreToCamelCase();
-        mybatisSqlRender = new ReservedRender(config.getGeneralSql().getReservedPrefix(),
+        mybatisSqlRender = new ReservedSqlRender(config.getGeneralSql().getReservedPrefix(),
                 config.getGeneralSql().getReservedStuffix());
     }
 
-    public static SqlRender getRender() {
+    public static BaseSqlRender getRender() {
         return mybatisSqlRender;
     }
 

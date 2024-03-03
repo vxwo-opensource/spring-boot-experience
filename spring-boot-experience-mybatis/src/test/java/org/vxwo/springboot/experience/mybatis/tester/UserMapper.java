@@ -13,6 +13,7 @@ public interface UserMapper {
     int udpateUserById(UserEntity value);
 
     @SelectProvider(value = GeneralSqlProvider.class, method = "selectByColumn")
+    @ResultMap("userEntityMap")
     UserEntity selectUserByColumn(UserEntity value);
 
     @DeleteProvider(value = GeneralSqlProvider.class, method = "deleteByColumn")
