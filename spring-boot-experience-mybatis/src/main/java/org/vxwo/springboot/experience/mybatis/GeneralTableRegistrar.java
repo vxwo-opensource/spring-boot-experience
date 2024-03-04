@@ -1,7 +1,7 @@
 package org.vxwo.springboot.experience.mybatis;
 
 import java.util.*;
-import java.util.concurrent.locks.*;
+import java.util.concurrent.ConcurrentHashMap;
 import org.apache.ibatis.builder.BuilderException;
 import org.apache.ibatis.io.ResolverUtil;
 import org.vxwo.springboot.experience.mybatis.annotations.GeneralTable;
@@ -12,41 +12,29 @@ import org.vxwo.springboot.experience.mybatis.sql.*;
  */
 
 public class GeneralTableRegistrar {
-    private final static Map<String, TableEntity> CACHE = new HashMap<>();
-    private final static ReadWriteLock CACHE_LOCK = new ReentrantReadWriteLock();
+    private final static Map<String, TableEntity> CACHE = new ConcurrentHashMap<>();
 
     public static TableEntity findTable(Class<?> type) {
-        TableEntity table = null;
         String typeName = type.getName();
 
-        Lock readLock = CACHE_LOCK.readLock();
-        readLock.lock();
-        table = CACHE.get(typeName);
-        readLock.unlock();
-
+        TableEntity table = CACHE.get(typeName);
         if (table == null) {
-            throw new BuilderException("Not found config for class: " + typeName);
+            throw new BuilderException("Not found `GeneralTable` for class: " + typeName);
         }
 
         return table;
     }
 
-    private static TableEntity addTableConfig(Class<?> type) {
-        TableEntity table = null;
+    private static void addTableConfig(Class<?> type) {
         String typeName = type.getName();
 
-        Lock writeLock = CACHE_LOCK.writeLock();
-        writeLock.lock();
-        try {
-            table = CACHE.get(typeName);
-            if (table == null) {
-                table = TableParser.parseTable(type, GeneralSqlHelper.isCamelCaseToUnderscore());
-                CACHE.put(typeName, table);
-            }
-        } finally {
-            writeLock.unlock();
+        TableEntity table = CACHE.get(typeName);
+        if (table != null) {
+            return;
         }
-        return table;
+
+        CACHE.put(typeName,
+                TableParser.parseTable(type, GeneralSqlHelper.isCamelCaseToUnderscore()));
     }
 
     public static void registerTablesInPackage(String packageName) {
