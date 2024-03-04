@@ -5,5 +5,7 @@
     <result column="group_ids" property="groupIds" typeHandler="org.vxwo.springboot.experience.mybatis.handlers.ListJsonTypeHandler"/>
     <result column="group_keys" property="groupKeys" typeHandler="org.vxwo.springboot.experience.mybatis.handlers.ListJsonTypeHandler"/>
     <result column="metadata" property="metadata" typeHandler="org.vxwo.springboot.experience.mybatis.handlers.MapJsonTypeHandler"/>
+    <result column="kv_entity" property="kvEntity" typeHandler="org.vxwo.springboot.experience.mybatis.handlers.SimpleJsonTypeHandler"/>
+    <result column="kv_entities" property="kvEntities" typeHandler="org.vxwo.springboot.experience.mybatis.tester.KvEntityListTypeHandler"/>
   </resultMap>
 </mapper>

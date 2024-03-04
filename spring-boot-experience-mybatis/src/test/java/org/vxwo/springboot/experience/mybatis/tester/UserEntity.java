@@ -22,4 +22,10 @@ public class UserEntity {
 
     @GeneralField(typeHandler = MapJsonTypeHandler.class)
     private Map<String, Object> metadata;
+
+    @GeneralField(typeHandler = SimpleJsonTypeHandler.class)
+    private KvEntity kvEntity;
+
+    @GeneralField(typeHandler = KvEntityListTypeHandler.class)
+    private List<KvEntity> kvEntities;
 }

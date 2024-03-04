@@ -22,6 +22,8 @@ public class ApplicationTest {
             add(" group_ids TEXT,");
             add(" group_keys TEXT,");
             add(" metadata TEXT,");
+            add(" kv_entity TEXT,");
+            add(" kv_entities TEXT,");
             add(" PRIMARY KEY (uid)");
             add(");");
         }
@@ -64,6 +66,12 @@ public class ApplicationTest {
                 put("name", "test");
             }
         });
+        user.setKvEntity(new KvEntity("key1", "value1"));
+        user.setKvEntities(new ArrayList<KvEntity>() {
+            {
+                add(new KvEntity("key2", "value2"));
+            }
+        });
 
         userMapper.insertUser(user);
         Assertions.assertEquals(1L, user.getUid());
@@ -91,6 +99,8 @@ public class ApplicationTest {
         Assertions.assertEquals(1, value.getGroupIds().get(0));
         Assertions.assertEquals("1", value.getGroupKeys().get(0));
         Assertions.assertEquals("test", value.getMetadata().get("name"));
+        Assertions.assertEquals("value1", value.getKvEntity().getValue());
+        Assertions.assertEquals("value2", value.getKvEntities().get(0).getValue());
     }
 
     @Test

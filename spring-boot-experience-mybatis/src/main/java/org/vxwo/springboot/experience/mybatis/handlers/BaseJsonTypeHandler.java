@@ -6,6 +6,7 @@ import org.apache.ibatis.type.MappedJdbcTypes;
 import org.springframework.util.StringUtils;
 import org.vxwo.springboot.experience.util.json.ObjectMapperBuilder;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
@@ -35,20 +36,29 @@ public abstract class BaseJsonTypeHandler<T> extends BaseTypeHandler<T> {
     @Override
     public T getNullableResult(ResultSet rs, String columnName) throws SQLException {
         String json = rs.getString(columnName);
-        return !StringUtils.hasText(json) ? null : parse(json);
+        return !StringUtils.hasText(json) ? null : parseValue(json);
     }
 
     @Override
     public T getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
         String json = rs.getString(columnIndex);
-        return !StringUtils.hasText(json) ? null : parse(json);
+        return !StringUtils.hasText(json) ? null : parseValue(json);
     }
 
     @Override
     public T getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
         String json = cs.getString(columnIndex);
-        return !StringUtils.hasText(json) ? null : parse(json);
+        return !StringUtils.hasText(json) ? null : parseValue(json);
     }
 
-    protected abstract T parse(String json) throws SQLException;
+    @SuppressWarnings("unchecked")
+    private T parseValue(String json) throws SQLException {
+        try {
+            return (T) OBJECT_MAPPER.readValue(json, getGenericValueType());
+        } catch (JsonProcessingException ex) {
+            throw new SQLException(ex);
+        }
+    }
+
+    protected abstract JavaType getGenericValueType();
 }
