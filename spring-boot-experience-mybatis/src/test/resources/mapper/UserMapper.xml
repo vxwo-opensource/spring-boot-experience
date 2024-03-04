@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.vxwo.springboot.experience.mybatis.tester.UserMapper">
-  <resultMap id="userEntityMap" type="org.vxwo.springboot.experience.mybatis.tester.UserEntity">
+  <resultMap id="userEntityMap" type="org.vxwo.springboot.experience.mybatis.tester.entity.UserEntity">
     <result column="group_ids" property="groupIds" typeHandler="org.vxwo.springboot.experience.mybatis.handlers.ListJsonTypeHandler"/>
     <result column="group_keys" property="groupKeys" typeHandler="org.vxwo.springboot.experience.mybatis.handlers.ListJsonTypeHandler"/>
     <result column="metadata" property="metadata" typeHandler="org.vxwo.springboot.experience.mybatis.handlers.MapJsonTypeHandler"/>
     <result column="kv_entity" property="kvEntity" typeHandler="org.vxwo.springboot.experience.mybatis.handlers.SimpleJsonTypeHandler"/>
-    <result column="kv_entities" property="kvEntities" typeHandler="org.vxwo.springboot.experience.mybatis.tester.KvEntityListTypeHandler"/>
+    <result column="kv_entities" property="kvEntities" typeHandler="org.vxwo.springboot.experience.mybatis.tester.handlers.KvEntityListTypeHandler"/>
   </resultMap>
 </mapper>

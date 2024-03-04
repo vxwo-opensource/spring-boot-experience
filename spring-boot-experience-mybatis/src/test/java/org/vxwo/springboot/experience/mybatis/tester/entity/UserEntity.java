@@ -1,8 +1,9 @@
-package org.vxwo.springboot.experience.mybatis.tester;
+package org.vxwo.springboot.experience.mybatis.tester.entity;
 
 import java.util.*;
 import org.vxwo.springboot.experience.mybatis.annotations.*;
 import org.vxwo.springboot.experience.mybatis.handlers.*;
+import org.vxwo.springboot.experience.mybatis.tester.handlers.KvEntityListTypeHandler;
 import lombok.Data;
 
 @Data

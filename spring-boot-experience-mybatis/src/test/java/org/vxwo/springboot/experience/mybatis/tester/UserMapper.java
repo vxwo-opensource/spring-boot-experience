@@ -2,6 +2,7 @@ package org.vxwo.springboot.experience.mybatis.tester;
 
 import org.apache.ibatis.annotations.*;
 import org.vxwo.springboot.experience.mybatis.GeneralSqlProvider;
+import org.vxwo.springboot.experience.mybatis.tester.entity.UserEntity;
 
 @Mapper
 public interface UserMapper {

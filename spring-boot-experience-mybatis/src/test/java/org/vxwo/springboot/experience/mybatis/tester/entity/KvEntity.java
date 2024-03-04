@@ -1,4 +1,4 @@
-package org.vxwo.springboot.experience.mybatis.tester;
+package org.vxwo.springboot.experience.mybatis.tester.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
