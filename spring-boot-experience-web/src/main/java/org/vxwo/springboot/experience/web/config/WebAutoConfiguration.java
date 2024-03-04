@@ -2,7 +2,6 @@ package org.vxwo.springboot.experience.web.config;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.vxwo.springboot.experience.web.ConfigPrefix;
 import org.vxwo.springboot.experience.web.CoreOrdered;
@@ -21,7 +20,6 @@ import org.vxwo.springboot.experience.web.processor.PathProcessor;
  * @author vxwo-team
  */
 
-@Configuration
 public class WebAutoConfiguration {
 
     @Bean

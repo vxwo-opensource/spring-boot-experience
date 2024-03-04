@@ -2,7 +2,6 @@ package org.vxwo.springboot.experience.redis.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.vxwo.springboot.experience.redis.processor.RedisFrequencyProcessor;
 import org.vxwo.springboot.experience.redis.processor.RedisLockProcessor;
@@ -16,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
  */
 
 @Slf4j
-@Configuration
 public class RedisAutoConfiguration {
     private String redisNamespace;
 
