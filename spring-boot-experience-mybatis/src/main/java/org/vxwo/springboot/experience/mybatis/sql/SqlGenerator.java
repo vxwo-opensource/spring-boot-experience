@@ -14,7 +14,7 @@ public final class SqlGenerator {
 
     private static String renderColumnSet(BaseSqlRender render, ColumnEntity column) {
         return render.renderReserved(column.getName()) + "="
-                + render.renderProperty(column.getFieldName(), column.getFieldTypeHandler());
+                + render.renderProperty(column.getFieldName(), column.getFieldTypeHandlerName());
     }
 
     public static String insertOne(BaseSqlRender render, TableEntity table, Object value) {
@@ -24,15 +24,14 @@ public final class SqlGenerator {
         ColumnEntity idColumn = table.getIdColumn();
         if (existsValue(idColumn, value)) {
             columns.add(render.renderReserved(idColumn.getName()));
-            properties.add(
-                    render.renderProperty(idColumn.getFieldName(), idColumn.getFieldTypeHandler()));
+            properties.add(render.renderProperty(idColumn.getFieldName(),
+                    idColumn.getFieldTypeHandlerName()));
         }
-
         table.getOtherColumns().forEach(column -> {
             if (existsValue(column, value)) {
                 columns.add(render.renderReserved(column.getName()));
-                properties.add(
-                        render.renderProperty(column.getFieldName(), column.getFieldTypeHandler()));
+                properties.add(render.renderProperty(column.getFieldName(),
+                        column.getFieldTypeHandlerName()));
             }
         });
         if (columns.isEmpty()) {

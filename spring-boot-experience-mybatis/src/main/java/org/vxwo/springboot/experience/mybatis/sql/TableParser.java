@@ -4,6 +4,7 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.apache.ibatis.reflection.ReflectionException;
+import org.apache.ibatis.type.TypeHandler;
 import org.apache.ibatis.type.UnknownTypeHandler;
 import org.springframework.util.StringUtils;
 import org.vxwo.springboot.experience.mybatis.annotations.*;
@@ -106,11 +107,12 @@ public final class TableParser {
                 continue;
             }
 
-            String typeHandler = null;
+            @SuppressWarnings("rawtypes")
+            Class<? extends TypeHandler> typeHandler = null;
             GeneralField fieldAnnotation = field.getAnnotation(GeneralField.class);
             if (fieldAnnotation != null) {
                 if (!fieldAnnotation.typeHandler().equals(UnknownTypeHandler.class)) {
-                    typeHandler = fieldAnnotation.typeHandler().getName();
+                    typeHandler = fieldAnnotation.typeHandler();
                 }
             }
 

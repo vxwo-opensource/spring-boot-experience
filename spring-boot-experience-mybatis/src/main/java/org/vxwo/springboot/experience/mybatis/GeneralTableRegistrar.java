@@ -12,12 +12,12 @@ import org.vxwo.springboot.experience.mybatis.sql.*;
  */
 
 public class GeneralTableRegistrar {
-    private final static Map<String, TableEntity> CACHE = new ConcurrentHashMap<>();
+    private final static Map<String, TableEntity> TABLE_CACHE = new ConcurrentHashMap<>();
 
     public static TableEntity findTable(Class<?> type) {
         String typeName = type.getName();
 
-        TableEntity table = CACHE.get(typeName);
+        TableEntity table = TABLE_CACHE.get(typeName);
         if (table == null) {
             throw new BuilderException("Not found `GeneralTable` for class: " + typeName);
         }
@@ -28,18 +28,19 @@ public class GeneralTableRegistrar {
     private static void addTableConfig(Class<?> type) {
         String typeName = type.getName();
 
-        TableEntity table = CACHE.get(typeName);
+        TableEntity table = TABLE_CACHE.get(typeName);
         if (table != null) {
             return;
         }
 
-        CACHE.put(typeName,
+        TABLE_CACHE.put(typeName,
                 TableParser.parseTable(type, GeneralSqlHelper.isCamelCaseToUnderscore()));
     }
 
     public static void registerTablesInPackage(String packageName) {
         ResolverUtil<Class<?>> resolverUtil = new ResolverUtil<>();
         resolverUtil.findAnnotated(GeneralTable.class, packageName);
+
         for (Class<?> type : resolverUtil.getClasses()) {
             addTableConfig(type);
         }
