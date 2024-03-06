@@ -15,6 +15,7 @@ sbexp:
       enabled: true
       request-header-keys:
         - User-Agent
+        - Authorization
       response-header-keys:
         - Access-Control-Allow-Origin
       include-paths:

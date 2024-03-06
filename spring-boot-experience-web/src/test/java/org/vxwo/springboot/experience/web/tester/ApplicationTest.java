@@ -46,6 +46,16 @@ public class ApplicationTest {
 
     @Test
     @Order(103)
+    public void testBearerIncludeShouldReturnSuccess() {
+        RequestEntity<?> request = RequestEntity
+                .get(String.format("http://localhost:%s/tester/bearer/include-path", localPort))
+                .header(HttpHeaders.AUTHORIZATION, "Bearer tester").build();
+        ResponseEntity<String> response = this.restTemplate.exchange(request, String.class);
+        Assertions.assertEquals(ReturnCode.SUCCESS, response.getBody());
+    }
+
+    @Test
+    @Order(103)
     public void testBearerIncludeShouldReturnFailed() {
         RequestEntity<?> request = RequestEntity
                 .get(String.format("http://localhost:%s/tester/bearer/include-path", localPort))
@@ -69,7 +79,7 @@ public class ApplicationTest {
     public void testBearerLoginedOptionalShouldReturnLogined() {
         RequestEntity<?> request = RequestEntity
                 .get(String.format("http://localhost:%s/tester/bearer/optional-path", localPort))
-                .header(HttpHeaders.AUTHORIZATION, "Bearer    tester").build();
+                .header(HttpHeaders.AUTHORIZATION, "Bearer tester").build();
         ResponseEntity<String> response = this.restTemplate.exchange(request, String.class);
         Assertions.assertEquals(ReturnCode.LOGINED, response.getBody());
     }
