@@ -6,6 +6,7 @@ import org.apache.ibatis.builder.BuilderException;
 import org.apache.ibatis.io.ResolverUtil;
 import org.vxwo.springboot.experience.mybatis.annotations.GeneralTable;
 import org.vxwo.springboot.experience.mybatis.sql.*;
+import org.vxwo.springboot.experience.util.lang.Tuple2;
 
 /**
  * @author vxwo-team
@@ -25,24 +26,31 @@ public class GeneralTableRegistrar {
         return table;
     }
 
-    private static void addTableConfig(Class<?> type) {
+    private static Tuple2<String, String> addTableConfig(Class<?> type) {
         String typeName = type.getName();
 
         TableEntity table = TABLE_CACHE.get(typeName);
         if (table != null) {
-            return;
+            return null;
         }
 
-        TABLE_CACHE.put(typeName,
-                TableParser.parseTable(type, GeneralSqlHelper.isCamelCaseToUnderscore()));
+        table = TableParser.parseTable(type, GeneralSqlHelper.isCamelCaseToUnderscore());
+        TABLE_CACHE.put(typeName, table);
+
+        return Tuple2.of(table.getName(), typeName);
     }
 
-    public static void registerTablesInPackage(String packageName) {
+    public static List<Tuple2<String, String>> registerTablesInPackage(String packageName) {
         ResolverUtil<Class<?>> resolverUtil = new ResolverUtil<>();
         resolverUtil.findAnnotated(GeneralTable.class, packageName);
 
+        List<Tuple2<String, String>> result = new ArrayList<>();
         for (Class<?> type : resolverUtil.getClasses()) {
-            addTableConfig(type);
+            Tuple2<String, String> tablePair = addTableConfig(type);
+            if (tablePair != null) {
+                result.add(tablePair);
+            }
         }
+        return result;
     }
 }
