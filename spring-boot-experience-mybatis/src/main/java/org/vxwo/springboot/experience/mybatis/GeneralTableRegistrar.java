@@ -34,7 +34,8 @@ public class GeneralTableRegistrar {
             return null;
         }
 
-        table = TableParser.parseTable(type, GeneralSqlHelper.isCamelCaseToUnderscore());
+        table = TableParser.parseTable(type,
+                GeneralSqlHelper.getConfiguration().isMapUnderscoreToCamelCase());
         TABLE_CACHE.put(typeName, table);
 
         return Tuple2.of(table.getName(), typeName);

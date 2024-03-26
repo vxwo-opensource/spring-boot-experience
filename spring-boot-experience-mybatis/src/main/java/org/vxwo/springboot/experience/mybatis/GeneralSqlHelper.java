@@ -24,20 +24,21 @@ public final class GeneralSqlHelper {
         }
     }
 
-    private static boolean camelCaseToUnderscore = false;
+    private static Configuration mybatisConfig;
     private static BaseSqlRender mybatisSqlRender = new ReservedSqlRender("", "");
 
-    public static void initialize(MybatisConfig config, Configuration sessionConfig) {
-        camelCaseToUnderscore = sessionConfig.isMapUnderscoreToCamelCase();
-        mybatisSqlRender = new ReservedSqlRender(config.getGeneralSql().getReservedPrefix(),
-                config.getGeneralSql().getReservedStuffix());
+    public static void initialize(MybatisConfig config, Configuration mybatisConfig) {
+        GeneralSqlHelper.mybatisConfig = mybatisConfig;
+        GeneralSqlHelper.mybatisSqlRender =
+                new ReservedSqlRender(config.getGeneralSql().getReservedPrefix(),
+                        config.getGeneralSql().getReservedStuffix());
     }
 
     public static BaseSqlRender getRender() {
         return mybatisSqlRender;
     }
 
-    public static boolean isCamelCaseToUnderscore() {
-        return camelCaseToUnderscore;
+    public static Configuration getConfiguration() {
+        return mybatisConfig;
     }
 }
