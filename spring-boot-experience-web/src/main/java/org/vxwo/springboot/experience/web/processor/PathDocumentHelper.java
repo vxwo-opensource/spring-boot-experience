@@ -59,7 +59,7 @@ public class PathDocumentHelper {
      */
     public List<String> getBearerPathMatchs(String tag) {
         List<String> pathMatches = new ArrayList<>();
-        if (apikeyAuthorization != null) {
+        if (bearerAuthorization != null) {
             pathMatches.addAll(absPathMatches(bearerAuthorization.getPathRuleMatcher()
                     .getPathMatchs(TagPathTester.fixTag(tag))));
         }
@@ -74,7 +74,7 @@ public class PathDocumentHelper {
      */
     public List<String> getBearerExcludePathMatchs(String tag) {
         List<String> pathMatches = new ArrayList<>();
-        if (apikeyAuthorization != null) {
+        if (bearerAuthorization != null) {
             pathMatches.addAll(absPathMatches(bearerAuthorization.getPathRuleMatcher()
                     .getExcludePathMatchs(TagPathTester.fixTag(tag))));
         }
