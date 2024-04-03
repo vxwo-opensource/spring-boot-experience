@@ -25,6 +25,10 @@ public class RedisTemplateRender {
         keyPrefixSerializer = new RedisPrefixKeySerializer(keyPrefix);
     }
 
+    public RedisPrefixKeySerializer getPrefixKeySerializer() {
+        return keyPrefixSerializer;
+    }
+
     public void renderStringTemplate(RedisTemplate<String, String> template) {
         template.setConnectionFactory(connectionFactory);
         template.setKeySerializer(keyPrefixSerializer);
