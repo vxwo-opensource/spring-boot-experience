@@ -17,16 +17,26 @@ public final class RequestUtil {
             "SBEXP:" + UUID.randomUUID().toString() + ":LocalValues";
 
     /**
-     * Get current HttpServletRequest
+     * Try get current HttpServletRequest
      *
      * @return  instance of HttpServletRequest
      */
-    public static HttpServletRequest getRequest() {
+    public static HttpServletRequest tryGetRequest() {
         HttpServletRequest request = null;
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         if (requestAttributes instanceof ServletRequestAttributes) {
             request = ((ServletRequestAttributes) requestAttributes).getRequest();
         }
+        return request;
+    }
+
+    /**
+     * Get current HttpServletRequest
+     *
+     * @return  instance of HttpServletRequest
+     */
+    public static HttpServletRequest getRequest() {
+        HttpServletRequest request = tryGetRequest();
         if (request == null) {
             throw new UnsupportedOperationException();
         }

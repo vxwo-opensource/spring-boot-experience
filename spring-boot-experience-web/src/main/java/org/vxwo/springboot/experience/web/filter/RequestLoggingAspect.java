@@ -25,10 +25,9 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
-import org.vxwo.springboot.experience.web.config.RequestLoggingConfig;
 import org.vxwo.springboot.experience.web.entity.RequestLoggingEntity;
 import org.vxwo.springboot.experience.web.handler.RequestLoggingHandler;
-import org.vxwo.springboot.experience.util.ExceptionUtils;
+import org.vxwo.springboot.experience.web.util.RequestUtil;
 
 /**
  * @author vxwo-team
@@ -36,18 +35,8 @@ import org.vxwo.springboot.experience.util.ExceptionUtils;
 
 @Aspect
 public class RequestLoggingAspect {
-
-    private final int stacktraceLimitLines;
-
-    @Autowired(required = false)
-    private HttpServletRequest request;
-
     @Autowired
     private RequestLoggingHandler processHandler;
-
-    public RequestLoggingAspect(RequestLoggingConfig value) {
-        stacktraceLimitLines = value.getStacktraceLimitLines();
-    }
 
     private static boolean ignoreParameterByAnnotation(MethodParameter methodParam) {
         boolean ignoreParameter = false;
@@ -72,6 +61,7 @@ public class RequestLoggingAspect {
     }
 
     private RequestLoggingEntity getLoggingEntity() {
+        HttpServletRequest request = RequestUtil.tryGetRequest();
         return request == null ? null
                 : (RequestLoggingEntity) request.getAttribute(RequestLoggingEntity.ATTRIBUTE_NAME);
     }
@@ -170,50 +160,5 @@ public class RequestLoggingAspect {
         }
 
         return result;
-    }
-
-    /**
-     * Put field `owner` to current logging
-     *
-     * @param owner  The owner
-     */
-    public void putOwner(String owner) {
-        RequestLoggingEntity entity = getLoggingEntity();
-        if (entity == null) {
-            return;
-        }
-
-        entity.setOwner(owner);
-    }
-
-    /**
-     * Put simple object to field `customDetail` in current logging
-     *
-     * @param key  the key in custom detail
-     * @param detail  the object to custom detail
-     */
-    public void putCustomDetail(String key, Object detail) {
-        RequestLoggingEntity entity = getLoggingEntity();
-        if (entity == null) {
-            return;
-        }
-
-        entity.getCustomDetails().put(key, detail);
-    }
-
-    /**
-     * Put exception to field `customDetail` in current logging
-     *
-     * @param key  the key in custom detail
-     * @param exception  the exception to custom detail
-     */
-    public void putCustomDetail(String key, Exception exception) {
-        RequestLoggingEntity entity = getLoggingEntity();
-        if (entity == null) {
-            return;
-        }
-
-        entity.getCustomDetails().put(key,
-                ExceptionUtils.getStackTrace(exception, stacktraceLimitLines));
     }
 }

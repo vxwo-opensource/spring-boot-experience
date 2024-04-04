@@ -15,6 +15,7 @@ import org.vxwo.springboot.experience.web.filter.RequestLoggingFilter;
 import org.vxwo.springboot.experience.web.filter.SecondaryAuthorizationFilter;
 import org.vxwo.springboot.experience.web.processor.PathDocumentHelper;
 import org.vxwo.springboot.experience.web.processor.PathProcessor;
+import org.vxwo.springboot.experience.web.processor.RequestLoggingHelper;
 
 /**
  * @author vxwo-team
@@ -40,6 +41,11 @@ public class WebAutoConfiguration {
     }
 
     @Bean
+    public RequestLoggingHelper requestLoggingHelper(RequestLoggingConfig value) {
+        return new RequestLoggingHelper(value);
+    }
+
+    @Bean
     @ConditionalOnProperty(value = ConfigPrefix.REQUEST_LOGGING + ".enabled", havingValue = "true")
     @Order(CoreOrdered.PRELOAD_LAYER + 1)
     public RequestLoggingFilter requestLoggingFilter(RequestLoggingConfig value) {
@@ -48,8 +54,8 @@ public class WebAutoConfiguration {
 
     @Bean
     @ConditionalOnProperty(value = ConfigPrefix.REQUEST_LOGGING + ".enabled", havingValue = "true")
-    public RequestLoggingAspect requestLoggingAspect(RequestLoggingConfig value) {
-        return new RequestLoggingAspect(value);
+    public RequestLoggingAspect requestLoggingAspect() {
+        return new RequestLoggingAspect();
     }
 
     @Bean
