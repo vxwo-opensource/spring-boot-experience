@@ -14,20 +14,21 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class RedisTemplateRender {
     private final RedisConnectionFactory connectionFactory;
-    private final RedisPrefixKeySerializer keyPrefixSerializer;
+    private final RedisPrefixKeySerializer prefixKeySerializer;
 
     private final static ObjectMapper OBJECT_MAPPER =
             ObjectMapperBuilder.builder().useDefault().build();
     private final static StringRedisSerializer STRING_SERIALIZER = new StringRedisSerializer();
 
-    public RedisTemplateRender(String keyPrefix, RedisConnectionFactory connectionFactory) {
+    public RedisTemplateRender(RedisPrefixKeySerializer prefixKeySerializer,
+            RedisConnectionFactory connectionFactory) {
         this.connectionFactory = connectionFactory;
-        keyPrefixSerializer = new RedisPrefixKeySerializer(keyPrefix);
+        this.prefixKeySerializer = prefixKeySerializer;
     }
 
     public void renderStringTemplate(RedisTemplate<String, String> template) {
         template.setConnectionFactory(connectionFactory);
-        template.setKeySerializer(keyPrefixSerializer);
+        template.setKeySerializer(prefixKeySerializer);
         template.setValueSerializer(STRING_SERIALIZER);
         template.setHashKeySerializer(STRING_SERIALIZER);
         template.setHashValueSerializer(STRING_SERIALIZER);
@@ -40,7 +41,7 @@ public class RedisTemplateRender {
         valueSerializer.setObjectMapper(OBJECT_MAPPER);
 
         template.setConnectionFactory(connectionFactory);
-        template.setKeySerializer(keyPrefixSerializer);
+        template.setKeySerializer(prefixKeySerializer);
         template.setValueSerializer(valueSerializer);
         template.setHashKeySerializer(STRING_SERIALIZER);
         template.setHashValueSerializer(valueSerializer);

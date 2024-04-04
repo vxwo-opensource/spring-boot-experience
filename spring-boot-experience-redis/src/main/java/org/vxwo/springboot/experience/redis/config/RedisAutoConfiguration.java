@@ -6,6 +6,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.vxwo.springboot.experience.redis.processor.RedisFrequencyProcessor;
 import org.vxwo.springboot.experience.redis.processor.RedisLockProcessor;
 import org.vxwo.springboot.experience.redis.render.RedisTemplateRender;
+import org.vxwo.springboot.experience.redis.serializer.RedisPrefixKeySerializer;
 import org.vxwo.springboot.experience.redis.serializer.RedisPrefixWrapper;
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,8 +37,15 @@ public class RedisAutoConfiguration {
     }
 
     @Bean
-    public RedisTemplateRender redisTemplateRender(RedisConnectionFactory redisConnectionFactory) {
-        return new RedisTemplateRender(redisNamespace, redisConnectionFactory);
+    public RedisPrefixKeySerializer redisPrefixKeySerializer() {
+        return new RedisPrefixKeySerializer(redisNamespace);
+    }
+
+    @Bean
+    public RedisTemplateRender redisTemplateRender(
+            RedisPrefixKeySerializer redisPrefixKeySerializer,
+            RedisConnectionFactory redisConnectionFactory) {
+        return new RedisTemplateRender(redisPrefixKeySerializer, redisConnectionFactory);
     }
 
     @Bean
