@@ -1,5 +1,6 @@
 package tester;
 
+import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -12,6 +13,8 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.vxwo.springboot.experience.web.entity.RequestLoggingEntity;
+import org.vxwo.springboot.experience.web.processor.RequestLoggingHelper;
 import tester.CustomRequestBody.ChoicesBody;
 import tester.CustomRequestBody.MultiChoicesBody;
 import tester.CustomRequestBody.MultiPatternBody;
@@ -24,6 +27,9 @@ public class ApplicationTest {
 
     @Autowired
     private TestRestTemplate restTemplate;
+
+    @Autowired
+    private RequestLoggingHelper requestLoggingHelper;
 
     @Test
     @Order(101)
@@ -281,5 +287,31 @@ public class ApplicationTest {
                 "http://localhost:%s/tester/document-helper/bearer?url=/tester/bearer/optional-path",
                 localPort), String.class);
         Assertions.assertEquals(ReturnCode.FAILED, response);
+    }
+
+    @Test
+    @Order(1201)
+    public void testRequestLoggingHelperWebReturnSuccess() {
+        String response = this.restTemplate.getForObject(
+                String.format("http://localhost:%s/tester/chaos/RequestLoggingHelper", localPort),
+                String.class);
+        Assertions.assertEquals(ReturnCode.SUCCESS, response);
+    }
+
+    @Test
+    @Order(2001)
+    public void testRequestLoggingHelper() {
+        String owner = UUID.randomUUID().toString();
+
+        RequestLoggingEntity first = requestLoggingHelper.createLocalEntity();
+        requestLoggingHelper.putOwner(owner);
+        Assertions.assertEquals(true, owner.equals(first.getOwner()));
+
+        requestLoggingHelper.removeLocalEntity();
+        requestLoggingHelper.putOwner("");
+        Assertions.assertEquals(true, owner.equals(first.getOwner()));
+
+        RequestLoggingEntity second = requestLoggingHelper.createLocalEntity();
+        Assertions.assertEquals(false, owner.equals(second.getOwner()));
     }
 }

@@ -13,6 +13,8 @@ import org.vxwo.springboot.experience.web.util.RequestUtil;
  */
 
 public class RequestLoggingHelper {
+    private final static ThreadLocal<RequestLoggingEntity> LOCAL_ENTITY = new ThreadLocal<>();
+
     private final int stacktraceLimitLines;
 
     public RequestLoggingHelper(RequestLoggingConfig value) {
@@ -21,10 +23,11 @@ public class RequestLoggingHelper {
 
     private RequestLoggingEntity getLoggingEntity() {
         HttpServletRequest request = RequestUtil.tryGetRequest();
-        if (request == null) {
-            return null;
+        if (request != null) {
+            return (RequestLoggingEntity) request.getAttribute(RequestLoggingEntity.ATTRIBUTE_NAME);
         }
-        return (RequestLoggingEntity) request.getAttribute(RequestLoggingEntity.ATTRIBUTE_NAME);
+
+        return LOCAL_ENTITY.get();
     }
 
     /**
@@ -70,5 +73,25 @@ public class RequestLoggingHelper {
 
         entity.getCustomDetails().put(key,
                 ExceptionUtils.getStackTrace(exception, stacktraceLimitLines));
+    }
+
+    /**
+     * Create thread local entity  to simulate request, MUST remove it when unused.
+     *
+     * @return
+     */
+    public RequestLoggingEntity createLocalEntity() {
+        LOCAL_ENTITY.remove();
+
+        RequestLoggingEntity entity = new RequestLoggingEntity();
+        LOCAL_ENTITY.set(entity);
+        return entity;
+    }
+
+    /**
+     * Remove current thread local entity in simulate request
+     */
+    public void removeLocalEntity() {
+        LOCAL_ENTITY.remove();
     }
 }

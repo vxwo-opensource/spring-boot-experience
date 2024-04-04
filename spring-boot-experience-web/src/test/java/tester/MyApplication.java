@@ -10,9 +10,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.vxwo.springboot.experience.web.entity.RequestLoggingEntity;
 import org.vxwo.springboot.experience.web.processor.PathDocumentHelper;
-import static tester.CustomRequestBody.*;
+import org.vxwo.springboot.experience.web.processor.RequestLoggingHelper;
+import tester.CustomRequestBody.ChoicesBody;
+import tester.CustomRequestBody.MultiChoicesBody;
+import tester.CustomRequestBody.MultiPatternBody;
 import java.util.List;
+import java.util.UUID;
 import javax.validation.constraints.NotBlank;
 
 @RestController
@@ -22,6 +27,9 @@ public class MyApplication {
 
     @Autowired
     private PathDocumentHelper documentHelper;
+
+    @Autowired
+    private RequestLoggingHelper requestLoggingHelper;
 
     private AntPathMatcher pathMatcher = new AntPathMatcher();
 
@@ -105,6 +113,25 @@ public class MyApplication {
             }
         }
         return matchCount < 1 ? ReturnCode.FAILED : ReturnCode.SUCCESS;
+    }
+
+    @GetMapping("/chaos/RequestLoggingHelper")
+    public String doTestRequestLoggingHelper() {
+        String owner = UUID.randomUUID().toString();
+
+        RequestLoggingEntity first = requestLoggingHelper.createLocalEntity();
+        requestLoggingHelper.putOwner(owner);
+        if (owner.equals(first.getOwner())) {
+            return ReturnCode.FAILED;
+        }
+
+        first.setOwner(owner);
+        RequestLoggingEntity second = requestLoggingHelper.createLocalEntity();
+        if (owner.equals(second.getOwner())) {
+            return ReturnCode.FAILED;
+        }
+
+        return ReturnCode.SUCCESS;
     }
 
 }
