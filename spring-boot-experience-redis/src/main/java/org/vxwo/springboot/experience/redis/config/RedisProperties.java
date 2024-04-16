@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Data
 @ConfigurationProperties(prefix = "sbexp.redis")
-public class RedisConfig {
+public class RedisProperties {
     private String namespace;
     private String namespaceStuffix;
 }

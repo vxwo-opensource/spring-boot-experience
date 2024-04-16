@@ -9,12 +9,12 @@ import lombok.Data;
 
 @Data
 @ConfigurationProperties(prefix = "sbexp.mybatis")
-public class MybatisConfig {
+public class MybatisProperties {
     @Data
-    public static class GeneralSqlConfig {
+    public static class GeneralSqlProperties {
         private String reservedPrefix;
         private String reservedStuffix;
     }
 
-    private GeneralSqlConfig generalSql;
+    private GeneralSqlProperties generalSql;
 }

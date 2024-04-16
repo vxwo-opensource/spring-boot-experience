@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.vxwo.springboot.experience.web.ConfigPrefix;
-import org.vxwo.springboot.experience.web.config.FrequencyControlConfig;
+import org.vxwo.springboot.experience.web.config.FrequencyControlProperties;
 import org.vxwo.springboot.experience.web.handler.FrequencyControlFailureHandler;
 import org.vxwo.springboot.experience.web.handler.FrequencyControlHandler;
 import org.vxwo.springboot.experience.web.matcher.TagPathTester;
@@ -41,7 +41,7 @@ public class FrequencyControlFilter extends OncePerRequestFilter {
     @Autowired
     private FrequencyControlFailureHandler failureHandler;
 
-    public FrequencyControlFilter(FrequencyControlConfig value) {
+    public FrequencyControlFilter(FrequencyControlProperties value) {
         if (value.getConcurrency().getDurationMs() < 1) {
             throw new RuntimeException(
                     String.format("Configuration: {%s.concurrency.duration-ms} less then 1",
@@ -61,7 +61,7 @@ public class FrequencyControlFilter extends OncePerRequestFilter {
 
         fixedIntervals = new ArrayList<>();
         for (int i = 0; i < value.getFixedIntervals().size(); ++i) {
-            FrequencyControlConfig.FixedInterval s = value.getFixedIntervals().get(i);
+            FrequencyControlProperties.FixedInterval s = value.getFixedIntervals().get(i);
             String configPathName =
                     String.format("%s.fixed-intervals.[%d]", ConfigPrefix.FREQUENCY_CONTROL, i);
 

@@ -1,7 +1,7 @@
 package org.vxwo.springboot.experience.mybatis;
 
 import org.apache.ibatis.session.Configuration;
-import org.vxwo.springboot.experience.mybatis.config.MybatisConfig;
+import org.vxwo.springboot.experience.mybatis.config.MybatisProperties;
 import org.vxwo.springboot.experience.mybatis.sql.*;
 
 /**
@@ -27,7 +27,7 @@ public final class GeneralSqlHelper {
     private static Configuration mybatisConfig;
     private static BaseSqlRender mybatisSqlRender = new ReservedSqlRender("", "");
 
-    public static void initialize(MybatisConfig config, Configuration mybatisConfig) {
+    public static void initialize(MybatisProperties config, Configuration mybatisConfig) {
         GeneralSqlHelper.mybatisConfig = mybatisConfig;
         GeneralSqlHelper.mybatisSqlRender =
                 new ReservedSqlRender(config.getGeneralSql().getReservedPrefix(),

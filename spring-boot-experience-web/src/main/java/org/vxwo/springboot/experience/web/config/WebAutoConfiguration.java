@@ -22,9 +22,9 @@ import org.vxwo.springboot.experience.web.processor.RequestLoggingHelper;
  * @author vxwo-team
  */
 
-@EnableConfigurationProperties({CorsConfig.class, RequestLoggingConfig.class,
-        ApiKeyAuthorizationConfig.class, BearerAuthorizationConfig.class,
-        ManualAuthorizationConfig.class, FrequencyControlConfig.class})
+@EnableConfigurationProperties({CorsProperties.class, RequestLoggingProperties.class,
+    ApiKeyAuthorizationProperties.class, BearerAuthorizationProperties.class,
+    ManualAuthorizationProperties.class, FrequencyControlProperties.class})
 public class WebAutoConfiguration {
 
     @Bean
@@ -40,19 +40,19 @@ public class WebAutoConfiguration {
     @Bean
     @ConditionalOnProperty(value = ConfigPrefix.CORS + ".enabled", havingValue = "true")
     @Order(CoreOrdered.PRELOAD_LAYER)
-    public CorsFilter corsFilter(CorsConfig value) {
+    public CorsFilter corsFilter(CorsProperties value) {
         return new CorsFilter(value);
     }
 
     @Bean
-    public RequestLoggingHelper requestLoggingHelper(RequestLoggingConfig value) {
+    public RequestLoggingHelper requestLoggingHelper(RequestLoggingProperties value) {
         return new RequestLoggingHelper(value);
     }
 
     @Bean
     @ConditionalOnProperty(value = ConfigPrefix.REQUEST_LOGGING + ".enabled", havingValue = "true")
     @Order(CoreOrdered.PRELOAD_LAYER + 1)
-    public RequestLoggingFilter requestLoggingFilter(RequestLoggingConfig value) {
+    public RequestLoggingFilter requestLoggingFilter(RequestLoggingProperties value) {
         return new RequestLoggingFilter(value);
     }
 
@@ -64,39 +64,39 @@ public class WebAutoConfiguration {
 
     @Bean
     @ConditionalOnProperty(value = ConfigPrefix.AUTHORIZATION_API_KEY + ".enabled",
-            havingValue = "true")
+        havingValue = "true")
     @Order(CoreOrdered.FIRST_AUTHORIZATION_LAYER + 1)
-    public ApiKeyAuthorizationFilter apiKeyAuthorizationFilter(ApiKeyAuthorizationConfig value) {
+    public ApiKeyAuthorizationFilter apiKeyAuthorizationFilter(ApiKeyAuthorizationProperties value) {
         return new ApiKeyAuthorizationFilter(value);
     }
 
     @Bean
     @ConditionalOnProperty(value = ConfigPrefix.AUTHORIZATION_BEARER + ".enabled",
-            havingValue = "true")
+        havingValue = "true")
     @Order(CoreOrdered.FIRST_AUTHORIZATION_LAYER + 2)
-    public BearerAuthorizationFilter bearerAuthorizationFilter(BearerAuthorizationConfig value) {
+    public BearerAuthorizationFilter bearerAuthorizationFilter(BearerAuthorizationProperties value) {
         return new BearerAuthorizationFilter(value);
     }
 
     @Bean
     @ConditionalOnProperty(value = ConfigPrefix.AUTHORIZATION_MANUAL + ".enabled",
-            havingValue = "true")
+        havingValue = "true")
     @Order(CoreOrdered.FIRST_AUTHORIZATION_LAYER + 3)
-    public ManualAuthorizationFilter manualAuthorizationFilter(ManualAuthorizationConfig value) {
+    public ManualAuthorizationFilter manualAuthorizationFilter(ManualAuthorizationProperties value) {
         return new ManualAuthorizationFilter(value);
     }
 
     @Bean
     @ConditionalOnProperty(value = ConfigPrefix.FREQUENCY_CONTROL + ".enabled",
-            havingValue = "true")
+        havingValue = "true")
     @Order(CoreOrdered.FREQUENCY_CONTROL_LAYER)
-    public FrequencyControlFilter frequencyControlFilter(FrequencyControlConfig value) {
+    public FrequencyControlFilter frequencyControlFilter(FrequencyControlProperties value) {
         return new FrequencyControlFilter(value);
     }
 
     @Bean
     @ConditionalOnProperty(value = ConfigPrefix.AUTHORIZATION_SECONDARY + ".enabled",
-            havingValue = "true")
+        havingValue = "true")
     @Order(CoreOrdered.SECONDARY_AUTHORIZATION_LAYER)
     public SecondaryAuthorizationFilter secondaryAuthorizationFilter() {
         return new SecondaryAuthorizationFilter();

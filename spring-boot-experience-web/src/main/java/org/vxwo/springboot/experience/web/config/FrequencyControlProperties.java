@@ -11,7 +11,7 @@ import org.vxwo.springboot.experience.web.ConfigPrefix;
 
 @Data
 @ConfigurationProperties(prefix = ConfigPrefix.FREQUENCY_CONTROL)
-public class FrequencyControlConfig {
+public class FrequencyControlProperties {
 
     @Data
     public static class Concurrency {

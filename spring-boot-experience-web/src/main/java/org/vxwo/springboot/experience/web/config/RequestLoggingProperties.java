@@ -11,7 +11,7 @@ import lombok.Data;
 
 @Data
 @ConfigurationProperties(prefix = ConfigPrefix.REQUEST_LOGGING)
-public class RequestLoggingConfig {
+public class RequestLoggingProperties {
     private boolean ignoreRequestHeaders;
     private List<String> requestHeaderKeys;
     private boolean ignoreResponseHeaders;

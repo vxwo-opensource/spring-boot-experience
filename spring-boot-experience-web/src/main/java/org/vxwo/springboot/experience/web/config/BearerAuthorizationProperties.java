@@ -10,7 +10,8 @@ import org.vxwo.springboot.experience.web.ConfigPrefix;
  */
 
 @Data
-@ConfigurationProperties(prefix = ConfigPrefix.AUTHORIZATION_MANUAL)
-public class ManualAuthorizationConfig {
+@ConfigurationProperties(prefix = ConfigPrefix.AUTHORIZATION_BEARER)
+public class BearerAuthorizationProperties {
+    private List<String> bearerKeys;
     private List<GroupPathRule> pathRules;
 }

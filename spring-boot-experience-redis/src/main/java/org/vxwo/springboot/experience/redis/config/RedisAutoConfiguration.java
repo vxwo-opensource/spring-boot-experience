@@ -17,12 +17,12 @@ import lombok.extern.slf4j.Slf4j;
  */
 
 @Slf4j
-@EnableConfigurationProperties(RedisConfig.class)
+@EnableConfigurationProperties(RedisProperties.class)
 public class RedisAutoConfiguration {
     private String redisNamespace;
 
     @Autowired
-    public RedisAutoConfiguration(RedisConfig value) {
+    public RedisAutoConfiguration(RedisProperties value) {
         redisNamespace = value.getNamespace();
         if (!redisNamespace.isEmpty() && !redisNamespace.endsWith(value.getNamespaceStuffix())) {
             redisNamespace += value.getNamespaceStuffix();

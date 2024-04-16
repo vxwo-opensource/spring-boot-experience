@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.vxwo.springboot.experience.web.config.CorsConfig;
+import org.vxwo.springboot.experience.web.config.CorsProperties;
 import org.vxwo.springboot.experience.web.util.SplitUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,7 +25,7 @@ public class CorsFilter extends OncePerRequestFilter {
     private final String firstAllowOrigin;
     private final List<String> acceptAllowOrigins;
 
-    public CorsFilter(CorsConfig value) {
+    public CorsFilter(CorsProperties value) {
         parseReferer = value.isParseReferer();
 
         acceptAllowOrigins = SplitUtil.shrinkList(value.getAllowOrigins());

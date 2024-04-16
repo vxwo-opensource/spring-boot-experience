@@ -17,11 +17,11 @@ import lombok.extern.slf4j.Slf4j;
  */
 
 @Slf4j
-@EnableConfigurationProperties(MybatisConfig.class)
+@EnableConfigurationProperties(MybatisProperties.class)
 public class MybatisAutoConfiguration {
 
     @Autowired
-    public MybatisAutoConfiguration(MybatisConfig value, SqlSessionFactory sqlSessionFactory,
+    public MybatisAutoConfiguration(MybatisProperties value, SqlSessionFactory sqlSessionFactory,
             ApplicationContext applicationContext) {
         Set<String> basePackages = new HashSet<>();
         applicationContext.getBeansWithAnnotation(ComponentScan.class).forEach((name, instance) -> {

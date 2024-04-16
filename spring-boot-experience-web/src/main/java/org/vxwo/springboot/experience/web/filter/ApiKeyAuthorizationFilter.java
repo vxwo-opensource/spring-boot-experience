@@ -12,7 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.vxwo.springboot.experience.web.ConfigPrefix;
-import org.vxwo.springboot.experience.web.config.ApiKeyAuthorizationConfig;
+import org.vxwo.springboot.experience.web.config.ApiKeyAuthorizationProperties;
 import org.vxwo.springboot.experience.web.handler.AuthorizationFailureHandler;
 import org.vxwo.springboot.experience.web.matcher.TagPathTester;
 import org.vxwo.springboot.experience.web.matcher.OwnerPathRuleMatcher;
@@ -39,7 +39,7 @@ public class ApiKeyAuthorizationFilter extends OncePerRequestFilter {
     @Autowired
     private AuthorizationFailureHandler failureHandler;
 
-    public ApiKeyAuthorizationFilter(ApiKeyAuthorizationConfig value) {
+    public ApiKeyAuthorizationFilter(ApiKeyAuthorizationProperties value) {
         headerKeys = SplitUtil.shrinkList(value.getHeaderKeys());
         parseBearer = value.isParseBearer();
         bearerKeys = value.getBearerKeys();

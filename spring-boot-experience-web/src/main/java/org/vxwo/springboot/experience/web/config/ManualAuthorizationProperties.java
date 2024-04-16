@@ -10,8 +10,7 @@ import org.vxwo.springboot.experience.web.ConfigPrefix;
  */
 
 @Data
-@ConfigurationProperties(prefix = ConfigPrefix.CORS)
-public class CorsConfig {
-    private boolean parseReferer;
-    private List<String> allowOrigins;
+@ConfigurationProperties(prefix = ConfigPrefix.AUTHORIZATION_MANUAL)
+public class ManualAuthorizationProperties {
+    private List<GroupPathRule> pathRules;
 }

@@ -11,7 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.vxwo.springboot.experience.web.ConfigPrefix;
-import org.vxwo.springboot.experience.web.config.BearerAuthorizationConfig;
+import org.vxwo.springboot.experience.web.config.BearerAuthorizationProperties;
 import org.vxwo.springboot.experience.web.handler.AuthorizationFailureHandler;
 import org.vxwo.springboot.experience.web.handler.BearerAuthorizationHandler;
 import org.vxwo.springboot.experience.web.matcher.TagPathTester;
@@ -40,7 +40,7 @@ public class BearerAuthorizationFilter extends OncePerRequestFilter {
     @Autowired
     private AuthorizationFailureHandler failureHandler;
 
-    public BearerAuthorizationFilter(BearerAuthorizationConfig value) {
+    public BearerAuthorizationFilter(BearerAuthorizationProperties value) {
         bearerKeys = value.getBearerKeys();
         pathRuleMatcher = new GroupPathRuleMatcher(
                 ConfigPrefix.AUTHORIZATION_BEARER + ".path-rules", value.getPathRules());

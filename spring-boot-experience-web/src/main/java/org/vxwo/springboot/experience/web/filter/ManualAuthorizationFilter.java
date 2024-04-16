@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.vxwo.springboot.experience.web.ConfigPrefix;
-import org.vxwo.springboot.experience.web.config.ManualAuthorizationConfig;
+import org.vxwo.springboot.experience.web.config.ManualAuthorizationProperties;
 import org.vxwo.springboot.experience.web.handler.AuthorizationFailureHandler;
 import org.vxwo.springboot.experience.web.handler.ManualAuthorizationHandler;
 import org.vxwo.springboot.experience.web.matcher.TagPathTester;
@@ -36,7 +36,7 @@ public class ManualAuthorizationFilter extends OncePerRequestFilter {
     @Autowired
     private AuthorizationFailureHandler failureHandler;
 
-    public ManualAuthorizationFilter(ManualAuthorizationConfig value) {
+    public ManualAuthorizationFilter(ManualAuthorizationProperties value) {
         pathRuleMatcher = new GroupPathRuleMatcher(
                 ConfigPrefix.AUTHORIZATION_BEARER + ".path-rules", value.getPathRules());
 

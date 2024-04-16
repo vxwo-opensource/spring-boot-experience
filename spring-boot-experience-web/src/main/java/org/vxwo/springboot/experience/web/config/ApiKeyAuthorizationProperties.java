@@ -10,8 +10,10 @@ import org.vxwo.springboot.experience.web.ConfigPrefix;
  */
 
 @Data
-@ConfigurationProperties(prefix = ConfigPrefix.AUTHORIZATION_BEARER)
-public class BearerAuthorizationConfig {
+@ConfigurationProperties(prefix = ConfigPrefix.AUTHORIZATION_API_KEY)
+public class ApiKeyAuthorizationProperties {
+    private List<String> headerKeys;
+    private boolean parseBearer;
     private List<String> bearerKeys;
-    private List<GroupPathRule> pathRules;
+    private List<OwnerPathRule> pathRules;
 }

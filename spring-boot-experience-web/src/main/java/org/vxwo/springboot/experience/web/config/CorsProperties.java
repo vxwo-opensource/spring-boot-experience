@@ -10,10 +10,8 @@ import org.vxwo.springboot.experience.web.ConfigPrefix;
  */
 
 @Data
-@ConfigurationProperties(prefix = ConfigPrefix.AUTHORIZATION_API_KEY)
-public class ApiKeyAuthorizationConfig {
-    private List<String> headerKeys;
-    private boolean parseBearer;
-    private List<String> bearerKeys;
-    private List<OwnerPathRule> pathRules;
+@ConfigurationProperties(prefix = ConfigPrefix.CORS)
+public class CorsProperties {
+    private boolean parseReferer;
+    private List<String> allowOrigins;
 }

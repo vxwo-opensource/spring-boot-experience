@@ -2,7 +2,7 @@ package org.vxwo.springboot.experience.web.processor;
 
 import javax.servlet.http.HttpServletRequest;
 import org.vxwo.springboot.experience.util.ExceptionUtils;
-import org.vxwo.springboot.experience.web.config.RequestLoggingConfig;
+import org.vxwo.springboot.experience.web.config.RequestLoggingProperties;
 import org.vxwo.springboot.experience.web.entity.RequestLoggingEntity;
 import org.vxwo.springboot.experience.web.util.RequestUtil;
 
@@ -17,7 +17,7 @@ public class RequestLoggingHelper {
 
     private final int stacktraceLimitLines;
 
-    public RequestLoggingHelper(RequestLoggingConfig value) {
+    public RequestLoggingHelper(RequestLoggingProperties value) {
         stacktraceLimitLines = value.getStacktraceLimitLines();
     }
 

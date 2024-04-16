@@ -20,7 +20,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingResponseWrapper;
-import org.vxwo.springboot.experience.web.config.RequestLoggingConfig;
+import org.vxwo.springboot.experience.web.config.RequestLoggingProperties;
 import org.vxwo.springboot.experience.web.entity.RequestLoggingEntity;
 import org.vxwo.springboot.experience.web.handler.RequestLoggingHandler;
 import org.vxwo.springboot.experience.web.matcher.PathTester;
@@ -54,7 +54,7 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
     @Autowired
     private RequestLoggingHandler processHandler;
 
-    public RequestLoggingFilter(RequestLoggingConfig value) {
+    public RequestLoggingFilter(RequestLoggingProperties value) {
         Set<String> requestHeaderKeys = new HashSet<>();
         if (ObjectUtils.isEmpty(value.getRequestHeaderKeys())
                 || value.getRequestHeaderKeys().contains("*")) {
