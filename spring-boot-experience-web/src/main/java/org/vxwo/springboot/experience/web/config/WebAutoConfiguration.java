@@ -1,6 +1,7 @@
 package org.vxwo.springboot.experience.web.config;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
 import org.vxwo.springboot.experience.web.ConfigPrefix;
@@ -21,6 +22,9 @@ import org.vxwo.springboot.experience.web.processor.RequestLoggingHelper;
  * @author vxwo-team
  */
 
+@EnableConfigurationProperties({CorsConfig.class, RequestLoggingConfig.class,
+        ApiKeyAuthorizationConfig.class, BearerAuthorizationConfig.class,
+        ManualAuthorizationConfig.class, FrequencyControlConfig.class})
 public class WebAutoConfiguration {
 
     @Bean

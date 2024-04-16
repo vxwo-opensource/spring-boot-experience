@@ -3,6 +3,7 @@ package org.vxwo.springboot.experience.mybatis.config;
 import java.util.*;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.annotation.AnnotatedElementUtils;
@@ -16,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 
 @Slf4j
+@EnableConfigurationProperties(MybatisConfig.class)
 public class MybatisAutoConfiguration {
 
     @Autowired
