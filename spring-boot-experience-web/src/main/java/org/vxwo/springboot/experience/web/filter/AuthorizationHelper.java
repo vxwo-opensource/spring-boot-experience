@@ -1,7 +1,7 @@
 package org.vxwo.springboot.experience.web.filter;
 
 import java.util.UUID;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import org.vxwo.springboot.experience.web.matcher.TagPathTester;
 
 /**

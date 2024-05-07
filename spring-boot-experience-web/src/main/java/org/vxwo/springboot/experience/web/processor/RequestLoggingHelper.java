@@ -1,6 +1,6 @@
 package org.vxwo.springboot.experience.web.processor;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import org.vxwo.springboot.experience.util.ExceptionUtils;
 import org.vxwo.springboot.experience.web.config.RequestLoggingProperties;
 import org.vxwo.springboot.experience.web.entity.RequestLoggingEntity;

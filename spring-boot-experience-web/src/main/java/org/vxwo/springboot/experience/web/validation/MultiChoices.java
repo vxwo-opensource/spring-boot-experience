@@ -1,7 +1,7 @@
 package org.vxwo.springboot.experience.web.validation;
 
 import java.lang.annotation.*;
-import javax.validation.*;
+import jakarta.validation.*;
 
 /**
  * @author vxwo-team

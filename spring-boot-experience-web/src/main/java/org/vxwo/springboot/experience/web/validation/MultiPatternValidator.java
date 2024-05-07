@@ -2,7 +2,7 @@ package org.vxwo.springboot.experience.web.validation;
 
 import java.util.*;
 import java.util.regex.Pattern;
-import javax.validation.*;
+import jakarta.validation.*;
 
 /**
  * @author vxwo-team

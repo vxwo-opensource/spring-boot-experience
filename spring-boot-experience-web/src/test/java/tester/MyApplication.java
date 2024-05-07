@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.vxwo.springboot.experience.web.entity.RequestLoggingEntity;
 import org.vxwo.springboot.experience.web.processor.PathDocumentHelper;
 import org.vxwo.springboot.experience.web.processor.RequestLoggingHelper;
+import jakarta.validation.constraints.NotBlank;
 import tester.CustomRequestBody.ChoicesBody;
 import tester.CustomRequestBody.MultiChoicesBody;
 import tester.CustomRequestBody.MultiPatternBody;
 import java.util.List;
 import java.util.UUID;
-import javax.validation.constraints.NotBlank;
 
 @RestController
 @SpringBootApplication
