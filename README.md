@@ -1,5 +1,4 @@
 # Spring Boot Experience
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.vxwo.springboot.experience/spring-boot-experience/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.vxwo.springboot.experience/spring-boot-experience)
 
 Experience accumulation for Spring Boot.  
 Organize various experience tools accumulated using SpringBoot in various projects.
@@ -21,7 +20,7 @@ Organize various experience tools accumulated using SpringBoot in various projec
   ... others
 
   <properties>
-    <sbexp.version>1.4.0</sbexp.version>
+    <sbexp.version>3.0.0-SNAPSHOT</sbexp.version>
     ... others
   </properties>
 
