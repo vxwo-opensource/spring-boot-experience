@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.JavaType;
  */
 
 @MappedTypes({List.class})
+@MappedJdbcTypes(JdbcType.VARCHAR)
 public class ListJsonTypeHandler<T> extends BaseJsonTypeHandler<List<T>> {
     @Override
     protected JavaType getGenericValueType() {
