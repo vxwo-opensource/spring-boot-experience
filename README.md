@@ -21,7 +21,7 @@ Organize various experience tools accumulated using SpringBoot in various projec
   ... others
 
   <properties>
-    <sbexp.version>1.4.1</sbexp.version>
+    <sbexp.version>1.4.2</sbexp.version>
     ... others
   </properties>
 
