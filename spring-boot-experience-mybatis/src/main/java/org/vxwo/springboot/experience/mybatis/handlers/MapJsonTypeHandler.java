@@ -8,8 +8,8 @@ import com.fasterxml.jackson.databind.JavaType;
  * @author vxwo-team
  */
 
-@MappedTypes({Map.class})
-@MappedJdbcTypes(JdbcType.VARCHAR)
+@MappedTypes(Map.class)
+@MappedJdbcTypes({JdbcType.VARCHAR, JdbcType.CHAR, JdbcType.LONGVARCHAR})
 public class MapJsonTypeHandler<K, V> extends BaseJsonTypeHandler<Map<K, V>> {
     @Override
     protected JavaType getGenericValueType() {
