@@ -13,6 +13,9 @@ public interface UserMapper {
     @UpdateProvider(value = GeneralSqlProvider.class, method = "updateOneById")
     int udpateUserById(UserEntity value);
 
+    @UpdateProvider(value = GeneralSqlProvider.class, method = "updateOneAddById")
+    int udpateUserAddById(UserEntity value);
+
     @SelectProvider(value = GeneralSqlProvider.class, method = "selectByColumn")
     @ResultMap("userEntityMap")
     UserEntity selectUserByColumn(UserEntity value);

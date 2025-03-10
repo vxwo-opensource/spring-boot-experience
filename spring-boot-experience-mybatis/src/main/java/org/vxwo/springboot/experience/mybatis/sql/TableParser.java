@@ -107,10 +107,12 @@ public final class TableParser {
                 continue;
             }
 
+            boolean allowAdd = false;
             @SuppressWarnings("rawtypes")
             Class<? extends TypeHandler> typeHandler = null;
             GeneralField fieldAnnotation = field.getAnnotation(GeneralField.class);
             if (fieldAnnotation != null) {
+                allowAdd = fieldAnnotation.allowAdd();
                 if (!fieldAnnotation.typeHandler().equals(UnknownTypeHandler.class)) {
                     typeHandler = fieldAnnotation.typeHandler();
                 }
@@ -118,7 +120,7 @@ public final class TableParser {
 
             ColumnEntity column =
                     ColumnEntity.of(camelCaseToUnderscore ? camelToUnderline(fieldName) : fieldName,
-                            fieldName, getterMethod, typeHandler);
+                            fieldName, getterMethod, allowAdd, typeHandler);
 
             if (foundIdAnnotation) {
                 idByAnnotation = column;

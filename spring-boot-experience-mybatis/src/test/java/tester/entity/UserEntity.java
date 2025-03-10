@@ -15,6 +15,9 @@ public class UserEntity {
     private String pwd;
     private Date createdAt;
 
+    @GeneralField(allowAdd = true)
+    private Long count;
+
     @GeneralField(typeHandler = ListJsonTypeHandler.class)
     private List<Integer> groupIds;
 

@@ -49,6 +49,19 @@ public class SqlGeneratorTest {
 
     @Test
     @Order(103)
+    public void testSqlUpdateOneAddByIdShouldSuccess() {
+        UserEntity user = new UserEntity();
+        user.setUid(0L);
+        user.setPwd("pwd");
+        user.setCount(123L);
+
+        String expected =
+                "UPDATE [user] SET [pwd]=#{pwd}, [count]=[count]+#{count} WHERE [uid]=#{uid}";
+        Assertions.assertEquals(expected, SqlGenerator.updateOneAddById(sqlRender, sqlTable, user));
+    }
+
+    @Test
+    @Order(104)
     public void testSqlSelectByColumnShouldSuccess() {
         UserEntity user = new UserEntity();
         user.setUser("user");
@@ -59,7 +72,7 @@ public class SqlGeneratorTest {
     }
 
     @Test
-    @Order(104)
+    @Order(105)
     public void testSqlDeleteByColumnShouldSuccess() {
         UserEntity user = new UserEntity();
         user.setUser("user");

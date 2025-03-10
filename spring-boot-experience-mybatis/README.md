@@ -27,6 +27,15 @@ This annotation can be used to tell GeneralSqlProvider the tale name.
 
 This annotation can be used to tell GeneralSqlProvider the `id` column.
 
+### GeneralField
+
+This annotation can be used to tell GeneralSqlProvider the column attributes.
+
+| *Key*       | *Type*      | *Required* | *Default* | *Description*                                   |
+|-------------|-------------|------------|-----------|-------------------------------------------------|
+| allowAdd    | Boolean     |            | false     | Allowed to be used in add operations            |
+| typeHandler | TypeHandler |            |           | Specifies the TypeHandler for column conversion |
+
 ### Examples
 
 ```java
@@ -40,6 +49,13 @@ public static class UserEntity {
 
     private String user;
     private String pwd;
+
+    @GeneralField(allowAdd = true)
+    private Long count;
+
+    @GeneralField(typeHandler = ListJsonTypeHandler.class)
+    private List<String> phones;
+
     private Date createdAt;
 }
 ...
@@ -87,6 +103,26 @@ user.setPwd("123456");
 userMapper.udpateUserById(user);
 ```
 
+## Method: updateOneAddById
+
+Return the UPDATE statement against the target object ignore `null` fields and use add operations for some fields, It require the `id` column exists value.
+
+### Examples
+
+```java
+public interface UserMapper {
+    @UpdateProvider(value = GeneralSqlProvider.class, method = "updateOneAddById")
+    int udpateUserAddById(UserEntity value);
+}
+
+...
+
+UserEntity user = new UserEntity();
+user.setUid(1L);
+user.setCount(123L);
+userMapper.udpateUserAddById(user);
+```
+
 ## Method: selectByColumn
 
 Return the SELECT statement conditional on the target object with not `null` fields.
@@ -114,8 +150,8 @@ Return the DELETE statement conditional on the target object with not `null` fie
 
 ```java
 public interface UserMapper {
-    @DeleteProvider(value = GeneralSqlProvider.class, method = "deleteByColumn")
-    int deleteUserByColumn(UserEntity value);
+@DeleteProvider(value = GeneralSqlProvider.class, method = "deleteByColumn")
+int deleteUserByColumn(UserEntity value);
 }
 
 ...

@@ -17,6 +17,12 @@ public final class SqlGenerator {
                 + render.renderProperty(column.getFieldName(), column.getFieldTypeHandlerName());
     }
 
+    private static String renderColumnSetAdd(BaseSqlRender render, ColumnEntity column) {
+        String columnName = render.renderReserved(column.getName());
+        return columnName + "=" + columnName + "+"
+                + render.renderProperty(column.getFieldName(), column.getFieldTypeHandlerName());
+    }
+
     public static String insertOne(BaseSqlRender render, TableEntity table, Object value) {
         List<String> columns = new ArrayList<>();
         List<String> properties = new ArrayList<>();
@@ -52,6 +58,27 @@ public final class SqlGenerator {
         table.getOtherColumns().forEach(column -> {
             if (existsValue(column, value)) {
                 columnSets.add(renderColumnSet(render, column));
+            }
+        });
+        if (columnSets.isEmpty()) {
+            throw new BuilderException("Update statements must have at least one set phrase");
+        }
+
+        return "UPDATE " + render.renderReserved(table.getName()) + " SET "
+                + String.join(", ", columnSets) + " WHERE " + renderColumnSet(render, idColumn);
+    }
+
+    public static String updateOneAddById(BaseSqlRender render, TableEntity table, Object value) {
+        ColumnEntity idColumn = table.getIdColumn();
+        if (!existsValue(idColumn, value)) {
+            throw new BuilderException("Update statements must have value for column 'id'");
+        }
+
+        List<String> columnSets = new ArrayList<>();
+        table.getOtherColumns().forEach(column -> {
+            if (existsValue(column, value)) {
+                columnSets.add(!column.isAllowAdd() ? renderColumnSet(render, column)
+                        : renderColumnSetAdd(render, column));
             }
         });
         if (columnSets.isEmpty()) {
