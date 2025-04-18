@@ -33,6 +33,7 @@ This annotation can be used to tell GeneralSqlProvider the column attributes.
 
 | *Key*       | *Type*      | *Required* | *Default* | *Description*                                   |
 |-------------|-------------|------------|-----------|-------------------------------------------------|
+| excluded    | Boolean     |            | false     | Exclude this field                              |
 | allowAdd    | Boolean     |            | false     | Allowed to be used in add operations            |
 | typeHandler | TypeHandler |            |           | Specifies the TypeHandler for column conversion |
 
@@ -49,6 +50,9 @@ public static class UserEntity {
 
     private String user;
     private String pwd;
+
+    @GeneralField(excluded = true)
+    private Object noUsed;
 
     @GeneralField(allowAdd = true)
     private Long count;
