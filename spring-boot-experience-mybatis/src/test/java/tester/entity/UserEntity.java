@@ -15,6 +15,9 @@ public class UserEntity {
     private String pwd;
     private Date createdAt;
 
+    @GeneralField(excluded = true)
+    private Object excluded;
+
     @GeneralField(allowAdd = true)
     private Long count;
 

@@ -9,11 +9,13 @@ import org.apache.ibatis.type.UnknownTypeHandler;
 import org.springframework.util.StringUtils;
 import org.vxwo.springboot.experience.mybatis.annotations.*;
 import org.vxwo.springboot.experience.util.lang.Tuple2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author vxwo-team
  */
 
+@Slf4j
 public final class TableParser {
     private static String camelToUnderline(String value) {
         if (!StringUtils.hasText(value)) {
@@ -88,6 +90,8 @@ public final class TableParser {
         ColumnEntity idByName = null, idByAnnotation = null;
         List<ColumnEntity> columns = new ArrayList<>();
         for (Field field : fieldAndMehtods.getT1()) {
+            String fieldName = field.getName();
+
             boolean foundIdAnnotation = false;
             GeneralId idAnnotation = field.getAnnotation(GeneralId.class);
             if (idAnnotation != null) {
@@ -95,7 +99,15 @@ public final class TableParser {
                 foundIdAnnotation = true;
             }
 
-            String fieldName = field.getName();
+
+            GeneralField fieldAnnotation = field.getAnnotation(GeneralField.class);
+            if (fieldAnnotation != null && fieldAnnotation.excluded()) {
+                if (log.isDebugEnabled()) {
+                    log.debug("Exclude field {" + fieldName + "} on class: " + typeName);
+                }
+                continue;
+            }
+
             Method getterMethod =
                     fieldAndMehtods.getT2().get(parseGetterName(fieldName, field.getType()));
             if (getterMethod == null) {
@@ -104,13 +116,15 @@ public final class TableParser {
                             + "} in annotation '@GeneralId' on class: " + typeName);
                 }
 
+                if (log.isWarnEnabled()) {
+                    log.warn("Ignore no 'Getter' field {" + fieldName + "} on class: " + typeName);
+                }
                 continue;
             }
 
             boolean allowAdd = false;
             @SuppressWarnings("rawtypes")
             Class<? extends TypeHandler> typeHandler = null;
-            GeneralField fieldAnnotation = field.getAnnotation(GeneralField.class);
             if (fieldAnnotation != null) {
                 allowAdd = fieldAnnotation.allowAdd();
                 if (!fieldAnnotation.typeHandler().equals(UnknownTypeHandler.class)) {
@@ -135,7 +149,7 @@ public final class TableParser {
                     "Mutiple annotation '@GeneralId' fields on class: " + typeName);
         } else if (idAnnotationCount < 1 && idByName == null) {
             throw new ReflectionException(
-                    "Not found 'id' field or none annotation by '@GeneralId' on class: "
+                    "Not found 'id' field or none annotation by '@GeneralId' or excluded on class: "
                             + typeName);
         }
 

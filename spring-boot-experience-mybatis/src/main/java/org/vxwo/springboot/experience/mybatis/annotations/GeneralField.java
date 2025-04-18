@@ -16,6 +16,14 @@ import org.apache.ibatis.type.UnknownTypeHandler;
 @SuppressWarnings("rawtypes")
 public @interface GeneralField {
     /**
+     * Indicates whether this field is excluded in SQL
+     *
+     * @return true if the field is excluded in SQL,
+     *         defaults to false
+     */
+    boolean excluded() default false;
+
+    /**
      * Indicates whether this field is allowed to be used in add operations
      *
      * @return true if the field is allowed in insertion operations,
