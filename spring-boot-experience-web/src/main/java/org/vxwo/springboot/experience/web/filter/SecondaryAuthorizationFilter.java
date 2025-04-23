@@ -1,7 +1,6 @@
 package org.vxwo.springboot.experience.web.filter;
 
 import java.io.IOException;
-import java.util.UUID;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
