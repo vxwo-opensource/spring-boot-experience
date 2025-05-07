@@ -116,7 +116,7 @@ public final class TableParser {
                             + "} in annotation '@GeneralId' on class: " + typeName);
                 }
 
-                if (log.isWarnEnabled()) {
+                if (log.isWarnEnabled() && !Modifier.isStatic(field.getModifiers())) {
                     log.warn("Ignore no 'Getter' field {" + fieldName + "} on class: " + typeName);
                 }
                 continue;
