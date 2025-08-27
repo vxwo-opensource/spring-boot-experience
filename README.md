@@ -1,4 +1,5 @@
 # Spring Boot Experience
+![Maven Central Version](https://img.shields.io/maven-central/v/org.vxwo.springboot.experience/spring-boot-experience?filter=1.*&label=SpringBoot2.x)
 
 Experience accumulation for Spring Boot 3.  
 Organize various experience tools accumulated using SpringBoot in various projects.
@@ -20,7 +21,7 @@ Organize various experience tools accumulated using SpringBoot in various projec
   ... others
 
   <properties>
-    <sbexp.version>3.0.0-SNAPSHOT</sbexp.version>
+    <sbexp.version>x.x.x</sbexp.version>
     ... others
   </properties>
 
