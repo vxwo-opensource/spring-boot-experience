@@ -32,7 +32,7 @@ public class PathTester {
 
     public boolean test(String input) {
         return fullMatch || input.length() == matchLength ? matchString.equals(input)
-                : input.startsWith(matchString);
+                : input.startsWith(path);
     }
 
     public String toPathMatch() {

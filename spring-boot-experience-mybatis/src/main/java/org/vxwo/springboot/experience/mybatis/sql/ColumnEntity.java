@@ -12,13 +12,15 @@ public final class ColumnEntity {
     private final String name;
     private final String fieldName;
     private final Method fieldGetter;
+    private final boolean allowAdd;
     private final Class<? extends TypeHandler> typeHandler;
 
-    private ColumnEntity(String name, String fieldName, Method fieldGetter,
+    private ColumnEntity(String name, String fieldName, Method fieldGetter, boolean allowAdd,
             Class<? extends TypeHandler> typeHandler) {
         this.name = name;
         this.fieldName = fieldName;
         this.fieldGetter = fieldGetter;
+        this.allowAdd = allowAdd;
         this.typeHandler = typeHandler;
     }
 
@@ -38,12 +40,16 @@ public final class ColumnEntity {
         }
     }
 
+    public boolean isAllowAdd() {
+        return allowAdd;
+    }
+
     public String getFieldTypeHandlerName() {
         return typeHandler == null ? null : typeHandler.getName();
     }
 
     public static ColumnEntity of(String columnName, String fieldName, Method fieldGetter,
-            Class<? extends TypeHandler> typeHandler) {
-        return new ColumnEntity(columnName, fieldName, fieldGetter, typeHandler);
+            boolean allowAdd, Class<? extends TypeHandler> typeHandler) {
+        return new ColumnEntity(columnName, fieldName, fieldGetter, allowAdd, typeHandler);
     }
 }

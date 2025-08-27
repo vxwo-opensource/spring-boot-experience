@@ -2,7 +2,6 @@ package org.vxwo.springboot.experience.mybatis.handlers;
 
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
-import org.apache.ibatis.type.MappedJdbcTypes;
 import org.springframework.util.StringUtils;
 import org.vxwo.springboot.experience.util.json.ObjectMapperBuilder;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -18,7 +17,6 @@ import java.sql.SQLException;
  */
 
 @SuppressWarnings("PMD")
-@MappedJdbcTypes(JdbcType.VARCHAR)
 public abstract class BaseJsonTypeHandler<T> extends BaseTypeHandler<T> {
     protected final static ObjectMapper OBJECT_MAPPER =
             ObjectMapperBuilder.builder().useDefault().build();

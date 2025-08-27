@@ -19,6 +19,7 @@ public class ApplicationTest {
             add(" uid BIGINT GENERATED ALWAYS AS IDENTITY,");
             add(" `user` VARCHAR(50) NOT NULL,");
             add(" pwd VARCHAR(50),");
+            add(" `count` BIGINT NOT NULL DEFAULT 0,");
             add(" created_at TIMESTAMP,");
             add(" group_ids TEXT,");
             add(" group_keys TEXT,");
@@ -91,6 +92,21 @@ public class ApplicationTest {
 
     @Test
     @Order(103)
+    public void testSqlUpdateOneAddByIdShouldSuccess() {
+        UserEntity user = new UserEntity();
+        user.setUid(1L);
+        user.setPwd("pwd");
+        user.setCount(123L);
+
+        int value = userMapper.udpateUserAddById(user);
+        Assertions.assertEquals(1, value);
+
+        UserEntity updated = userMapper.selectUserByColumn(user);
+        Assertions.assertEquals(123L, updated.getCount());
+    }
+
+    @Test
+    @Order(104)
     public void testSqlSelectByColumnShouldSuccess() {
         UserEntity user = new UserEntity();
         user.setUser("user");
@@ -105,7 +121,7 @@ public class ApplicationTest {
     }
 
     @Test
-    @Order(104)
+    @Order(105)
     public void testSqlDeleteByColumnShouldSuccess() {
         UserEntity user = new UserEntity();
         user.setUser("user");
@@ -115,7 +131,7 @@ public class ApplicationTest {
     }
 
     @Test
-    @Order(105)
+    @Order(106)
     public void testSqlDeleteByColumnAgainShouldFailed() {
         UserEntity user = new UserEntity();
         user.setUser("user");

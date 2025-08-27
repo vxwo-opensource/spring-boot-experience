@@ -15,11 +15,27 @@ import org.apache.ibatis.type.UnknownTypeHandler;
 @Target({ElementType.FIELD})
 @SuppressWarnings("rawtypes")
 public @interface GeneralField {
+    /**
+     * Indicates whether this field is excluded in SQL
+     *
+     * @return true if the field is excluded in SQL,
+     *         defaults to false
+     */
+    boolean excluded() default false;
 
     /**
-     * Returns the column TypeHandler
+     * Indicates whether this field is allowed to be used in add operations
      *
-     * return  the column TypeHandler
+     * @return true if the field is allowed in insertion operations,
+     *         defaults to false
+     */
+    boolean allowAdd() default false;
+
+    /**
+     * Specifies the TypeHandler class for column type conversion
+     *
+     * @return the TypeHandler class to be used, defaults to UnknownTypeHandler.class
+     *         indicating no specific handler is specified
      */
     Class<? extends TypeHandler> typeHandler() default UnknownTypeHandler.class;
 }

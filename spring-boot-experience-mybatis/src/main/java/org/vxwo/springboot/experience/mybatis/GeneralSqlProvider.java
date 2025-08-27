@@ -20,6 +20,12 @@ public final class GeneralSqlProvider {
                 GeneralTableRegistrar.findTable(value.getClass()), value);
     }
 
+    public <T> String updateOneAddById(T value) {
+        Objects.requireNonNull(value);
+        return SqlGenerator.updateOneAddById(GeneralSqlHelper.getRender(),
+                GeneralTableRegistrar.findTable(value.getClass()), value);
+    }
+
     public <T> String selectByColumn(T value) {
         Objects.requireNonNull(value);
         return SqlGenerator.selectByColumn(GeneralSqlHelper.getRender(),
