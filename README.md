@@ -1,5 +1,5 @@
 # Spring Boot Experience
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.vxwo.springboot.experience/spring-boot-experience/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.vxwo.springboot.experience/spring-boot-experience)
+![Maven Central Version](https://img.shields.io/maven-central/v/org.vxwo.springboot.experience/spring-boot-experience?filter=1.*&label=SpringBoot2.x)
 
 Experience accumulation for Spring Boot.  
 Organize various experience tools accumulated using SpringBoot in various projects.
