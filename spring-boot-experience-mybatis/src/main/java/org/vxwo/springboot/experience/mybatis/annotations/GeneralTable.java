@@ -15,7 +15,7 @@ public @interface GeneralTable {
     /**
      * Returns the table name
      *
-     * return  the table name
+     * @return  the table name
      */
     String value() default "";
 }
