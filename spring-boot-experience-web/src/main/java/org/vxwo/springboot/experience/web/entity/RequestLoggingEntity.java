@@ -29,6 +29,7 @@ public class RequestLoggingEntity {
     private Map<String, Object> requestBody = new HashMap<>(10);
     private String requestType;
     private int requestLength;
+    private String requestBodyText;
 
     private String owner = "";
     private String clientIp;

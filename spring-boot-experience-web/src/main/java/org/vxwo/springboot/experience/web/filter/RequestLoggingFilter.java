@@ -16,9 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 import org.vxwo.springboot.experience.web.config.RequestLoggingProperties;
 import org.vxwo.springboot.experience.web.entity.RequestLoggingEntity;
@@ -37,6 +39,7 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
     private final boolean ignoreRequestHeaders;
     private final boolean includeRequestHeaderAllKey;
     private final List<String> includeRequestHeaderKeys;
+    private final boolean saveRequestBodyText;
 
     private final boolean ignoreResponseHeaders;
     private final boolean includeResponseHeaderAllKey;
@@ -67,6 +70,7 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
         }
         ignoreRequestHeaders = value.isIgnoreRequestHeaders();
         includeRequestHeaderKeys = Collections.unmodifiableList(new ArrayList<>(requestHeaderKeys));
+        saveRequestBodyText = value.isSaveRequestBodyText();
 
         Set<String> responseHeaderKeys = new HashSet<>();
         if (ObjectUtils.isEmpty(value.getResponseHeaderKeys())
@@ -135,6 +139,20 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
         return StringUtils.hasText(host) ? host : "";
     }
 
+    private static MediaType tryParseTextMedia(String contentType) {
+        if (StringUtils.hasText(contentType)) {
+            try {
+                MediaType mediaType = MediaType.valueOf(contentType);
+                if (mediaType.getType().equals("text") || (mediaType.getType().equals("application")
+                        && mediaType.getSubtype().startsWith("json"))) {
+                    return mediaType;
+                }
+            } catch (Exception ex) {
+            }
+        }
+        return null;
+    }
+
     private String parseResponseBody(ContentCachingResponseWrapper response) {
         int contentSize = response.getContentSize();
         if (contentSize < 1) {
@@ -144,23 +162,16 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
             return "@ignore: size gt " + responseBodyLimit;
         }
 
-        boolean isText = false, isJson = false;
-        String contentType = response.getContentType();
-        if (contentType == null) {
-            isText = true;
-        } else {
-            isText = contentType.startsWith("text/");
-            isJson = contentType.startsWith("application/json");
+        try {
+            MediaType mediaType = tryParseTextMedia(response.getContentType());
+            if (mediaType != null) {
+                return new String(response.getContentAsByteArray(),
+                        mediaType.getCharset() != null ? mediaType.getCharset()
+                                : StandardCharsets.UTF_8);
+            }
+        } catch (Exception ex) {
         }
-
-        if (isText || isJson) {
-            String responseText =
-                    new String(response.getContentAsByteArray(), StandardCharsets.UTF_8);
-            return responseText;
-        } else {
-            return "@byte[" + contentSize + "]";
-        }
-
+        return "@byte[" + contentSize + "]";
     }
 
     @Override
@@ -207,12 +218,29 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
             }
         }
 
+        HttpServletRequest targetRequest = request;
+        MediaType requestBodyMedia =
+                saveRequestBodyText ? tryParseTextMedia(entity.getRequestType()) : null;
+        if (requestBodyMedia != null) {
+            targetRequest = new ContentCachingRequestWrapper(request);
+        }
+
         ContentCachingResponseWrapper cachedResponse = new ContentCachingResponseWrapper(response);
         request.setAttribute(RequestLoggingEntity.ATTRIBUTE_NAME, entity);
 
         try {
-            filterChain.doFilter(request, cachedResponse);
+            filterChain.doFilter(targetRequest, cachedResponse);
         } finally {
+            if (requestBodyMedia != null) {
+                try {
+                    entity.setRequestBodyText(new String(
+                            ((ContentCachingRequestWrapper) targetRequest).getContentAsByteArray(),
+                            requestBodyMedia.getCharset() != null ? requestBodyMedia.getCharset()
+                                    : StandardCharsets.UTF_8));
+                } catch (Exception ex) {
+                }
+            }
+
             entity.setResponseStatus(cachedResponse.getStatus());
             entity.setResponseLength(cachedResponse.getContentSize());
             entity.setResponseType(cachedResponse.getContentType());

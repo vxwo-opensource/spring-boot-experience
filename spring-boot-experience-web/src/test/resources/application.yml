@@ -13,6 +13,7 @@ sbexp:
 
     logging:
       enabled: true
+      save-request-body-text: true
       request-header-keys:
         - User-Agent
         - Authorization

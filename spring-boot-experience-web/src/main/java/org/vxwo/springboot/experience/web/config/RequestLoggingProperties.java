@@ -17,6 +17,7 @@ public class RequestLoggingProperties {
     private boolean ignoreResponseHeaders;
     private List<String> responseHeaderKeys;
 
+    private boolean saveRequestBodyText;
     private int responseBodyLimitKb;
     private int stacktraceLimitLines;
     private List<String> includePaths;

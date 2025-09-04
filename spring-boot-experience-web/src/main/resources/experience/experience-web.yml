@@ -15,6 +15,7 @@ sbexp:
         - "*"
       response-header-keys:
         - "*"
+      save-request-body-text: false
       response-body-limit-kb: 500
       stacktrace-limit-lines: 10
       include-paths:
