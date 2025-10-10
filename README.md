@@ -1,5 +1,6 @@
 # Spring Boot Experience
-![Maven Central Version](https://img.shields.io/maven-central/v/org.vxwo.springboot.experience/spring-boot-experience?filter=1.*&label=SpringBoot2.x)
+![Maven Central Version v1](https://img.shields.io/maven-central/v/org.vxwo.springboot.experience/spring-boot-experience?filter=1.*&label=SpringBoot2.x)
+![Maven Central Version v3](https://img.shields.io/maven-central/v/org.vxwo.springboot.experience/spring-boot-experience?filter=3.*&label=SpringBoot3.x)
 
 Experience accumulation for Spring Boot 3.  
 Organize various experience tools accumulated using SpringBoot in various projects.
