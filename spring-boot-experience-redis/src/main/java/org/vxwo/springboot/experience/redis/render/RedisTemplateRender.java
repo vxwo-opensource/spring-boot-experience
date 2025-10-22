@@ -37,9 +37,7 @@ public class RedisTemplateRender {
 
     public <T> void renderGenericTemplate(RedisTemplate<String, T> template, Class<T> valueClass) {
         Jackson2JsonRedisSerializer<T> valueSerializer =
-                new Jackson2JsonRedisSerializer<T>(valueClass);
-        valueSerializer.setObjectMapper(OBJECT_MAPPER);
-
+                new Jackson2JsonRedisSerializer<T>(OBJECT_MAPPER, valueClass);
         template.setConnectionFactory(connectionFactory);
         template.setKeySerializer(prefixKeySerializer);
         template.setValueSerializer(valueSerializer);
